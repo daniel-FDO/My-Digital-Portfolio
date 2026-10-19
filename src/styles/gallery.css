@@ -1,0 +1,112 @@
+/* =========================================================
+   GALLERY — the photo carousel (Gallery.tsx)
+   The cards are placed by the script (transform, z-index, --dim);
+   this file gives them their size, frame and finish.
+   Card width: about half the column on wide screens, most of it on
+   narrow ones (the script switches layouts at 560px, as here).
+   ========================================================= */
+
+.gal__edition { font: 0.6875rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.gal__stage { margin-top: 1.25rem; container-type: inline-size; }   /* cqw = the carousel's width */
+.gal__view {
+  position: relative;
+  height: calc(min(48cqw, 23rem) * 1.25 + 1.5rem);
+  overflow: hidden;
+  overflow: clip;
+  perspective: 1400px;
+  touch-action: pan-y;                     /* vertical swipes still scroll the page */
+  user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  border-radius: 1rem;
+  outline: none;
+}
+.gal__card {
+  position: absolute; left: 0; top: 0.75rem;
+  width: min(48cqw, 23rem);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border-radius: 1.1rem;
+  overflow: hidden;
+  background: var(--soft);
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--widget-line);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  cursor: pointer;
+}
+.gal__card.is-front { cursor: default; }
+.gal__card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* Neighbours dim; every card has a soft dark fade along the bottom */
+.gal__card::before, .gal__card::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.gal__card::before { background: linear-gradient(to top, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0) 38%); }
+.gal__card::after { background: #0b0b0a; opacity: var(--dim, 0); }
+.gal__num {
+  position: absolute; left: 0.85rem; top: 0.85rem; z-index: 1;
+  padding: 0.2rem 0.45rem; border-radius: 999px;
+  background: rgba(17, 17, 16, 0.5);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  font: 500 0.625rem/1.2 var(--mono); letter-spacing: 0.06em; color: #f4f2ef;
+}
+.gal__cap {
+  position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem; z-index: 1;
+  font-size: 1rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.03em; color: #fff;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+}
+.gal__view:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); }
+.gal__view:focus-visible .gal__card.is-front { box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55), 0 0 0 2px var(--fg); }
+
+/* The "Drag" badge: precise pointers only, while over the photos */
+.gal__badge {
+  position: absolute; left: 0; top: 0; z-index: 200;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.gal__badge span {
+  position: absolute; left: -2rem; top: -2rem;
+  display: grid; place-items: center;
+  width: 4rem; height: 4rem; border-radius: 50%;
+  background: var(--fg); color: var(--bg);
+  font: 600 0.625rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
+  opacity: 0; transform: scale(0.5);
+  transition: opacity 0.18s ease, transform 0.25s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .gal__view.is-hinting { cursor: none; }
+  .gal__view.is-hinting .gal__badge span { opacity: 1; transform: none; }
+  .gal__view.is-hinting.is-dragging .gal__badge span { transform: scale(0.85); }
+}
+@media not ((hover: hover) and (pointer: fine)) { .gal__badge { display: none; } }
+
+/* Counter · hint · Previous / Next */
+.gal__bar { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; }
+.gal__count { font: 0.75rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.gal__count b { font-weight: 500; color: var(--fg); }
+.gal__hint { font: 0.6875rem/1.4 var(--mono); color: var(--muted); }
+.gal__nav { display: flex; gap: 0.4rem; margin-left: auto; }
+.gal__btn {
+  display: grid; place-items: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  transition: background-color var(--fast) ease, border-color var(--fast) ease, opacity var(--fast) ease;
+}
+.gal__btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gal__btn:hover { background: var(--soft); border-color: color-mix(in srgb, var(--fg) 22%, transparent); }
+.gal__btn:active { transform: scale(0.96); }
+.gal__btn[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+.gal__btn[aria-disabled="true"]:hover { background: var(--card); border-color: var(--line); }
+.gal__btn[aria-disabled="true"]:active { transform: none; }
+.gal__btn:focus-visible { border-radius: 50%; }
+
+/* Narrow (the carousel under 560px, as in the script): one main photo and a peek of the next */
+@container (max-width: 559px) {
+  .gal__view { height: calc(78cqw * 1.25 + 1.5rem); -webkit-mask-image: none; mask-image: none; }
+  .gal__card { width: 78cqw; }
+  .gal__hint { display: none; }
+}
+@media (pointer: coarse) { .gal__btn { width: 44px; height: 44px; } }
+@media (prefers-reduced-motion: reduce) {
+  .gal__badge span { transition: none; }
+}

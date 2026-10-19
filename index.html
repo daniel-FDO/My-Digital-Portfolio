@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Daniel Fasan</title>
+  <meta name="description" content="Daniel Fasan — T-Level Digital Software Development student in Kent, UK. Projects, education, skills and contact." />
+  <meta name="theme-color" content="#111110" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111110'/%3E%3Cpath d='M9 7h7a9 9 0 0 1 0 18H9v-3h2V10H9zm6 4v10h1a5 5 0 0 0 0-10z' fill='%23ef4a3c' fill-rule='evenodd'/%3E%3C/svg%3E" />
+
+  <!-- THEME, set before the page draws (no flash).
+       A fresh visit or reload starts dark; a choice made with the toolbar's
+       theme button lasts for this visit (sessionStorage), so opening a
+       folder, Back / Forward and secret.html all keep it. src/lib/theme.tsx. -->
+  <script>
+    (function () {
+      var theme = 'dark';
+      try {
+        var nav = performance.getEntriesByType('navigation')[0];
+        var sameSite = false;
+        try { sameSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+        if ((nav && nav.type === 'back_forward') || sameSite) {
+          if (sessionStorage.getItem('theme') === 'light') theme = 'light';
+        } else {
+          sessionStorage.setItem('theme', 'dark');
+        }
+      } catch (e) {}
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <!-- PRELOADER: shown once per tab, on the first visit to this page —
+       not on reload, Back / Forward, or arriving from another page of
+       the site. html.pl-on turns it on (preloader.css / src/lib/preloader.ts).
+       No JavaScript → no class → no loader. If the app never runs,
+       the loader steps aside at 5s. -->
+  <script>
+    (function () {
+      var root = document.documentElement, show = false;
+      try {
+        var nav = performance.getEntriesByType('navigation')[0];
+        var sameSite = false;
+        try { sameSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+        show = !(nav && nav.type === 'back_forward') && !sameSite && sessionStorage.getItem('introSeen') !== '1';
+        if (show) sessionStorage.setItem('introSeen', '1');
+      } catch (e) { show = false; }
+      if (!show) return;
+      root.classList.add('pl-on');
+      setTimeout(function () {
+        if (window.Preloader) return;
+        var l = document.getElementById('pl');
+        if (l) l.remove();
+        root.classList.remove('pl-on');
+      }, 5000);
+    })();
+  </script>
+  <link rel="stylesheet" href="/src/styles/preloader.css" />
+
+  <!-- Geist (everything) + Geist Mono (chips, labels, shortcuts) —
+       variable, every weight 100–900 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet" />
+  <!-- The footer (Footer.tsx): Inter (the ID card), Inter Tight 800 (the giant
+       "daniel", its Greek / Russian "a", the card's name), and the spinning "a"
+       in other scripts ("text=" makes Google send only those few letters). -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@800&family=Noto+Sans+Devanagari:wght@800&family=Noto+Sans+Arabic:wght@800&family=Noto+Sans+KR:wght@800&family=Noto+Sans+Hebrew:wght@800&family=Noto+Sans+Georgian:wght@800&family=Noto+Sans+Armenian:wght@800&text=%E3%81%82%E0%A4%85%D8%A3%EC%95%84%D7%90%E1%83%90%D5%A1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/home.css" />
+  <link rel="stylesheet" href="/src/styles/toolbar.css" />
+  <link rel="stylesheet" href="/src/styles/dock.css" />
+  <link rel="stylesheet" href="/src/styles/daniel.css" />
+  <link rel="stylesheet" href="/src/styles/widgets.css" />
+  <link rel="stylesheet" href="/src/styles/activity.css" />
+  <link rel="stylesheet" href="/src/styles/gallery.css" />
+  <link rel="stylesheet" href="/src/styles/section-nav.css" />
+  <link rel="stylesheet" href="/src/styles/project-showcase.css" />
+  <!-- WIDE LAYOUT EXPERIMENT: delete this one line to go back to the narrow column -->
+  <link rel="stylesheet" href="/src/styles/wide-layout.css" />
+  <!-- The footer's ID card + the footballers' canvas and Play / Pause (footer-rig.css) -->
+  <link rel="stylesheet" href="/src/styles/footer-rig.css" />
+  <!-- The React root adds no box of its own: the page's layout (.page, .footer,
+       .dock …) sits straight under <body>, as the CSS expects -->
+  <style>#root { display: contents; }</style>
+</head>
+<body>
+  <!-- PRELOADER (only while html.pl-on; see <head>). Decorative: the
+       announcements go through #plLive, which stays outside it. -->
+  <div class="pl" id="pl" aria-hidden="true">
+    <div class="pl__inner">
+      <p class="pl__mark">daniel<span class="pl__dot">.</span></p>
+      <p class="pl__tag">DESIGN · CODE · EXPERIMENT</p>
+      <div class="pl__bar"><span class="pl__track"><span class="pl__fill"></span></span><span class="pl__pct">0%</span></div>
+      <p class="pl__note">Still loading…</p>
+    </div>
+  </div>
+  <p class="sr" id="plLive" role="status" aria-live="polite"></p>
+
+  <div id="root"></div>
+  <noscript><p style="padding: 24px">This portfolio needs JavaScript. You can email Daniel at <a href="mailto:danielfash2007@gmail.com">danielfash2007@gmail.com</a>.</p></noscript>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

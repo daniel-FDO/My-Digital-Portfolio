@@ -1,0 +1,17 @@
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+
+# Installed packages (npm install recreates them)
+node_modules/
+
+# Build output
+dist/
+
+# Vercel's local folder
+.vercel
+
+# Video tooling scratch (video/README.md)
+video/.probe/
+video/stills/

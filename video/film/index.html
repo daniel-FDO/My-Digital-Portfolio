@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Project film</title>
+  <!-- The end card's type: Geist 500 (the title), Instrument Serif italic (the tail) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&family=Geist+Mono:wght@500&family=Instrument+Serif:ital@1&display=block" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; width: 1280px; height: 800px; overflow: hidden; background: #000; }
+    canvas { position: absolute; inset: 0; width: 1280px; height: 800px; display: block; }
+    #card { position: absolute; inset: 0; pointer-events: none; font-synthesis: none; -webkit-font-smoothing: antialiased; }
+    #badge {
+      position: absolute; left: 50%; top: 31px; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 14px 7px 10px; border-radius: 999px;
+      background: #fff; color: #18181b; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35);
+      font: 500 14.5px/1 'Geist', sans-serif; letter-spacing: -0.01em; white-space: nowrap;
+    }
+    #badge i { width: 8px; height: 8px; border-radius: 50%; }
+    #title { position: absolute; left: 0; right: 0; top: 68px; text-align: center; }
+    #line1 { font: 500 51px/1.02 'Geist', sans-serif; letter-spacing: -0.045em; }
+    #line2 { margin-top: 2px; font: italic 400 57px/1 'Instrument Serif', serif; letter-spacing: -0.01em; }
+    .w { display: inline-block; white-space: pre; will-change: transform, opacity, filter; }
+  </style>
+</head>
+<body>
+  <canvas id="gl" width="1280" height="800"></canvas>
+  <div id="card">
+    <div id="badge"><i></i><span></span></div>
+    <div id="title"><div id="line1"></div><div id="line2"></div></div>
+  </div>
+  <script type="module" src="./film.js"></script>
+</body>
+</html>

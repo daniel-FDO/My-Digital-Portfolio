@@ -1,0 +1,126 @@
+/* =========================================================
+   DANIEL, THE CHARACTER (components/daniel/DanielCharacter.tsx)
+   Mounted inside the "Hello, I'm Daniel." card (widgets/DanielTile):
+   "Daniel." on the left, him on the right, both laid out by the card.
+   His box is 3:4 and as tall as the card's inside (top to bottom),
+   so the drawing — which frames his raised, waving hand inside that
+   box — always fits. Transparent: he sits on the card itself.
+   Classes are .dnc* (the card already uses .daniel*).
+   ========================================================= */
+.daniel--with-character {
+  --dnc-pad: 0.45rem;
+  position: relative;
+  container-type: size;                    /* his width follows the card's height */
+}
+.dnc {
+  position: absolute;
+  top: var(--dnc-pad); bottom: var(--dnc-pad); right: 0.6rem;
+  aspect-ratio: 3 / 4;
+}
+.dnc[hidden] { display: none; }
+.dnc__btn {
+  position: relative; display: block;
+  width: 100%; height: 100%;
+  padding: 0; border: 0; background: none;
+  border-radius: 14px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dnc__btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.dnc__stage { position: absolute; inset: 0; display: block; }
+.dnc__stage > img, .dnc__stage > canvas, .dnc__stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.dnc__poster { object-fit: contain; transition: opacity 0.35s ease; pointer-events: none; }
+.dnc--live .dnc__poster { opacity: 0; }
+
+/* A small label on him: for keyboard focus, and the brief "Hi there!" (poster / reduced motion) */
+.dnc__tip {
+  position: absolute; left: 50%; bottom: 0.2rem; transform: translateX(-50%);
+  padding: 2px 7px; border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  font: 0.5625rem/1.5 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
+  color: var(--fg);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.dnc__tip > span { display: none; }
+.dnc__btn:focus-visible .dnc__tip { opacity: 1; }
+.dnc__btn:focus-visible .dnc__tip-key { display: inline; }
+.dnc.is-greeting .dnc__tip { opacity: 1; }
+.dnc.is-greeting .dnc__tip > span { display: none; }
+.dnc.is-greeting .dnc__tip-hi { display: inline; }
+
+/* ---- "Daniel's actions": a quiet "…" at his frame's lower-right corner ----
+   The dots are small, but the button is a 44 × 44 px target (it reaches a little past the
+   frame, into the card's padding, so it covers as little of him as possible). */
+.dnc__more {
+  position: absolute; right: -0.4rem; bottom: -0.4rem;
+  width: 44px; height: 44px;
+  display: grid; place-items: end; padding: 0 0.7rem 0.75rem 0;
+  border: 0; border-radius: 12px; background: none; color: var(--fg);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.dnc__dots {
+  width: 18px; height: 4px; fill: currentColor;
+  opacity: 0.42;
+  transition: opacity var(--fast) ease;
+}
+.daniel:hover .dnc__dots { opacity: 0.6; }
+.dnc__more:hover .dnc__dots, .dnc__more[aria-expanded='true'] .dnc__dots, .dnc__more:focus-visible .dnc__dots { opacity: 1; }
+.dnc__more:focus-visible { outline: 2px solid var(--ring); outline-offset: -4px; }
+@media (hover: none), (pointer: coarse) {
+  .dnc__dots { opacity: 0.7; }                     /* no hover to discover it on touch */
+}
+.dnc--none .dnc__more { display: none; }
+
+/* The menu itself lives at the end of <body> (position: fixed, placed in JS inside the viewport) */
+.dnc-menu {
+  position: fixed; z-index: 1000;
+  min-width: 11.5rem; max-width: calc(100vw - 16px);
+  padding: 0.3rem;
+  border: 1px solid var(--widget-line);
+  border-radius: 0.85rem;
+  background: var(--card);
+  color: var(--fg);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.35), 0 2px 6px rgba(0, 0, 0, 0.12);
+  font: 500 0.875rem/1.3 var(--font);
+  transform-origin: bottom right;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dnc-menu { animation: dnc-menu-in 0.14s var(--ease); }
+}
+@keyframes dnc-menu-in { from { opacity: 0; transform: translateY(4px) scale(0.98); } }
+.dnc-menu__item {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  width: 100%; min-height: 2.25rem; padding: 0 0.7rem;
+  border: 0; border-radius: 0.55rem; background: none; color: inherit; font: inherit; text-align: left;
+  cursor: pointer;
+}
+@media (pointer: coarse) { .dnc-menu__item { min-height: 44px; } }
+.dnc-menu__item:hover, .dnc-menu__item:focus-visible { background: var(--soft-2); outline: none; }
+.dnc-menu__item:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); }
+.dnc-menu__item[aria-disabled='true'] { color: var(--muted); opacity: 0.6; cursor: default; }
+.dnc-menu__item[aria-disabled='true']:hover { background: none; }
+.dnc-menu__sep { height: 1px; margin: 0.3rem 0.4rem; background: var(--line); }
+.dnc-menu__check { width: 16px; height: 16px; fill: none; stroke: var(--brand); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; visibility: hidden; }
+.dnc-menu__mute[aria-checked='true'] .dnc-menu__check { visibility: visible; }
+.dnc-menu__note { margin: 0.2rem 0.7rem 0.3rem; font: 0.75rem/1.3 var(--font); color: var(--muted); }
+
+/* ---- The card around him ---- */
+/* the name stays left and never reaches him: its size also follows the space left of him
+   ("Daniel." at full weight is ~3.35em wide) */
+.daniel--with-character .daniel__word {
+  font-size: min(7rem, (100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 3.4rem) / 3.4);
+}
+.daniel--with-character .w__label, .daniel--with-character .daniel__hint {
+  max-width: calc(100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 2.6rem);
+}
+.daniel__hint-dnc, .daniel__hint-name { display: none; }
+.daniel--with-character .daniel__hint-dnc { display: inline; }
+.daniel--with-character:has(.dnc[hidden]) .daniel__hint-dnc { display: none; }
+.daniel:not(.daniel--with-character) .daniel__hint-name,
+.daniel--with-character:has(.dnc[hidden]) .daniel__hint-name { display: inline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dnc__poster, .dnc__tip, .dnc__dots { transition: none; }
+}

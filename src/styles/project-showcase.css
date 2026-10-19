@@ -1,0 +1,95 @@
+/* =========================================================
+   PROJECT SHOWCASE (ProjectShowcase.tsx)
+   Mouse on a wide screen: the list ~42% | a column for the preview
+   ~58%; the preview is hidden until a project is hovered or focused,
+   then fades in, staying level with the top of the list as you
+   scroll. Touch / narrow: the preview opens under its own row.
+   The rows themselves are the original list's (home.css "Rows").
+   ========================================================= */
+.pjs--side .pjs__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
+  gap: 2.25rem;
+  align-items: start;
+}
+.pjs .rows > li { max-width: none; }
+
+/* ---- The stage ---- */
+.pjs__stage { min-width: 0; }
+.pjs--side .pjs__stage {
+  position: sticky; top: 2rem;
+  margin-top: 1rem;
+  opacity: 0; visibility: hidden;
+  transform: translateY(8px) scale(0.985);
+  transform-origin: 50% 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.28s var(--ease), visibility 0s linear 0.28s;
+}
+.pjs--side .pjs__stage.is-on {
+  opacity: 1; visibility: visible; transform: none; pointer-events: auto;
+  transition: opacity 0.2s ease, transform 0.32s var(--ease), visibility 0s;
+}
+.pjs__stage--inline { margin: 0.35rem 0 1rem; animation: pjs-in 0.25s ease both; }
+
+.pjs__screen {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 0.9rem;
+  border: 1px solid var(--widget-line);
+  background: var(--soft);
+  box-shadow: 0 24px 48px -30px rgba(0, 0, 0, 0.55);
+}
+.pjs__poster, .pjs__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.pjs__video { animation: pjs-in 0.3s ease both; }
+@keyframes pjs-in { from { opacity: 0; } }
+.pjs__play {
+  position: absolute; right: 0.75rem; bottom: 0.75rem; z-index: 1;
+  display: grid; place-items: center;
+  width: 2.25rem; height: 2.25rem; border-radius: 50%;
+  background: rgba(17, 17, 16, 0.62);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: background-color var(--fast) ease, transform 0.12s ease;
+}
+.pjs__play:hover { background: rgba(17, 17, 16, 0.8); }
+.pjs__play:active { transform: scale(0.95); }
+.pjs__play svg { width: 13px; height: 13px; fill: currentColor; }
+.pjs__play:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 50%; }
+
+.pjs__meta { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem 1rem; margin-top: 0.85rem; flex-wrap: wrap; }
+.pjs__id { min-width: 0; }
+.pjs__name { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.025em; line-height: 1.3; color: var(--fg); }
+.pjs__sub { font-size: 0.8125rem; line-height: 1.5; color: var(--muted); overflow-wrap: anywhere; }
+.pjs__host { font-family: var(--mono); font-size: 0.75rem; }
+.pjs__links { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+.pjs__visit, .pjs__source {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  min-height: 2.25rem; padding: 0 0.95rem;
+  border-radius: 999px;
+  font-size: 0.8125rem; font-weight: 500;
+  transition: background-color var(--fast) ease, transform 0.12s ease;
+}
+.pjs__visit { background: var(--fg); color: var(--bg); }
+.pjs__visit:hover { background: color-mix(in srgb, var(--fg) 86%, transparent); }
+.pjs__visit svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform var(--fast) var(--ease); }
+.pjs__visit:hover svg { transform: translate(1px, -1px); }
+.pjs__source { border: 1px solid var(--line); color: var(--fg); }
+.pjs__source:hover { background: var(--soft); }
+.pjs__visit:active, .pjs__source:active { transform: scale(0.97); }
+
+@media (max-width: 479px) {
+  .pjs__meta { align-items: flex-start; }
+  .pjs__links { width: 100%; }
+  .pjs__visit { flex: 1; justify-content: center; }
+}
+@media (pointer: coarse) {
+  .pjs__play { width: 2.75rem; height: 2.75rem; }
+  .pjs__visit, .pjs__source { min-height: 2.75rem; }
+  .pjs__pv { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pjs__video, .pjs__stage--inline { animation: none; }
+  .pjs--side .pjs__stage, .pjs--side .pjs__stage.is-on { transition: none; transform: none; }
+}

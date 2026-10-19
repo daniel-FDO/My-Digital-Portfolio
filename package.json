@@ -1,0 +1,40 @@
+{
+  "name": "daniel-portfolio-react",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Daniel's portfolio (React + TypeScript + Vite) + the Spotify / GitHub endpoints",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "preview": "npm run build && node server.js",
+    "start": "node server.js",
+    "get-token": "node get-token.js",
+    "capture": "node capture-previews.js",
+    "video:capture": "node video/capture.mjs",
+    "video:check": "node video/check-motion.mjs",
+    "video:stills": "node video/render.mjs stills",
+    "video:render": "node video/render.mjs video",
+    "test:daniel": "node --no-warnings tests/daniel-motion.mjs",
+    "test:daniel:browser": "node tests/daniel-browser.mjs",
+    "record:daniel": "node tests/daniel-record.mjs"
+  },
+  "engines": {
+    "node": ">=21.7"
+  },
+  "dependencies": {
+    "@fontsource-variable/nunito": "^5.3.0",
+    "express": "^4.22.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "playwright-core": "^1.63.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "slug": "blueprint",
+  "url": "https://blueprint-vwig.onrender.com/",
+  "capturedAt": "2026-10-19T00:25:47.116Z",
+  "panels": [
+    {
+      "id": "hero",
+      "file": "hero.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "write",
+      "file": "write.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "templates",
+      "file": "templates.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "check",
+      "file": "check.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "export",
+      "file": "export.png",
+      "w": 1280,
+      "h": 800
+    }
+  ],
+  "pieces": [
+    {
+      "id": "cta",
+      "panel": "hero",
+      "file": "pieces/hero--cta.png",
+      "x": 1049.1875,
+      "y": 710.8125,
+      "w": 192.421875,
+      "h": 54
+    },
+    {
+      "id": "chip0",
+      "panel": "hero",
+      "file": "pieces/hero--chip0.png",
+      "x": 422.390625,
+      "y": 184,
+      "w": 84.984375,
+      "h": 33.25
+    },
+    {
+      "id": "chip1",
+      "panel": "hero",
+      "file": "pieces/hero--chip1.png",
+      "x": 89.59375,
+      "y": 416,
+      "w": 53.78125,
+      "h": 33.25
+    },
+    {
+      "id": "chip2",
+      "panel": "hero",
+      "file": "pieces/hero--chip2.png",
+      "x": 870.390625,
+      "y": 632,
+      "w": 73.125,
+      "h": 33.25
+    },
+    {
+      "id": "assistant",
+      "panel": "write",
+      "file": "pieces/write--assistant.png",
+      "x": 1131.800048828125,
+      "y": 254.24822998046875,
+      "w": 193.4110107421875,
+      "h": 156.77133178710938
+    },
+    {
+      "id": "tile1",
+      "panel": "templates",
+      "file": "pieces/templates--tile1.png",
+      "x": 352,
+      "y": 18,
+      "w": 132,
+      "h": 208.171875
+    },
+    {
+      "id": "tile2",
+      "panel": "templates",
+      "file": "pieces/templates--tile2.png",
+      "x": 500,
+      "y": 18,
+      "w": 132,
+      "h": 208.171875
+    },
+    {
+      "id": "tile3",
+      "panel": "templates",
+      "file": "pieces/templates--tile3.png",
+      "x": 648,
+      "y": 18,
+      "w": 132,
+      "h": 208.171875
+    },
+    {
+      "id": "tile4",
+      "panel": "templates",
+      "file": "pieces/templates--tile4.png",
+      "x": 796,
+      "y": 18,
+      "w": 132,
+      "h": 208.171875
+    },
+    {
+      "id": "checkpage",
+      "panel": "check",
+      "file": "pieces/check--checkpage.png",
+      "x": 787.4553833007812,
+      "y": 171.69752502441406,
+      "w": 370.66729736328125,
+      "h": 515.46435546875
+    },
+    {
+      "id": "lens",
+      "panel": "check",
+      "file": "pieces/check--lens.png",
+      "x": 981.1779174804688,
+      "y": 163.98219299316406,
+      "w": 131.08917236328125,
+      "h": 131.08909606933594
+    },
+    {
+      "id": "formats",
+      "panel": "export",
+      "file": "pieces/export--formats.png",
+      "x": 427.65625,
+      "y": 376.46875,
+      "w": 194.390625,
+      "h": 46
+    },
+    {
+      "id": "download",
+      "panel": "export",
+      "file": "pieces/export--download.png",
+      "x": 634.046875,
+      "y": 376.46875,
+      "w": 218.28125,
+      "h": 46
+    }
+  ]
+}

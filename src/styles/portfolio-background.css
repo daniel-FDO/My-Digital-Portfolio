@@ -1,0 +1,160 @@
+/* =========================================================
+   PORTFOLIO BACKGROUND — EXPERIMENT (PortfolioBackground.tsx)
+   Only loaded by that component; its switch is
+   ENABLE_BACKGROUND_EXPERIMENT there.
+   ========================================================= */
+
+/* The page's plain background steps back so the layer behind shows;
+   <html> keeps the near-black (or light) base colour. */
+html.pbg-on body { background: transparent; }
+
+.pbg {
+  --pbg-line: rgba(233, 232, 228, 0.085);
+  --pbg-index: rgba(233, 232, 228, 0.13);
+  --pbg-glow: rgba(128, 30, 36, 0.24);
+  --pbg-grain: 0.06;
+  position: fixed; inset: 0; z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+:root:not([data-theme="dark"]) .pbg {
+  --pbg-line: rgba(30, 27, 24, 0.075);
+  --pbg-index: rgba(30, 27, 24, 0.12);
+  --pbg-glow: rgba(224, 53, 43, 0.075);
+  --pbg-grain: 0.035;
+}
+
+/* ---- Contours: strongest at the edges, fading out towards the column ---- */
+.pbg__shift { position: absolute; inset: 0; will-change: transform; }
+.pbg__map {
+  position: absolute; inset: 0;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 50% 48%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.55) 62%, #000 100%);
+  mask-image: radial-gradient(ellipse 62% 70% at 50% 48%, rgba(0, 0, 0, 0.08) 25%, rgba(0, 0, 0, 0.55) 62%, #000 100%);
+}
+.pbg__layer { position: absolute; overflow: visible; will-change: transform; }
+.pbg__layer path { fill: none; stroke: var(--pbg-line); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.pbg__layer path.is-index { stroke: var(--pbg-index); stroke-width: 1.15; }
+
+/* Three slow drift loops (same 26s length, so the whole scene repeats
+   seamlessly); odd and even lines of a hill use different ones, so
+   the spacing between them breathes and the shapes seem to deform. */
+@media (prefers-reduced-motion: no-preference) {
+  .pbg__layer { animation: 26s ease-in-out infinite; }
+  .pbg__layer--0 { animation-name: pbg-drift-0; }
+  .pbg__layer--1 { animation-name: pbg-drift-1; }
+  .pbg__layer--2 { animation-name: pbg-drift-2; }
+  .pbg__glow { animation: pbg-glow 26s ease-in-out infinite; }
+  .pbg.is-paused .pbg__layer, .pbg.is-paused .pbg__glow { animation-play-state: paused; }
+}
+@keyframes pbg-drift-0 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate3d(9px, -6px, 0) rotate(0.8deg) scale(1.012); }
+  66% { transform: translate3d(-5px, 7px, 0) rotate(-0.5deg) scale(0.994); }
+}
+@keyframes pbg-drift-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  40% { transform: translate3d(-8px, 5px, 0) rotate(-0.9deg) scale(1.01); }
+  75% { transform: translate3d(6px, 8px, 0) rotate(0.4deg) scale(0.99); }
+}
+@keyframes pbg-drift-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate3d(5px, 9px, 0) rotate(0.6deg) scale(0.992); }
+  60% { transform: translate3d(-9px, -4px, 0) rotate(-0.7deg) scale(1.014); }
+}
+
+/* ---- The burgundy glow: top-right, by the red "D" ---- */
+.pbg__glow {
+  position: absolute;
+  right: -18vmax; top: -22vmax;
+  width: 62vmax; height: 62vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--pbg-glow), transparent);
+  opacity: 0.85;
+  will-change: transform, opacity;
+}
+@keyframes pbg-glow {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.85; }
+  50% { transform: translate3d(-3vmax, 2.5vmax, 0) scale(1.06); opacity: 1; }
+}
+
+/* ---- Grain: a static noise tile ---- */
+.pbg__grain {
+  position: absolute; inset: 0;
+  opacity: var(--pbg-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 1.6 -0.3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ---- Small screens: fewer, fainter lines (fewer hills are drawn too) ---- */
+@media (max-width: 639px) {
+  .pbg { --pbg-line: rgba(233, 232, 228, 0.065); --pbg-index: rgba(233, 232, 228, 0.1); }
+  :root:not([data-theme="dark"]) .pbg { --pbg-line: rgba(30, 27, 24, 0.06); --pbg-index: rgba(30, 27, 24, 0.09); }
+  .pbg__map {
+    -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.1) 70%, #000);
+    mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.1) 70%, #000);
+  }
+  .pbg__glow { right: -30vmax; top: -30vmax; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pbg__layer, .pbg__glow { animation: none; }
+}
+
+/* =========================================================
+   MORE LIFE (LIFE in PortfolioBackground.tsx; .pbg--life)
+   ========================================================= */
+.pbg { --pbg-trace: rgba(222, 84, 70, 0.6); }
+:root:not([data-theme="dark"]) .pbg { --pbg-trace: rgba(190, 56, 44, 0.42); }
+.pbg__mover { position: absolute; inset: 0; }   /* one per hill; JS leans it towards the pointer */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Flowing layers: a little more travel than before, each on its own loop length */
+  .pbg--life .pbg__layer--0 { animation-name: pbg-flow-0; }
+  .pbg--life .pbg__layer--1 { animation-name: pbg-flow-1; }
+  .pbg--life .pbg__layer--2 { animation-name: pbg-flow-2; }
+  /* The glow wanders down the right edge and along the top, brightening and dimming */
+  .pbg--life .pbg__glow { animation: pbg-wander var(--glow-loop, 36s) ease-in-out infinite; }
+  .pbg.is-paused .pbg__trace { animation-play-state: paused; }
+}
+@keyframes pbg-flow-0 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate3d(14px, -9px, 0) rotate(1.1deg) scale(1.018); }
+  66% { transform: translate3d(-8px, 11px, 0) rotate(-0.7deg) scale(0.99); }
+}
+@keyframes pbg-flow-1 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  40% { transform: translate3d(-13px, 8px, 0) rotate(-1.2deg) scale(1.016); }
+  75% { transform: translate3d(9px, 12px, 0) rotate(0.6deg) scale(0.986); }
+}
+@keyframes pbg-flow-2 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate3d(8px, 14px, 0) rotate(0.9deg) scale(0.988); }
+  60% { transform: translate3d(-14px, -6px, 0) rotate(-1deg) scale(1.02); }
+}
+@keyframes pbg-wander {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.8; }
+  28% { transform: translate3d(-1vmax, 38vh, 0) scale(1.06); opacity: 1; }
+  52% { transform: translate3d(1vmax, 10vh, 0) scale(0.96); opacity: 0.65; }
+  78% { transform: translate3d(-26vw, -2vh, 0) scale(1.04); opacity: 0.95; }
+}
+
+/* A travelling highlight: a short muted-red stretch of one contour, fading in and out */
+.pbg__trace {
+  fill: none !important;
+  stroke: var(--pbg-trace) !important;
+  stroke-width: 1.6 !important;
+  stroke-linecap: round;
+  stroke-dasharray: 0.07 0.93;
+  stroke-dashoffset: var(--from);
+  opacity: 0;
+  animation: pbg-trace 3.4s ease-in-out forwards;
+}
+@keyframes pbg-trace {
+  0% { stroke-dashoffset: var(--from); opacity: 0; }
+  22% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { stroke-dashoffset: var(--to); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pbg__trace { display: none; }
+}

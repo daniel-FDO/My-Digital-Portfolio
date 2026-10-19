@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#efece3">
+  <meta name="description" content="A small hands-on physics playground. Drop, drag, and throw shapes. See what gravity does next.">
+  <title>Object Lab — A little room for physics</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="masthead"><a class="brand" href="./" aria-label="Object Lab home"><span class="brand-icon" aria-hidden="true">◒</span> OBJECT LAB<span class="edition"> / 001</span></a><span class="masthead-note">AN EXPERIMENT IN PLAY</span><a class="back" href="../../index.html">Back <span aria-hidden="true">↗</span></a></header>
+    <main>
+      <section class="intro" aria-labelledby="title"><div><p class="eyebrow"><span></span> YOUR EVERYDAY PHYSICS SANDBOX</p><h1 id="title">A little room<br>for <em>physics.</em></h1></div><div class="intro-note"><span class="note-mark" aria-hidden="true">↘</span><p>Drop a shape. <br>Drag and release to throw. <br>Adjust gravity below.</p></div></section>
+      <section class="workbench" aria-label="Physics playground">
+        <div class="bench-header"><span><span class="live-dot" id="liveDot"></span> <span id="stateLabel">LIVE SIMULATION</span></span><span>CHAMBER <b>01</b></span></div>
+        <div class="chamber" id="chamber">
+          <canvas id="canvas" aria-label="Physics chamber. Use the Add circle and Add square buttons below to drop objects. Drag objects to move and throw them.">Your browser needs canvas support to display this playground.</canvas>
+          <div class="canvas-caption" aria-hidden="true"><span>GRAB. MOVE. LET GO.</span><span id="countLabel">00 OBJECTS</span></div>
+          <div class="paused-tag" id="pausedTag" hidden>TIME ON HOLD <span>Arrange a shape. Resume to release.</span></div>
+          <div class="axis" aria-hidden="true">↓ y <span> x →</span></div>
+        </div>
+        <div class="controls">
+          <fieldset class="spawn-controls"><legend>01 / ADD AN OBJECT</legend><div class="button-pair"><button id="addCircle" class="spawn"><span class="circle-icon" aria-hidden="true"></span>Circle <span class="plus" aria-hidden="true">+</span></button><button id="addSquare" class="spawn"><span class="square-icon" aria-hidden="true"></span>Square <span class="plus" aria-hidden="true">+</span></button></div></fieldset>
+          <div class="gravity-control"><label for="gravity">02 / GRAVITY <output id="gravityValue" for="gravity">1.0×</output></label><input id="gravity" type="range" min="0" max="2" step="0.1" value="1" aria-valuetext="1.0 times normal gravity"><div class="range-labels" aria-hidden="true"><span>FLOAT</span><span>HEAVY</span></div></div>
+          <fieldset class="time-controls"><legend>03 / TIME CONTROL</legend><div class="button-pair"><button id="pause" class="primary"><span id="pauseIcon" aria-hidden="true">Ⅱ</span> <span id="pauseText">Pause</span></button><button id="reset" class="reset" title="Reset objects and gravity"><span aria-hidden="true">↺</span> Reset</button></div></fieldset>
+        </div>
+      </section>
+      <div class="underbench"><p><span aria-hidden="true">↳</span> Drag to throw · Add shapes with the buttons · Space to pause the chamber</p><p>ADJUSTABLE GRAVITY</p></div>
+      <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+      <noscript><p class="noscript">Enable JavaScript to run the physics playground.</p></noscript>
+    </main>
+    <footer><span>OBJECT LAB <span class="footer-divider">/</span> BROWSER PHYSICS PLAYGROUND</span><span>CIRCLE / SQUARE COLLISIONS <span aria-hidden="true">✳</span></span></footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+/* =========================================================
+   SECTION DOCK (SectionNav.tsx)
+   A dark, translucent pill in both themes. Wide screens (1000px+,
+   and tall enough): a rail on the right edge, vertically centred.
+   Otherwise: a compact row centred above the toolbar (.dock), clear
+   of the home indicator (safe area); its icons scroll sideways if
+   the screen is too narrow for all of them.
+   ========================================================= */
+.snav {
+  --s: 34px;                                  /* one icon button */
+  --g: 4px;                                   /* the gap between them */
+  --ink: #ecebe7;
+  position: fixed; z-index: 45;               /* above the edge blur (40), under the toolbar (50) */
+}
+.snav--rail { right: calc(14px + env(safe-area-inset-right)); top: 50%; transform: translateY(-50%); }
+.snav--row {
+  --g: 2px;
+  --tb-bottom: 16px;                          /* the toolbar's place (home.css "Toolbar") */
+  --tb-h: 48px;
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--tb-bottom) + var(--tb-h) + 8px + env(safe-area-inset-bottom));
+  max-width: calc(100vw - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));
+}
+@media (max-width: 639px) { .snav--row { --tb-bottom: 10px; } }
+@media (pointer: coarse) { .snav--row { --tb-h: 54px; } }
+
+.snav__bar {
+  display: flex; align-items: center; gap: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(17, 17, 16, 0.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--ink);
+  transition: opacity 0.25s ease, transform 0.35s var(--ease), visibility 0s;
+}
+:root:not([data-theme="dark"]) .snav__bar { background: rgba(24, 23, 21, 0.78); border-color: rgba(0, 0, 0, 0.1); }
+.snav--rail .snav__bar { flex-direction: column; padding: 13px 7px; }
+.snav--row .snav__bar { padding: 5px 12px; max-width: 100%; }
+.snav.is-hidden .snav__bar { opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.98); transition: opacity 0.2s ease, transform 0.3s var(--ease), visibility 0s linear 0.3s; pointer-events: none; }
+
+/* Current number · the count */
+.snav__num { font: 500 10px/1 var(--mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--ink); flex: none; }
+.snav__num > span { display: inline-block; animation: snav-num 0.35s var(--ease); }
+.snav__num--total { color: rgba(236, 235, 231, 0.55); }
+@keyframes snav-num { from { opacity: 0; transform: translateY(3px); } }
+.snav__line { flex: none; width: 1px; height: 12px; background: rgba(255, 255, 255, 0.2); }
+
+/* The icons + the highlight that slides to the active one */
+.snav__strip { min-width: 0; }
+.snav--row .snav__strip { overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; border-radius: 12px; }
+.snav--row .snav__strip::-webkit-scrollbar { display: none; }
+.snav--row .snav__strip { padding: 3px; margin: -3px; }   /* room for the focus ring */
+.snav__list { position: relative; display: flex; gap: var(--g); }
+.snav--rail .snav__list { flex-direction: column; }
+.snav__glow {
+  position: absolute; left: 0; top: 0;
+  width: var(--s); height: var(--s);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: transform 0.45s var(--ease);
+  pointer-events: none;
+}
+.snav--rail .snav__glow { transform: translateY(calc(var(--i) * (var(--s) + var(--g)))); }
+.snav--row .snav__glow { transform: translateX(calc(var(--i) * (var(--s) + var(--g)))); }
+
+.snav__btn {
+  position: relative; flex: none;
+  display: grid; place-items: center;
+  width: var(--s); height: var(--s);
+  border-radius: 11px;
+  color: rgba(236, 235, 231, 0.6);
+  transition: color 0.2s ease;
+}
+.snav__btn svg {
+  width: 18px; height: 18px;
+  fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+  transform: scale(0.86);
+  transition: transform 0.35s var(--ease);
+}
+.snav__btn.is-active { color: #fff; }
+.snav__btn.is-active svg { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .snav__btn:hover { color: rgba(255, 255, 255, 0.92); }
+  .snav__btn:not(.is-active):hover svg { transform: scale(0.95); }
+}
+.snav__btn:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 1px; border-radius: 11px; }
+
+/* The label */
+.snav__tip {
+  position: absolute;
+  padding: 4px 8px; border-radius: 7px;
+  background: var(--tip-bg); color: var(--tip-ink);
+  font: 500 11px/1.3 var(--font); white-space: nowrap;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.22s var(--ease);
+}
+.snav--rail .snav__tip { right: calc(100% + 10px); top: var(--at); transform: translate(4px, -50%); }
+.snav--rail .snav__tip.is-on { opacity: 1; transform: translate(0, -50%); }
+.snav--row .snav__tip { left: var(--at); bottom: calc(100% + 8px); transform: translate(-50%, 4px); }
+.snav--row .snav__tip.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .snav__bar, .snav__glow, .snav__btn svg, .snav__tip { transition: none; }
+  .snav__num > span { animation: none; }
+}
+@media (forced-colors: active) {
+  .snav__bar { border-color: CanvasText; }
+  .snav__btn.is-active { outline: 2px solid Highlight; }
+}

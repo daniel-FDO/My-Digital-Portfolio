@@ -1,0 +1,129 @@
+/* =========================================================
+   PRELOADER — "daniel." (markup: index.html, logic: preloader.js)
+   Everything is scoped to .pl, plus html.pl-on, which only exists
+   while the loader is on screen. Without JavaScript (or after it
+   leaves) none of this applies. Fixed colours, not the theme
+   tokens: it's always the near-black intro, whatever the theme.
+   ========================================================= */
+.pl { display: none; }
+html.pl-on { overflow: hidden; }                 /* no scrolling under it */
+html.pl-on .pl,
+.pl.is-out { display: grid; }                    /* still there while it fades (pl-on is already gone) */
+/* The page's own entrance waits until the loader steps aside */
+html.pl-on .page .intro .in,
+html.pl-on .rise,
+html.pl-on .sec { animation-play-state: paused; }
+
+.pl {
+  position: fixed; inset: 0; z-index: 3000;
+  place-items: center;
+  padding: 24px;
+  background: #111110;
+  color: #e9e8e4;
+  font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  pointer-events: auto;                          /* nothing underneath is clickable */
+}
+.pl__inner {
+  display: flex; flex-direction: column; align-items: center;
+  width: min(232px, 100%);
+}
+
+/* 1. the wordmark rises in */
+.pl__mark {
+  font-size: 44px; line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.pl.is-in .pl__mark { opacity: 1; transform: none; }
+
+/* 2. the full stop lights up, with a soft halo */
+.pl__dot {
+  color: #4a4845;
+  transition: color 0.4s ease 0.3s, text-shadow 0.6s ease 0.3s;
+}
+.pl.is-in .pl__dot {
+  color: #ef4a3c;
+  text-shadow: 0 0 2px rgba(239, 74, 60, 0.7), 0 0 16px rgba(239, 74, 60, 0.55);
+}
+
+.pl__tag {
+  margin-top: 16px;
+  font-size: 10px; line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  white-space: nowrap;
+  color: #8f8c86;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.15s;
+}
+.pl.is-in .pl__tag { opacity: 1; }
+
+/* 3. the progress line (JS sets --p, 0 … 1, from what has really loaded) */
+.pl__bar {                                        /* the line is centred; the figure hangs off its end */
+  position: relative;
+  display: flex; align-items: center;
+  width: 176px;
+  margin-top: 30px;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.2s;
+}
+.pl.is-in .pl__bar { opacity: 1; }
+.pl__track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(233, 232, 228, 0.13);
+}
+.pl__fill {
+  position: absolute; inset: 0;
+  background: #ef4a3c;
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0));
+}
+.pl__pct {
+  position: absolute; left: calc(100% + 12px); top: 50%;
+  transform: translateY(-50%);
+  font: 400 11px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  color: #a19e99;
+}
+.pl__note {
+  height: 12px;
+  margin-top: 12px;
+  font-size: 11px; line-height: 12px;
+  color: #8f8c86;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.pl.is-slow .pl__note { opacity: 1; }
+
+/* 5. away: fades, and the words lift a little */
+.pl.is-out {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+.pl.is-out .pl__inner {
+  transform: translateY(-14px);
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (max-width: 380px) {
+  .pl__mark { font-size: 38px; }
+  .pl__tag { letter-spacing: 0.2em; }
+}
+
+/* Reduced motion: nothing moves; a static state and a plain fade */
+@media (prefers-reduced-motion: reduce) {
+  .pl__mark, .pl.is-out .pl__inner { transform: none !important; }
+  .pl__dot { transition: none; }
+  /* home.css shortens every transition to ~0 here; keep these two fades */
+  .pl .pl__mark, .pl .pl__tag, .pl .pl__bar { transition: opacity 0.25s ease !important; }
+  .pl.is-out { transition: opacity 0.3s ease !important; }
+}

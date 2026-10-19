@@ -1,0 +1,95 @@
+/* =========================================================
+   BUTTONS — one system for the whole site (home page, folder
+   pages, secret.html). Three kinds, each with one job:
+     .btn--primary    the main action: a solid fill (warm white with
+                      dark text at night, near-black in the light)
+     .btn--secondary  the other actions: plain text with a deliberate
+                      underline that firms up on hover
+     .btn--utility    small controls (theme, menu, ← →, Back, Close):
+                      compact, a fine border, a clear label or name
+   + .btn--icon (square utility, for ← → and the theme control).
+   Colours come from two tokens, so a button fits any surface:
+     --btn-ink  text / border / fill colour  (default: the page text)
+     --btn-on   text colour ON a primary fill (default: the page bg)
+   A folder card, the stone card or the always-dark footer just set
+   those two. Hover / focus: a quick (~180ms) colour or border change;
+   pressed: a 1px nudge. No glass, glow, scaling, magnetic movement
+   or decorative arrows.
+   ========================================================= */
+.btn {
+  --btn-ink-c: var(--btn-ink, var(--text, #161616));
+  --btn-on-c: var(--btn-on, var(--bg, #f6f5f2));
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--btn-ink-c);
+  font: 500 15px/1.2 var(--font, "Inter", system-ui, sans-serif);
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, text-decoration-color 0.18s ease, transform 0.1s ease;
+}
+.btn:focus-visible { outline: 2px solid var(--focus, var(--btn-ink-c)); outline-offset: 3px; }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled,
+.btn[aria-disabled="true"] { opacity: 0.4; cursor: default; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* Primary: solid fill */
+.btn--primary {
+  background: var(--btn-ink-c);
+  border-color: var(--btn-ink-c);
+  color: var(--btn-on-c);
+}
+.btn--primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--btn-ink-c) 84%, var(--btn-on-c));
+  border-color: color-mix(in srgb, var(--btn-ink-c) 84%, var(--btn-on-c));
+}
+
+/* Secondary: text with an underline (still a 44px-tall target) */
+.btn--secondary {
+  padding: 0 2px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: color-mix(in srgb, var(--btn-ink-c) 40%, transparent);
+}
+.btn--secondary:hover { text-decoration-color: currentColor; }
+
+/* Utility: compact, a fine border */
+.btn--utility {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-color: color-mix(in srgb, var(--btn-ink-c) 28%, transparent);
+}
+.btn--utility:hover:not(:disabled) {
+  border-color: var(--btn-ink-c);
+  background: color-mix(in srgb, var(--btn-ink-c) 6%, transparent);
+}
+.btn--icon { width: 36px; padding: 0; font-size: 16px; }
+.btn--utility.btn--lg { min-height: 44px; min-width: 44px; }   /* a utility control people tap often */
+
+/* Text kept for screen readers only (e.g. "opens in a new tab") */
+.btn .vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:active:not(:disabled) { transform: none; }
+}

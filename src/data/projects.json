@@ -1,0 +1,115 @@
+[
+  {
+    "name": "Blueprint",
+    "category": "CV builder",
+    "url": "https://blueprint-vwig.onrender.com/",
+    "image": "previews/blueprint.jpg",
+    "focus": "50% 40%",
+    "description": "A CV builder with editable templates, a live preview and PDF export.",
+    "points": [
+      "Three editable templates, a readiness check and job-keyword matching.",
+      "CVs are saved in the browser and export as PDF or JSON. AI suggestions are optional."
+    ],
+    "featured": true,
+    "video": "previews/video/blueprint.mp4",
+    "poster": "previews/video/blueprint.jpg"
+  },
+  {
+    "name": "Daniel’s Gallery",
+    "category": "Interactive gallery",
+    "url": "https://gallery-zeta-blond.vercel.app/",
+    "repo": "https://github.com/daniel-FDO/gallery",
+    "image": "previews/gallery.jpg",
+    "focus": "50% 45%",
+    "capture": false,
+    "description": "An interactive gallery with five rooms of art, wallpapers, portraits and visual experiments.",
+    "points": [
+      "Five rooms, from live works you take part in to a page-turning notebook.",
+      "An ambient soundtrack, generated live, plays only if you choose."
+    ],
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "featured": true,
+    "video": "previews/video/gallery.mp4",
+    "poster": "previews/video/gallery.jpg"
+  },
+  {
+    "name": "Homeless Support Finder",
+    "category": "Community support",
+    "url": "https://porchlightwebproj.netlify.app/",
+    "image": "previews/porchlight.jpg",
+    "focus": "50% 0%",
+    "description": "A support site that helps people find shelters, food banks and other local services.",
+    "points": [
+      "A map of support services, plus practical guides on housing and mental health.",
+      "Ways to ask for help anonymously or contact someone directly."
+    ],
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "video": "previews/video/porchlight.mp4",
+    "poster": "previews/video/porchlight.jpg"
+  },
+  {
+    "name": "Rock, Paper, Scissors",
+    "category": "Browser game",
+    "url": "https://rock-paper-scissors-daniel.netlify.app/",
+    "repo": "https://github.com/daniel-FDO/rock-paper-scissors-",
+    "image": "previews/rock-paper-scissors.jpg",
+    "focus": "50% 30%",
+    "description": "Play rock, paper, scissors against the computer and keep track of your score.",
+    "points": [
+      "Built from a Frontend Mentor design challenge."
+    ],
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "video": "previews/video/rock-paper-scissors.mp4",
+    "poster": "previews/video/rock-paper-scissors.jpg"
+  },
+  {
+    "name": "Study Desk",
+    "category": "Study planner",
+    "url": "projects/study-desk/",
+    "image": "previews/study-desk.jpg",
+    "focus": "50% 20%",
+    "capture": false,
+    "description": "A coursework planner with deadlines, subject filters and a focus timer.",
+    "points": [
+      "Tasks are saved in your browser. No account needed."
+    ],
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "video": "previews/video/study-desk.mp4",
+    "poster": "previews/video/study-desk.jpg"
+  },
+  {
+    "name": "Object Lab",
+    "category": "Physics playground",
+    "url": "projects/object-lab/",
+    "image": "previews/object-lab.jpg",
+    "focus": "50% 45%",
+    "capture": false,
+    "description": "Drop, drag and throw shapes in a physics playground with adjustable gravity.",
+    "points": [
+      "Add circles and squares, pause the simulation or reset the scene."
+    ],
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "video": "previews/video/object-lab.mp4",
+    "poster": "previews/video/object-lab.jpg"
+  }
+]

@@ -1,0 +1,247 @@
+/* =========================================================
+   WIDGETS — the bento under the intro (widgets/Widgets.tsx)
+   Wide:   music music | now | github
+           Daniel Daniel | now | studying
+   Medium: two columns, "now" tall on the left.
+   Narrow: one column for the big ones, pairs for the small ones.
+   The layout follows the grid's own width (container queries).
+   The music card's own styles stay in home.css ("Music").
+   ========================================================= */
+.widgets { margin-top: 2.9rem; container-type: inline-size; }
+.widgets__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 11.5rem;
+  grid-template-areas:
+    "music music now gh"
+    "name  name  now study";
+  gap: 0.9rem;
+}
+.wg--music { grid-area: music; }
+.wg--now { grid-area: now; }
+.wg--gh { grid-area: gh; }
+.wg--name { grid-area: name; }
+.wg--study { grid-area: study; }
+.wg { min-width: 0; }
+/* The tiles' entrance: opacity + a short rise (no blur: cheaper to draw) */
+@media (prefers-reduced-motion: no-preference) {
+  .widgets .rise { animation-name: wg-rise; }
+}
+@keyframes wg-rise { from { opacity: 0; transform: translateY(10px); } }
+.wg > .w { height: 100%; }
+
+/* Every tile: the card from home.css (.w) */
+.w {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--widget-line);
+  background: var(--widget);
+}
+.tile {
+  display: flex; flex-direction: column;
+  padding: 1rem 1.05rem;
+  color: var(--fg);
+  transition: border-color var(--fast) ease, transform 0.35s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover { border-color: color-mix(in srgb, var(--fg) 22%, transparent); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .tile:hover { transform: translateY(-2px); }
+  .tile:hover .w__arrow { transform: translate(2px, -2px); color: var(--fg); }
+}
+.tile:focus-visible { outline-offset: 3px; border-radius: 1rem; }
+.w__label {
+  display: flex; align-items: center; gap: 0.4rem;
+  font: 500 0.6875rem/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted);
+}
+.w__glyph { width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.w__arrow {
+  position: absolute; top: 0.95rem; right: 0.95rem;
+  width: 13px; height: 13px;
+  fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  color: var(--muted);
+  transition: transform var(--fast) var(--ease), color var(--fast) ease;
+}
+.tile__num {
+  display: flex; align-items: center; gap: 0.55rem;
+  font-size: 1.9rem; font-weight: 600; line-height: 1; letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.tile__unit { font: 0.625rem/1.35 var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.tile__foot { margin-top: auto; padding-top: 0.6rem; font-size: 0.75rem; line-height: 1.45; color: var(--muted); }
+.tile__muted { font-size: 0.8125rem; line-height: 1.45; color: var(--muted); }
+.tile__ph { display: inline-block; width: 3rem; height: 0.8em; border-radius: 4px; background: var(--soft-2); animation: wg-wait 1.6s ease-in-out infinite; }
+@keyframes wg-wait { 50% { opacity: 0.45; } }
+
+/* ---- Music: the cover as a soft backdrop; a small equaliser while playing ---- */
+.music { isolation: isolate; }
+.music__bg {
+  position: absolute; inset: -25%; z-index: -1;
+  width: 150%; height: 150%; object-fit: cover;
+  filter: blur(36px) saturate(1.3);
+  opacity: 0.32;
+  pointer-events: none;
+  will-change: transform;                  /* blurred once, in its own layer */
+}
+:root:not([data-theme="dark"]) .music__bg { opacity: 0.22; }
+.music__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; margin-right: 7px; vertical-align: -1px; }
+.music__eq i { width: 2px; height: 100%; border-radius: 1px; background: #1db954; transform-origin: 50% 100%; }
+.music__eq i:nth-child(2) { transform: scaleY(0.55); }
+.music__eq i:nth-child(3) { transform: scaleY(0.8); }
+.music__eq i:nth-child(4) { transform: scaleY(0.4); }
+@media (prefers-reduced-motion: no-preference) {
+  .music__eq i { animation: wg-eq 0.9s ease-in-out infinite alternate; }
+  .music__eq i:nth-child(2) { animation-delay: -0.3s; animation-duration: 0.7s; }
+  .music__eq i:nth-child(3) { animation-delay: -0.6s; animation-duration: 1.1s; }
+  .music__eq i:nth-child(4) { animation-delay: -0.15s; animation-duration: 0.8s; }
+}
+@keyframes wg-eq { from { transform: scaleY(0.25); } to { transform: scaleY(1); } }
+
+/* ---- Kent now ---- */
+.now {
+  display: flex; flex-direction: column;
+  padding: 1.05rem 1.15rem 1rem;
+  background:
+    radial-gradient(120% 70% at 100% 0%, color-mix(in srgb, var(--brand) 9%, transparent), transparent 60%),
+    var(--widget);
+}
+.now__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
+@media (prefers-reduced-motion: no-preference) {
+  .now__dot { animation: wg-live 2.4s ease-in-out infinite; }
+  .now__colon { animation: wg-colon 2s steps(1) infinite; }
+}
+@keyframes wg-live { 50% { opacity: 0.35; } }
+@keyframes wg-colon { 50% { opacity: 0.3; } }
+.now__time {
+  margin-top: 1rem;
+  font-size: 3.4rem; font-weight: 600; line-height: 1; letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.now__colon { opacity: 0.55; }
+.now__sec { position: relative; top: -1.55em; margin-left: 0.35rem; font: 500 0.75rem/1 var(--mono); letter-spacing: 0; color: var(--muted); }
+.now__date { margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted); }
+.now__wx { display: flex; align-items: center; gap: 0.55rem; margin-top: auto; padding-top: 1rem; }
+.now__icon { width: 26px; height: 26px; flex: none; fill: none; stroke: var(--fg); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.now__temp { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.04em; line-height: 1; }
+.now__word { font-size: 0.8125rem; color: var(--muted); }
+.now__sun { margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px solid var(--line); }
+.now__arc { display: block; width: 100%; max-width: 13rem; height: auto; margin-inline: auto; overflow: visible; }
+.now__moon { fill: none; stroke: var(--muted); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.now__next { margin-top: 0.55rem; text-align: center; font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em; }
+.now__track { fill: none; stroke: var(--line); stroke-width: 1.4; stroke-dasharray: 0.012 0.016; stroke-linecap: round; }
+.now__done { fill: none; stroke: color-mix(in srgb, var(--brand) 70%, transparent); stroke-width: 1.6; stroke-linecap: round; }
+.now__horizon { stroke: var(--line); stroke-width: 1; }
+.now__sunDot { fill: var(--brand); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--brand) 70%, transparent)); }
+.now__times { display: flex; justify-content: space-between; margin-top: 0.3rem; font: 0.6875rem/1.4 var(--mono); color: var(--muted); }
+
+/* ---- GitHub ---- */
+.gh-tile__body { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.gh-tile__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--weeks), 9px);
+  grid-template-rows: repeat(7, 9px);
+  gap: 2px;
+  margin: auto 0 0.75rem;
+}
+.gh-tile__grid i { border-radius: 2px; background: var(--gh-0); }
+.gh-tile__grid i[data-l="1"] { background: var(--gh-1); }
+.gh-tile__grid i[data-l="2"] { background: var(--gh-2); }
+.gh-tile__grid i[data-l="3"] { background: var(--gh-3); }
+.gh-tile__grid i[data-l="4"] { background: var(--gh-4); }
+.gh-tile__grid i.is-ph { animation: wg-wait 1.6s ease-in-out infinite; }
+.gh-tile .tile__muted { margin-top: auto; }
+
+/* ---- Daniel: the name, each letter swelling as the pointer comes near ---- */
+.daniel {
+  justify-content: space-between;
+  cursor: default;
+  touch-action: pan-y;                       /* sideways drags play; vertical scrolling still works */
+  user-select: none; -webkit-user-select: none;
+  background:
+    radial-gradient(90% 120% at 100% 100%, color-mix(in srgb, var(--brand) 7%, transparent), transparent 60%),
+    var(--widget);
+}
+.daniel__word {
+  display: flex; align-items: baseline;
+  margin-top: auto;
+  font-family: "Nunito Variable", var(--font);         /* rounded and friendly; bundled locally */
+  font-size: clamp(3.4rem, 1.2rem + 7vw, 7rem);       /* as big as the tile's height allows; swelling adds a little width */
+  line-height: 0.92; letter-spacing: -0.035em;
+  color: var(--fg);
+}
+.daniel__ch {
+  display: inline-block;
+  font-variation-settings: 'wght' 560;                /* medium at rest */
+  color: color-mix(in srgb, var(--fg) calc(82% + var(--k, 0) * 18%), var(--muted));
+  will-change: transform;
+}
+.daniel__dot { color: var(--brand); font-variation-settings: 'wght' 900; margin-left: 0.01em; }
+/* the supporting lines: the same rounded face, sentence case, quieter */
+.daniel > .w__label {
+  font: 700 0.875rem/1.3 "Nunito Variable", var(--font); letter-spacing: 0.01em; text-transform: none;
+}
+.daniel__hint {
+  margin-top: 0.55rem;
+  font: 600 0.8125rem/1.35 "Nunito Variable", var(--font); letter-spacing: 0.01em;
+  color: var(--muted);
+}
+.daniel__hint-touch { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .daniel__hint-fine { display: none; }
+  .daniel__hint-touch { display: inline; }
+}
+
+/* ---- Studying: the course, and where I am on it ---- */
+.study-tile__title { margin-top: 0.75rem; font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.study-tile__steps { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin-top: auto; }
+.study-tile__steps li { position: relative; display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; font: 0.625rem/1.3 var(--mono); letter-spacing: 0.02em; color: var(--muted); }
+.study-tile__steps li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.25rem; }
+.study-tile__steps i { position: relative; z-index: 1; width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.study-tile__steps li:not(:last-child)::after { content: ""; position: absolute; left: 9px; right: 0; top: 4px; height: 1px; background: var(--line); }
+.study-tile__steps li.is-done i, .study-tile__steps li.is-done::after { background: var(--fg); }
+.study-tile__steps li.is-now i { background: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
+.study-tile__steps li.is-now span { color: var(--fg); }
+
+/* ---- Medium: two columns, "now" tall on the left ---- */
+@container (max-width: 759px) {
+  .widgets__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 11.75rem;
+    grid-template-areas:
+      "music music"
+      "now   gh"
+      "now   study"
+      "name  name";
+  }
+}
+/* ---- Narrow (phones): big tiles full width, small ones in pairs ---- */
+@container (max-width: 479px) {
+  .widgets__grid {
+    grid-auto-rows: auto;
+    grid-template-areas:
+      "music music"
+      "now   now"
+      "gh    study"
+      "name  name";
+    gap: 0.75rem;
+  }
+  .wg--music { height: 10.8rem; }
+  .wg--music .music { padding: 0.95rem; }
+  .wg--gh, .wg--study { min-height: 10.5rem; }
+  .wg--name { height: 10rem; }
+  .daniel__word { font-size: 4rem; }
+  .now { display: grid; grid-template-columns: 1fr auto; column-gap: 1rem; }
+  .now > .w__label, .now__sun { grid-column: 1 / -1; }
+  .now__time { font-size: 3rem; }
+  .now__wx { grid-column: 2; grid-row: 2; flex-direction: column; align-items: flex-end; gap: 0.25rem; margin: 1rem 0 0; padding: 0; text-align: right; }
+  .gh-tile__grid { grid-template-columns: repeat(var(--weeks), minmax(0, 1fr)); grid-template-rows: none; gap: 1.5px; }
+  .gh-tile__grid i { aspect-ratio: 1; }
+  .tile__num { font-size: 1.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile, .w__arrow { transition: none; }
+}

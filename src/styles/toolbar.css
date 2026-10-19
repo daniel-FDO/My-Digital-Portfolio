@@ -1,0 +1,139 @@
+/* =========================================================
+   TOOLBAR (Dock.tsx) — a dark glass pill at the bottom centre, like
+   the section dock (section-nav.css): the same dark in both themes.
+   Height 48px (54px for touch) and its place are what the section
+   dock's narrow row stacks above, so keep them in step.
+   ========================================================= */
+.dock {
+  --ink: #ecebe7;
+  position: fixed; left: 50%; z-index: 50;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+}
+.dock__bar {
+  display: flex; align-items: center; gap: 4px;
+  height: 48px;
+  padding: 0 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(17, 17, 16, 0.72);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+}
+:root:not([data-theme="dark"]) .dock__bar { background: rgba(24, 23, 21, 0.84); border-color: rgba(0, 0, 0, 0.1); }
+@media (prefers-reduced-motion: no-preference) {
+  .dock__bar { animation: dock-in 0.6s var(--ease) 0.25s backwards; }
+  html.pl-on .dock__bar { animation-play-state: paused; }
+}
+@keyframes dock-in { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+
+/* ---- Ask: spark · the cycling question · ⌘K ---- */
+.dock__ask {
+  display: flex; align-items: center; gap: 0.55rem;
+  width: 248px; height: 34px;
+  padding: 0 0.45rem 0 0.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  color: rgba(236, 235, 231, 0.66);
+  transition: background-color var(--fast) ease, box-shadow var(--fast) ease, color var(--fast) ease;
+}
+.dock__ask:hover { background: rgba(255, 255, 255, 0.11); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); color: rgba(236, 235, 231, 0.9); }
+.dock__ask[aria-expanded="true"] { background: rgba(255, 255, 255, 0.13); color: var(--ink); }
+.dock__spark {
+  display: grid; place-items: center; flex: none;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: color-mix(in srgb, var(--brand) 22%, transparent);
+  color: #ff8a7e;
+  transition: transform 0.45s var(--ease), background-color var(--fast) ease;
+}
+.dock__spark svg { width: 14px; height: 14px; fill: currentColor; }
+.dock__ask:hover .dock__spark { transform: rotate(90deg) scale(1.06); background: color-mix(in srgb, var(--brand) 32%, transparent); }
+.dock__ph {
+  position: relative; flex: 1; min-width: 0; height: 20px;
+  overflow: hidden; text-align: left;
+  font-size: 12.5px; line-height: 20px;
+  -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+  mask-image: linear-gradient(90deg, #000 85%, transparent);
+}
+.dock__ph > span { display: block; white-space: nowrap; }
+@media (prefers-reduced-motion: no-preference) {
+  .dock__ph > span { animation: dock-prompt 0.5s var(--ease) both; }
+}
+@keyframes dock-prompt { from { opacity: 0; transform: translateY(8px); filter: blur(3px); } }
+.dock__keys { display: flex; gap: 3px; flex: none; }
+.dock__keys kbd { background: rgba(255, 255, 255, 0.1); color: rgba(236, 235, 231, 0.7); }
+
+.dock__sep { width: 1px; height: 18px; margin: 0 3px; background: rgba(255, 255, 255, 0.14); flex: none; }
+
+/* ---- Round buttons: theme, back to top ---- */
+.dock__btn {
+  position: relative;
+  display: grid; place-items: center;
+  width: 34px; height: 34px; flex: none;
+  border-radius: 50%;
+  color: rgba(236, 235, 231, 0.78);
+  transition: background-color var(--fast) ease, color var(--fast) ease;
+}
+.dock__btn:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); }
+.dock__btn:active { transform: scale(0.94); }
+.dock__btn:focus-visible, .dock__ask:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 2px; }
+.dock__ask:focus-visible { border-radius: 999px; }
+.dock__btn > svg:not(.dock__ring) { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; transition: opacity 0.25s ease, transform 0.35s var(--ease), filter 0.25s ease; }
+.dock #themeToggle svg { position: absolute; }
+:root[data-theme="dark"] .i-moon, :root:not([data-theme="dark"]) .i-sun { opacity: 0; transform: rotate(-40deg) scale(0.6); filter: blur(2px); }
+.dock #themeToggle:hover svg { transform: rotate(18deg); }
+:root[data-theme="dark"] .dock #themeToggle:hover .i-moon, :root:not([data-theme="dark"]) .dock #themeToggle:hover .i-sun { transform: rotate(-40deg) scale(0.6); }
+
+/* Back to top: slides in once you've scrolled; the ring fills as you read */
+.dock__more {
+  display: flex; align-items: center;
+  max-width: 0; overflow: hidden; opacity: 0;
+  transition: max-width 0.4s var(--ease), opacity 0.25s ease;
+}
+.dock.is-scrolled .dock__more { max-width: 40px; opacity: 1; }
+.dock__ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.dock__track { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 2; }
+.dock__prog { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.dock__top .dock__arrow { width: 15px !important; height: 15px !important; stroke-width: 2 !important; }
+.dock__top:hover .dock__arrow { transform: translateY(-1.5px); }
+
+/* Labels on hover and keyboard focus */
+.dock__btn[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute; left: 50%; bottom: calc(100% + 12px);
+  padding: 4px 8px; border-radius: 7px;
+  background: var(--tip-bg); color: var(--tip-ink);
+  font: 500 11px/1.3 var(--font); white-space: nowrap;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.35);
+  opacity: 0; transform: translate(-50%, 4px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.22s var(--ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dock__btn[data-tip]:hover::after { opacity: 1; transform: translate(-50%, 0); }
+}
+.dock__btn[data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+/* .dock__more clips its button's label: let it show once it has slid in */
+.dock.is-scrolled .dock__more { overflow: visible; transition: max-width 0.4s var(--ease), opacity 0.25s ease, overflow 0s 0.4s; }
+
+/* ---- Narrow / touch ---- */
+@media (max-width: 639px) {
+  .dock { bottom: calc(10px + env(safe-area-inset-bottom)); }
+  .dock__ask { width: 176px; }
+  .dock__keys { display: none; }
+}
+@media (pointer: coarse) {
+  .dock__bar { height: 54px; }
+  .dock__btn { width: 44px; height: 44px; }
+  .dock__ask { height: 40px; }
+  .dock.is-scrolled .dock__more { max-width: 48px; }
+}
+@media (max-width: 380px) {
+  .dock__ask { width: 148px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dock__spark, .dock__btn > svg, .dock__more, .dock__btn[data-tip]::after { transition: none; }
+}

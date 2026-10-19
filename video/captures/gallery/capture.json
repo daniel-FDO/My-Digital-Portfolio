@@ -1,0 +1,123 @@
+{
+  "slug": "gallery",
+  "url": "https://gallery-zeta-blond.vercel.app/",
+  "capturedAt": "2026-10-19T00:19:52.731Z",
+  "panels": [
+    {
+      "id": "lobby",
+      "file": "lobby.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "livearts",
+      "file": "livearts.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "wallpapers",
+      "file": "wallpapers.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "portraits",
+      "file": "portraits.png",
+      "w": 1280,
+      "h": 800
+    }
+  ],
+  "pieces": [
+    {
+      "id": "enter",
+      "panel": "lobby",
+      "file": "pieces/lobby--enter.png",
+      "x": 555,
+      "y": 558,
+      "w": 170,
+      "h": 170
+    },
+    {
+      "id": "art0",
+      "panel": "livearts",
+      "file": "pieces/livearts--art0.png",
+      "x": 146.3147430419922,
+      "y": 202.79293823242188,
+      "w": 392.1192626953125,
+      "h": 381.6423645019531
+    },
+    {
+      "id": "art1",
+      "panel": "livearts",
+      "file": "pieces/livearts--art1.png",
+      "x": 707.0318603515625,
+      "y": 279.9700927734375,
+      "w": 205.3092041015625,
+      "h": 233.0142822265625
+    },
+    {
+      "id": "pill",
+      "panel": "livearts",
+      "file": "pieces/livearts--pill.png",
+      "x": 327.2578125,
+      "y": 734.9375,
+      "w": 625.484375,
+      "h": 49.0625
+    },
+    {
+      "id": "banner0",
+      "panel": "wallpapers",
+      "file": "pieces/wallpapers--banner0.png",
+      "x": 332.70831298828125,
+      "y": 178.53775024414062,
+      "w": 258.54254150390625,
+      "h": 465.4085388183594
+    },
+    {
+      "id": "banner1",
+      "panel": "wallpapers",
+      "file": "pieces/wallpapers--banner1.png",
+      "x": 683.5084228515625,
+      "y": 178.0781707763672,
+      "w": 260.2044677734375,
+      "h": 466.31182861328125
+    },
+    {
+      "id": "sign",
+      "panel": "wallpapers",
+      "file": "pieces/wallpapers--sign.png",
+      "x": 577.4064331054688,
+      "y": 143.78662109375,
+      "w": 125.1871337890625,
+      "h": 31.245529174804688
+    },
+    {
+      "id": "portrait0",
+      "panel": "portraits",
+      "file": "pieces/portraits--portrait0.png",
+      "x": 405.3999938964844,
+      "y": 179,
+      "w": 413.4400329589844,
+      "h": 318.239990234375
+    },
+    {
+      "id": "portrait1",
+      "panel": "portraits",
+      "file": "pieces/portraits--portrait1.png",
+      "x": 833.7999877929688,
+      "y": 162,
+      "w": 236.63995361328125,
+      "h": 287.6400146484375
+    },
+    {
+      "id": "portrait2",
+      "panel": "portraits",
+      "file": "pieces/portraits--portrait2.png",
+      "x": 174.20001220703125,
+      "y": 219.8000030517578,
+      "w": 216.239990234375,
+      "h": 277.44000244140625
+    }
+  ]
+}

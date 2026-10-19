@@ -1,0 +1,51 @@
+{
+  "slug": "study-desk",
+  "url": "local:projects/study-desk/index.html",
+  "capturedAt": "2026-10-19T00:20:20.335Z",
+  "panels": [
+    {
+      "id": "desk",
+      "file": "desk.png",
+      "w": 1280,
+      "h": 1018
+    }
+  ],
+  "pieces": [
+    {
+      "id": "title",
+      "panel": "desk",
+      "file": "pieces/desk--title.png",
+      "x": 276.1875,
+      "y": 101,
+      "w": 302.484375,
+      "h": 140.21875
+    },
+    {
+      "id": "nav",
+      "panel": "desk",
+      "file": "pieces/desk--nav.png",
+      "x": 26,
+      "y": 196,
+      "w": 172,
+      "h": 47
+    },
+    {
+      "id": "form",
+      "panel": "desk",
+      "file": "pieces/desk--form.png",
+      "x": 276.1875,
+      "y": 416.609375,
+      "w": 650.625,
+      "h": 144
+    },
+    {
+      "id": "focus",
+      "panel": "desk",
+      "file": "pieces/desk--focus.png",
+      "x": 958.8125,
+      "y": 356.609375,
+      "w": 270,
+      "h": 542.96875
+    }
+  ]
+}

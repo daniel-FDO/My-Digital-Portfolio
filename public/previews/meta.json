@@ -1,0 +1,26 @@
+{
+  "https://porchlightwebproj.netlify.app/": {
+    "title": "Homeless Support Finder",
+    "description": ""
+  },
+  "https://vermillion-panda-960b32.netlify.app/": {
+    "title": "Frontend Mentor | Conference ticket generator",
+    "description": ""
+  },
+  "https://rock-paper-scissors-daniel.netlify.app/": {
+    "title": "Rock, Paper, Scissors",
+    "description": ""
+  },
+  "https://blueprint-vwig.onrender.com/": {
+    "title": "BluePrint | Career Tools",
+    "description": ""
+  },
+  "https://danielfasan.netlify.app/": {
+    "title": "Daniel Fasan — Digital Portfolio",
+    "description": "Daniel Fasan — front-end developer building useful, playful digital experiences."
+  },
+  "https://daniel-fasan.netlify.app/": {
+    "title": "Daniel Fasan | Welcome",
+    "description": "Daniel Fasan, digital developer. A playful welcome: drag the letters, drop shapes, then hold to enter."
+  }
+}

@@ -1,0 +1,63 @@
+/* Detail pages share the homepage's warm neutrals and reading measure.
+   Existing gallery, book, routes and controls retain their own behaviour. */
+.fp {
+  --bg: #f4f2ef; --text: #1e1b18; --muted: #625d56; --line: #dfdcd6;
+  --font: 'Geist', 'Inter', sans-serif; --font-display: 'Geist', 'Inter', sans-serif;
+  --fold-gutter: clamp(22px, 5vw, 48px);
+}
+:root[data-theme='dark'] .fp { --bg: #111110; --text: #e9e8e4; --muted: #a19e99; --line: #ffffff1f; }
+.fp .top { max-width: 860px; margin-inline: auto; padding: 24px var(--fold-gutter); }
+.fp .logo { font-size: 17px; color: var(--text); }
+.fp .logo span { color: #df4a3d; }
+.fp .back { border: 1px solid var(--line); border-radius: 8px; font: 500 13px/1.4 var(--font); padding: 11px 17px; min-height: 44px; }
+.fp .intro { border-radius: 0; padding-block: 112px 44px; box-shadow: none; border-bottom: 1px solid var(--line); background: var(--bg); color: var(--text); }
+.fp .intro__inner, .fp .body { max-width: 762px; margin-inline: auto; }
+.fp .intro__meta { margin-bottom: 24px; align-items: center; }
+.fp .intro__num { font: 400 13px/1.4 'Geist Mono', monospace; color: var(--muted); }
+.fp .intro__tag { padding: 0; border: 0; border-radius: 0; font-size: 11px; letter-spacing: .1em; color: var(--muted); }
+.fp .intro__title { grid-column: 1 / -1; font: 500 clamp(32px, 5vw, 52px)/1.12 var(--font); letter-spacing: -.045em; }
+.fp .intro__lead { grid-column: 1 / -1; padding: 0; border: 0; margin-top: 22px; max-width: 58ch; font-size: 16px; line-height: 1.65; color: var(--muted); }
+.fp .body { padding-block: 40px 72px; }
+.fp .facts { padding-bottom: 30px; gap: 24px; }
+.fp .facts dt { font-size: 10px; letter-spacing: .08em; }
+.fp .facts dd { font-size: 16px; }
+.fp .block { padding-block: 28px; border-top: 1px solid var(--line); }
+.fp .block h2 { font-size: 18px; font-weight: 500; letter-spacing: -.025em; }
+.fp .block p { font-size: 15px; line-height: 1.75; }
+.page-about, :root[data-theme='dark'] .page-about {
+  --ab-hero: var(--bg); --ab-hero-ink: var(--text); --ab-hero-accent: var(--text);
+  --ab-bg: var(--bg); --ab-text: var(--text); --ab-body: var(--muted);
+  --ab-muted: var(--muted); --ab-rule: var(--line); --ab-accent: var(--text);
+  --ab-on-accent: var(--bg); --ab-footer: var(--bg);
+}
+.page-about .ab-hero { border-radius: 0; box-shadow: none; border-bottom: 1px solid var(--line); padding-block: 104px 32px; }
+.page-about .ab-hero__inner { max-width: 762px; margin-inline: auto; min-height: 0; gap: 28px; }
+.page-about .ab-hero__label { font: 400 11px/1.5 'Geist Mono', monospace; letter-spacing: .08em; margin-bottom: 20px; }
+.page-about .ab-hero__title { font: 500 clamp(36px, 5.5vw, 64px)/1.08 var(--font); letter-spacing: -.05em; }
+.page-about .ab-gallery { --cw: clamp(164px, 18vw, 230px); }
+.page-about .ab-card { border-radius: 10px; box-shadow: 0 12px 24px -14px #0006; }
+.page-about .ab-facts { padding-block: 32px; }
+.page-about .ab-facts__grid, .page-about .ab-lore__inner, .page-about .ab-footer__inner { max-width: 762px; margin-inline: auto; }
+.page-about .ab-facts dt { font-size: 10px; letter-spacing: .08em; }
+.page-about .ab-facts dd { font-size: 16px; }
+.page-about .ab-lore { padding-block: 24px 64px; }
+.page-about .ab-lore__inner { padding-top: 24px; gap: 36px; }
+.page-about .ab-lore__art { font-size: clamp(40px, 4.4vw, 56px); }
+.page-about .ab-lore__title { font-family: var(--font); font-weight: 500; letter-spacing: -.045em; }
+.page-about .ab-lore__sticky { top: 96px; }
+.page-about .ab-chapter h3 { font-family: var(--font); font-size: 20px; font-weight: 500; }
+.page-about .ab-chapter p { font-size: 15px; line-height: 1.75; }
+.page-about .ab-footer { color: var(--text); border-top: 1px solid var(--line); padding-block: 40px; }
+.page-about .ab-footer__title { font: 500 clamp(28px, 4vw, 42px)/1.15 var(--font); letter-spacing: -.04em; }
+.page-about .ab-footer__text, .page-about .ab-footer__links a, .page-about .ab-footer__top { color: var(--muted); }
+.page-about .ab-footer__links a:hover, .page-about .ab-footer__top:hover { color: var(--text); }
+.page-about .ab-footer__rule { background: var(--line); }
+@media (max-width: 760px) {
+  .page-about .ab-hero__inner { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .page-about .ab-hero__title { font-size: clamp(32px, 6vw, 46px); }
+}
+@media (max-width: 520px) {
+  .page-about .ab-hero__inner { grid-template-columns: 1fr; }
+  .page-about .ab-gallery { --cw: 180px; }
+  .page-about .ab-lore__inner { grid-template-columns: 1fr; gap: 28px; }
+}

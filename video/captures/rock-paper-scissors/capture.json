@@ -1,0 +1,108 @@
+{
+  "slug": "rock-paper-scissors",
+  "url": "https://rock-paper-scissors-daniel.netlify.app/",
+  "capturedAt": "2026-10-19T00:09:03.527Z",
+  "panels": [
+    {
+      "id": "board",
+      "file": "board.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "result",
+      "file": "result.png",
+      "w": 1280,
+      "h": 800
+    },
+    {
+      "id": "rules",
+      "file": "rules.png",
+      "w": 1280,
+      "h": 800
+    }
+  ],
+  "pieces": [
+    {
+      "id": "choice0",
+      "panel": "board",
+      "file": "pieces/board--choice0.png",
+      "x": 398,
+      "y": 260,
+      "w": 192,
+      "h": 192
+    },
+    {
+      "id": "choice1",
+      "panel": "board",
+      "file": "pieces/board--choice1.png",
+      "x": 690,
+      "y": 260,
+      "w": 192,
+      "h": 192
+    },
+    {
+      "id": "choice2",
+      "panel": "board",
+      "file": "pieces/board--choice2.png",
+      "x": 544,
+      "y": 488,
+      "w": 192,
+      "h": 192
+    },
+    {
+      "id": "score",
+      "panel": "board",
+      "file": "pieces/board--score.png",
+      "x": 820,
+      "y": 50,
+      "w": 144,
+      "h": 112
+    },
+    {
+      "id": "you",
+      "panel": "result",
+      "file": "pieces/result--you.png",
+      "x": 140.65625,
+      "y": 344,
+      "w": 300,
+      "h": 300
+    },
+    {
+      "id": "house",
+      "panel": "result",
+      "file": "pieces/result--house.png",
+      "x": 839.328125,
+      "y": 344,
+      "w": 300,
+      "h": 300
+    },
+    {
+      "id": "message",
+      "panel": "result",
+      "file": "pieces/result--message.png",
+      "x": 552.453125,
+      "y": 392,
+      "w": 175.0625,
+      "h": 40
+    },
+    {
+      "id": "again",
+      "panel": "result",
+      "file": "pieces/result--again.png",
+      "x": 527.984375,
+      "y": 456,
+      "w": 224,
+      "h": 56
+    },
+    {
+      "id": "modal",
+      "panel": "rules",
+      "file": "pieces/rules--modal.png",
+      "x": 416,
+      "y": 199,
+      "w": 448,
+      "h": 402
+    }
+  ]
+}

@@ -1,0 +1,331 @@
+/* =========================================================
+   FOOTER RIG — the hanging ID card + Ronaldo × Messi's canvas and
+   Play / Pause (footer.js section 3, footer-football.js).
+   The card, lanyard, canvas and button rules are copied unchanged
+   from the archived footer stylesheet (_archive/unused/footer.css);
+   only the wrapper (.ffoot) and where the lanyard hangs are new, to
+   fit the current footer (home.css "Footer"). Scoped to .ffoot and
+   the rig's own classes.
+   ========================================================= */
+.ffoot {
+  --card-w: 170px;                     /* the ID card (height = 1.4 × width) */
+  --anchor-x: 0.5;                     /* where the lanyard hangs, across .ffoot__cardspace */
+  --anchor-y: 0px;                     /* ...from the top of .ffoot__cardspace */
+  --rope: 64px;                        /* lanyard length */
+  --strap-w: 18px;                     /* lanyard width (the hardware scales with it) */
+  --hook-sink: 3px;                    /* how far the clasp hooks down into the badge clip */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;                  /* footer.js / footer-football.js measure from here */
+  margin-top: 3rem;                    /* breathing room between Contact and the hairline */
+  padding-top: 5.5rem;                 /* the footer's top space: room for the players' heads + the ball */
+}
+/* The hairline that opens the footer, as on the old footer: the lanyard's
+   mount is clipped onto it, so the card hangs from something real. It sits
+   at the very top of .ffoot, which footer-football.js keeps the players
+   below. Wide screens: it spans the wordmark plus the card on each side
+   (symmetric), and the card hangs from its right end, beside the word. */
+.ffoot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(50% - 29rem - var(--card-w));
+  right: calc(50% - 29rem - var(--card-w));
+  height: 1px;
+  background: var(--line);
+  pointer-events: none;
+}
+.ffoot__cardspace {                    /* where the lanyard hangs: on the hairline */
+  position: absolute;
+  top: 0;
+  left: calc(50% + 27.5rem + 1.5rem);  /* the wordmark's right edge (it's 55rem wide) + a gap */
+  width: var(--card-w);
+  height: 1px;
+  pointer-events: none;
+}
+.ffoot .idcard:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 4px;
+}
+
+/* ---- Ronaldo + Messi on the wordmark (footer-football.js) ----
+   The canvas sits over the letters but under the ID card, and never
+   catches the pointer. */
+.ffoot__football {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+.ffoot__football[hidden] { display: none; }
+
+/* Small play / pause toggle, at the right end of the hairline under the word */
+.ffoot__play {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+.ffoot__play[hidden] { display: none; }
+.ffoot__play::after {                  /* a 44px touch target around the 28px circle */
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+}
+.ffoot__play:hover { background: var(--soft-2); color: var(--fg); }
+.ffoot__play:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+.ffoot__play svg { width: 12px; height: 12px; fill: currentColor; }
+.ffoot__play[data-state="playing"] .ffoot__play-play,
+.ffoot__play:not([data-state="playing"]) .ffoot__play-pause { display: none; }
+
+/* =========================================================
+   The ID card on its lanyard
+   ========================================================= */
+.idrig {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;                /* only the card itself catches the pointer */
+}
+.idrig__rope {
+  visibility: hidden;                  /* until the card drops in (footer.js adds .is-live) */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* Strap: stacked strokes along one path give the woven band its rounded
+   shading; short dashes make the weave, so the texture moves with it */
+.idrig.is-live .idrig__rope { visibility: visible; }
+.idrig__rope use { fill: none; stroke-linejoin: round; }
+.idrig__shadow     { stroke: rgba(0, 0, 0, 0.45); stroke-width: var(--strap-w); filter: url(#idSoft); transform: translate(1.5px, 2.5px); }
+.idrig__strap      { stroke: #18181b; stroke-width: var(--strap-w); }
+.idrig__strap-mid  { stroke: #242428; stroke-width: calc(var(--strap-w) * 0.82); }
+.idrig__strap-hi   { stroke: #2f2f34; stroke-width: calc(var(--strap-w) * 0.38); opacity: 0.85; }
+.idrig__weave      { stroke: rgba(255, 255, 255, 0.07); stroke-width: calc(var(--strap-w) * 0.86); stroke-dasharray: 0.7 1; }
+.idrig__weave--b   { stroke: rgba(0, 0, 0, 0.3); stroke-width: calc(var(--strap-w) * 0.6); stroke-dasharray: 0.45 1.25; stroke-dashoffset: 0.85; }
+.idrig__thread     { stroke: rgba(0, 0, 0, 0.22); stroke-width: 0.5; }
+.idrig__stitch-hole { stroke: rgba(0, 0, 0, 0.45); stroke-width: calc(var(--strap-w) * 0.075); stroke-dasharray: 1.7 1.1; stroke-linecap: round; }
+.idrig__stitch     { stroke: #d42a30; stroke-width: calc(var(--strap-w) * 0.04); stroke-dasharray: 1.7 1.1; stroke-linecap: round; }
+.idrig__logo       { fill: none; stroke: #e0333a; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
+.idrig__logo--shade { stroke: rgba(0, 0, 0, 0.55); stroke-width: 1.7; transform: translate(0.25px, 0.4px); }
+
+/* Hardware: brushed gunmetal */
+.idrig__hw-shadow  { fill: rgba(0, 0, 0, 0.5); }
+.idrig__mount      { fill: url(#idMetalTop); stroke: #141417; stroke-width: 0.7; }
+.idrig__mount-hi   { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 0.6; stroke-linecap: round; }
+.idrig__slot       { fill: #0b0b0d; stroke: rgba(255, 255, 255, 0.1); stroke-width: 0.4; }
+.idrig__metal      { fill: url(#idMetal); stroke: #141417; stroke-width: 0.45; }
+.idrig__metal-line { fill: none; stroke: url(#idMetal); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.idrig__metal-line--thin { stroke-width: 1.2; }
+.idrig__hook-edge--thin { stroke-width: 1.9; }
+.idrig__ring-edge,
+.idrig__hook-edge  { fill: none; stroke: #121215; stroke-width: 3.3; stroke-linecap: round; stroke-linejoin: round; }
+.idrig__glint      { fill: none; stroke: rgba(255, 255, 255, 0.55); stroke-width: 0.5; stroke-linecap: round; }
+.idrig__fold       { fill: #222226; stroke: #141416; stroke-width: 0.5; }
+.idrig__fold-edge  { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 0.6; }
+
+.idcard {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--card-w);
+  height: calc(var(--card-w) * 1.4);
+  transform-origin: 50% 0;             /* swings around the clip at the top */
+  perspective: 1100px;
+  pointer-events: auto;
+  touch-action: pan-y;                 /* phones: vertical swipes still scroll the page */
+  -webkit-user-select: none;
+          user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 14px;
+  color: #fff;                         /* the card is its own dark object, in both themes */
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.5;
+  opacity: 0;                          /* footer.js shows it when it drops in */
+  will-change: transform;
+  cursor: grab;
+}
+.idcard.is-grabbing { cursor: grabbing; }
+.idcard.is-live { opacity: 1; transition: opacity 0.3s ease; }
+
+/* Clip at the top (where the lanyard attaches) */
+.idcard__clip {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: -12px;
+  width: 30px;
+  height: 22px;
+  margin-left: -15px;
+  border-radius: 6px 6px 8px 8px;
+  background: linear-gradient(180deg, #2a2a2e, #111113);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.idcard__clip::after {                 /* the slot punched in the card */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 14px;
+  height: 3px;
+  margin-left: -7px;
+  border-radius: 2px;
+  background: #000;
+}
+
+.idcard__tilt,
+.idcard__flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+.idcard__tilt { will-change: transform; }
+.idcard__flip { transition: transform 0.85s cubic-bezier(0.3, 1.25, 0.45, 1); }
+.idcard.is-flipped .idcard__flip { transform: rotateY(180deg); }
+
+.idcard__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  background: linear-gradient(165deg, #3a3a40 0%, #1a1a1d 42%, #0c0c0d 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 18px 36px -16px rgba(0, 0, 0, 0.55);
+}
+:root[data-theme="dark"] .idcard__face { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 24px 50px -18px rgba(0, 0, 0, 0.9); }
+.idcard__back { transform: rotateY(180deg); background: linear-gradient(165deg, #26262b 0%, #121214 55%, #0a0a0b 100%); }
+
+.idcard__logo {
+  position: relative;
+  z-index: 1;
+  margin-top: 12%;
+  text-align: center;
+  font-family: "Inter Tight", "Inter", sans-serif;
+  font-size: calc(var(--card-w) * 0.11);
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: -0.045em;
+  color: #fff;
+}
+.idcard__logo span { color: #6c78ff; }
+
+/* The photo fills the lower two thirds and fades into the card */
+.idcard__photo {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+  object-position: 50% 14%;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.25) 16%, rgba(0, 0, 0, 0.8) 32%, #000 42%, #000 64%, transparent 94%);
+          mask-image: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.25) 16%, rgba(0, 0, 0, 0.8) 32%, #000 42%, #000 64%, transparent 94%);
+  pointer-events: none;
+}
+.idcard__name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 7%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5;
+}
+.idcard__name strong { font-size: max(10px, calc(var(--card-w) * 0.05)); font-weight: 700; letter-spacing: 0.24em; margin-right: -0.24em; }
+.idcard__name span { font-size: max(8px, calc(var(--card-w) * 0.036)); font-weight: 500; letter-spacing: 0.3em; margin-right: -0.3em; color: rgba(255, 255, 255, 0.6); }
+
+/* Back: QR, "Portfolio 2026", email, a small barcode */
+.idcard__back { display: flex; flex-direction: column; align-items: center; padding: 8% 9%; line-height: 1.5; }
+.idcard__back-top {
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: calc(var(--card-w) * 0.036);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.idcard__logo--small { margin: 0; font-size: calc(var(--card-w) * 0.07); letter-spacing: -0.045em; text-transform: none; }
+.idcard__qr {
+  width: 62%;
+  margin-top: 12%;
+  border-radius: 10px;
+}
+.idcard__portfolio {
+  margin-top: 9%;
+  font-family: "Inter Tight", "Inter", sans-serif;
+  font-size: calc(var(--card-w) * 0.072);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.idcard__email {
+  margin-top: 3%;
+  font-size: calc(var(--card-w) * 0.042);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.65);
+}
+.idcard__barcode {
+  margin-top: auto;
+  width: 70%;
+  height: 7%;
+  opacity: 0.35;
+  background: repeating-linear-gradient(90deg, #fff 0 2px, transparent 2px 4px, #fff 4px 5px, transparent 5px 8px, #fff 8px 11px, transparent 11px 13px);
+}
+
+/* Glossy sheen: a soft diagonal light that slides with the swing / cursor */
+.idcard__sheen {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -60%;
+  width: 70%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.05) 30%, rgba(255, 255, 255, 0.17) 50%, rgba(255, 255, 255, 0.05) 70%, transparent 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ---- Narrower windows: no room beside the word, so a smaller card hangs
+        over the top of the "l" (the end of the word), as on the old footer's
+        phones. footer-football.js keeps the players and the ball clear of it,
+        and falls back to one player, or none, if they can't fit. ---- */
+@media (max-width: 1330px) {
+  .ffoot { --card-w: 132px; --rope: 40px; --strap-w: 15px; }
+  /* the hairline spans the wordmark; the card hangs from its right end, over the "l" */
+  .ffoot::before { left: calc(50% - min(27.5rem, 50%)); right: calc(50% - min(27.5rem, 50%)); }
+  .ffoot__cardspace {
+    left: auto;
+    right: calc(50% - min(27.5rem, 50%));   /* its right edge = the wordmark's right edge */
+  }
+}
+@media (max-width: 900px) {
+  .ffoot { --card-w: 112px; --rope: 32px; --strap-w: 13px; }
+}
+@media (max-width: 640px) {
+  .ffoot { --card-w: 84px; --rope: 22px; --strap-w: 9px; --hook-sink: 5px; padding-top: 8rem; }   /* the card only reaches the top of the "l" */
+  .idcard__clip { top: -9px; width: 22px; height: 16px; margin-left: -11px; }
+  .idcard__clip::after { width: 10px; bottom: 3px; margin-left: -5px; }
+  .idrig__stitch, .idrig__stitch-hole { stroke-dasharray: 1 0.7; }
+  .idrig__weave { stroke-dasharray: 0.5 0.8; }
+  .idcard__name strong { font-size: 7px; letter-spacing: 0.2em; margin-right: -0.2em; white-space: nowrap; }
+}

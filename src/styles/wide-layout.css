@@ -1,0 +1,60 @@
+/* =========================================================
+   WIDE LAYOUT — EXPERIMENT (reversible)
+   A wider page on desktop (up to 1152px), with comfortable side
+   padding, reading-width paragraphs, and side-by-side layouts in
+   About and GitHub activity. Phones and tablets keep their layouts.
+
+   TO REVERT: remove the one <link … wide-layout.css> line in
+   index.html (this file changes nothing else).
+   ========================================================= */
+
+/* ---- The container: up to 1152px. From 1000px the side padding is
+   at least 80px, so the section dock (the right-edge rail) never sits
+   on the content. Below that it's the usual gutter. ---- */
+.page { --side: var(--gutter); width: min(1152px, 100% - 2 * var(--side)); }
+@media (min-width: 1000px) { .page { --side: clamp(80px, 7vw, 120px); } }
+
+/* ---- Reading width: paragraphs stay around 60–65 characters ---- */
+/* (ch is the width of a "0", wider than an average Geist letter: 44ch ≈ 63 letters) */
+.intro__text, .intro__study, .intro__learning, .sec__text, .faq__item p { max-width: 44ch; }
+.faq { max-width: 46rem; }
+
+/* ---- Things that shouldn't grow with the page keep their old size ---- */
+.xp { max-width: 46rem; }                         /* education rows: title ↔ place */
+
+/* ---- Projects: the hover preview stays beside the list, not at the far edge ---- */
+@media (hover: hover) and (pointer: fine) and (min-width: 1100px) {
+  .pv { right: auto; left: 34rem; width: 19rem; }
+}
+
+/* ---- About: photo | story | interests + the full-story link ---- */
+@media (min-width: 1100px) {
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 17rem);
+    column-gap: 3.5rem;
+    align-items: start;
+  }
+  .about__foot {
+    flex-direction: column; align-items: flex-start; gap: 0.75rem;
+    margin-top: 1.25rem; padding: 0.25rem 0 0 2rem;
+    border-top: 0; border-left: 1px solid var(--line);
+    align-self: stretch;
+  }
+  .about__more { margin-left: 0; margin-top: auto; }
+  .tl__item { max-width: 36rem; }
+}
+
+/* ---- GitHub activity: more room for the panel; the lead's note sits beside the title ---- */
+@media (min-width: 1100px) {
+  .act__grid { grid-template-columns: minmax(16rem, 0.36fr) minmax(0, 1fr); gap: 1rem; }
+  .act__side { gap: 1rem; }
+  .act__stats { gap: 0.75rem; }
+  .act__intro { max-width: 22rem; }
+}
+
+/* ---- Gallery: the whole container width (the cards keep a sensible size) ---- */
+@media (min-width: 1100px) {
+  .gal__view { height: calc(min(36cqw, 25rem) * 1.25 + 1.5rem); }
+  .gal__card { width: min(36cqw, 25rem); }
+}

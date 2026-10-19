@@ -1,0 +1,78 @@
+{
+  "slug": "object-lab",
+  "url": "local:projects/object-lab/index.html",
+  "capturedAt": "2026-10-19T00:08:24.070Z",
+  "panels": [
+    {
+      "id": "lab",
+      "file": "lab.png",
+      "w": 1280,
+      "h": 987
+    }
+  ],
+  "pieces": [
+    {
+      "id": "title",
+      "panel": "lab",
+      "file": "pieces/lab--title.png",
+      "x": 64,
+      "y": 160,
+      "w": 302.359375,
+      "h": 138.375
+    },
+    {
+      "id": "bench",
+      "panel": "lab",
+      "file": "pieces/lab--bench.png",
+      "x": 65,
+      "y": 331.375,
+      "w": 1150,
+      "h": 43
+    },
+    {
+      "id": "circle",
+      "panel": "lab",
+      "file": "pieces/lab--circle.png",
+      "x": 89,
+      "y": 764.375,
+      "w": 184.671875,
+      "h": 43
+    },
+    {
+      "id": "square",
+      "panel": "lab",
+      "file": "pieces/lab--square.png",
+      "x": 281.671875,
+      "y": 764.375,
+      "w": 184.671875,
+      "h": 43
+    },
+    {
+      "id": "gravity",
+      "panel": "lab",
+      "file": "pieces/lab--gravity.png",
+      "x": 506.34375,
+      "y": 742.375,
+      "w": 314.46875,
+      "h": 65
+    },
+    {
+      "id": "pause",
+      "panel": "lab",
+      "file": "pieces/lab--pause.png",
+      "x": 860.8125,
+      "y": 764.375,
+      "w": 165.09375,
+      "h": 43
+    },
+    {
+      "id": "reset",
+      "panel": "lab",
+      "file": "pieces/lab--reset.png",
+      "x": 1033.90625,
+      "y": 764.375,
+      "w": 157.09375,
+      "h": 43
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "slug": "porchlight",
+  "url": "https://porchlightwebproj.netlify.app/",
+  "capturedAt": "2026-10-19T00:08:52.667Z",
+  "panels": [
+    {
+      "id": "page",
+      "file": "page.png",
+      "w": 1280,
+      "h": 2503
+    }
+  ],
+  "pieces": [
+    {
+      "id": "help",
+      "panel": "page",
+      "file": "pieces/page--help.png",
+      "x": 1163.171875,
+      "y": 56.390625,
+      "w": 90.828125,
+      "h": 36.796875
+    },
+    {
+      "id": "herocard",
+      "panel": "page",
+      "file": "pieces/page--herocard.png",
+      "x": 716.5,
+      "y": 258.609375,
+      "w": 463.5,
+      "h": 286.1875
+    },
+    {
+      "id": "mood0",
+      "panel": "page",
+      "file": "pieces/page--mood0.png",
+      "x": 753.5,
+      "y": 387.796875,
+      "w": 185.75,
+      "h": 51
+    },
+    {
+      "id": "mood1",
+      "panel": "page",
+      "file": "pieces/page--mood1.png",
+      "x": 957.25,
+      "y": 387.796875,
+      "w": 185.75,
+      "h": 51
+    },
+    {
+      "id": "mood2",
+      "panel": "page",
+      "file": "pieces/page--mood2.png",
+      "x": 753.5,
+      "y": 456.796875,
+      "w": 185.75,
+      "h": 51
+    },
+    {
+      "id": "mood3",
+      "panel": "page",
+      "file": "pieces/page--mood3.png",
+      "x": 957.25,
+      "y": 456.796875,
+      "w": 185.75,
+      "h": 51
+    },
+    {
+      "id": "feat0",
+      "panel": "page",
+      "file": "pieces/page--feat0.png",
+      "x": 60,
+      "y": 776.234375,
+      "w": 368,
+      "h": 264.203125
+    },
+    {
+      "id": "feat1",
+      "panel": "page",
+      "file": "pieces/page--feat1.png",
+      "x": 456,
+      "y": 776.234375,
+      "w": 368,
+      "h": 264.203125
+    },
+    {
+      "id": "feat2",
+      "panel": "page",
+      "file": "pieces/page--feat2.png",
+      "x": 852,
+      "y": 776.234375,
+      "w": 368,
+      "h": 264.203125
+    },
+    {
+      "id": "stat0",
+      "panel": "page",
+      "file": "pieces/page--stat0.png",
+      "x": 60,
+      "y": 1085.4375,
+      "w": 373.328125,
+      "h": 125.84375
+    },
+    {
+      "id": "stat1",
+      "panel": "page",
+      "file": "pieces/page--stat1.png",
+      "x": 453.328125,
+      "y": 1085.4375,
+      "w": 373.328125,
+      "h": 125.84375
+    },
+    {
+      "id": "stat2",
+      "panel": "page",
+      "file": "pieces/page--stat2.png",
+      "x": 846.65625,
+      "y": 1085.4375,
+      "w": 373.34375,
+      "h": 125.84375
+    },
+    {
+      "id": "guide0",
+      "panel": "page",
+      "file": "pieces/page--guide0.png",
+      "x": 60,
+      "y": 1463.078125,
+      "w": 566,
+      "h": 273.96875
+    },
+    {
+      "id": "guide1",
+      "panel": "page",
+      "file": "pieces/page--guide1.png",
+      "x": 654,
+      "y": 1463.078125,
+      "w": 566,
+      "h": 273.96875
+    },
+    {
+      "id": "guide2",
+      "panel": "page",
+      "file": "pieces/page--guide2.png",
+      "x": 60,
+      "y": 1765.046875,
+      "w": 566,
+      "h": 273.96875
+    },
+    {
+      "id": "guide3",
+      "panel": "page",
+      "file": "pieces/page--guide3.png",
+      "x": 654,
+      "y": 1765.046875,
+      "w": 566,
+      "h": 273.96875
+    }
+  ]
+}
