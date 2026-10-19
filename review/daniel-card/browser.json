@@ -22,7 +22,7 @@
   {
     "name": "hover: a brief rise on entry, then settles",
     "pass": true,
-    "detail": "peak lift 0.0392, held 0.0100 (rest 0.0000)"
+    "detail": "peak lift 0.0381, held 0.0100 (rest 0.0000)"
   },
   {
     "name": "hover: eyes towards the pointer, head tilted, attentive lean",
@@ -147,12 +147,12 @@
   {
     "name": "menu → Dance: plays and returns to idle",
     "pass": true,
-    "detail": "3.7 s, max sway 3.0°, max lift 28 mm-units"
+    "detail": "3.6 s, max sway 3.0°, max lift 28 mm-units"
   },
   {
     "name": "menu → Nod: plays and returns to idle",
     "pass": true,
-    "detail": "1.6 s"
+    "detail": "1.4 s"
   },
   {
     "name": "dance lasts 3–4 s",
@@ -207,7 +207,7 @@
   {
     "name": "menu inside the viewport at 1440px, next to the trigger, not clipped by the card",
     "pass": true,
-    "detail": "{\"m\":[539,316,709,536],\"vw\":1440,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":1440}"
+    "detail": "{\"m\":[537,311,709,534],\"vw\":1440,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":1440}"
   },
   {
     "name": "no horizontal overflow at 1440px",

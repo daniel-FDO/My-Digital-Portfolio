@@ -44,11 +44,15 @@ export const HOME: HomeData = {
   // Each item: [name, abbr, icon]. `icon` is one or more keys (space-separated)
   // in skill-icons.ts (brand marks) or SkillIcon's OWN_ICONS; `abbr` is only the
   // fallback tile if an icon is missing. Groups with `learning` go in the
-  // right-hand column. Each skill appears once.
+  // right-hand column; `column: 'middle'` ones sit beside the first groups on
+  // wide screens (below them on narrower ones). Each skill appears once.
   skills: [
     { group: 'Frontend', items: [['HTML', 'H', 'html'], ['CSS', 'C', 'css'], ['Tailwind CSS', 'Tw', 'tailwind'], ['Responsive design', '↔', 'responsive']] },
     { group: 'Python & data', items: [['Python', 'Py', 'python'], ['Flask', 'F', 'flask'], ['Pandas', 'Pd', 'pandas']] },
     { group: 'Tools', items: [['VS Code', 'VS', 'vscode'], ['Git & GitHub', 'G', 'git github'], ['Chrome DevTools', 'Dt', 'chrome']] },
+    // Stitch and Lovable have no published brand mark in Simple Icons: their letter tile shows instead
+    { group: 'Design', column: 'middle', items: [['Figma', 'F', 'figma'], ['Canva', 'C', 'canva'], ['Stitch', 'St', 'stitch'], ['Lovable', 'Lv', 'lovable']] },
+    { group: 'AI tools', column: 'middle', items: [['Claude', 'Cl', 'claude'], ['ChatGPT', 'GP', 'chatgpt'], ['Notion', 'N', 'notion'], ['Gemini', 'G', 'gemini']] },
     { group: 'Currently learning', learning: 'now', items: [['React', 'R', 'react'], ['TypeScript', 'TS', 'ts'], ['JavaScript', 'JS', 'js']] },
     { group: 'Learning next', learning: 'next', items: [['Node.js', 'N', 'node'], ['UI/UX design', 'UI', 'uiux'], ['Motion graphics', 'Mo', 'motion']] },
   ],

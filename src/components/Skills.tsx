@@ -1,5 +1,6 @@
 /* =========================================================
-   SKILLS & TOOLS — the groups I use on the left; "Currently
+   SKILLS & TOOLS — the groups I use on the left (Design and AI
+   tools in a middle column on wide screens); "Currently
    learning" and "Learning next" (groups with `learning` in
    home.ts) on the right. Brand marks come from skill-icons.ts;
    OWN_ICONS are drawn here.
@@ -46,7 +47,10 @@ export function Skills() {
       <h2 className="h" id="skillsTitle">Skills &amp; tools</h2>
       {/* Left: the skills I use. Right: what I'm learning now / next. */}
       <div className="skills">
-        <div className="stack" id="skillGroups">{HOME.skills.filter((g) => !g.learning).map((g) => <SkillGroup g={g} key={g.group} />)}</div>
+        <div className="stack" id="skillGroups">
+          <div className="stack__col">{HOME.skills.filter((g) => !g.learning && !g.column).map((g) => <SkillGroup g={g} key={g.group} />)}</div>
+          <div className="stack__col">{HOME.skills.filter((g) => !g.learning && g.column === 'middle').map((g) => <SkillGroup g={g} key={g.group} />)}</div>
+        </div>
         <div className="learn" id="learnGroups">{HOME.skills.filter((g) => g.learning).map((g) => <SkillGroup g={g} key={g.group} />)}</div>
       </div>
     </section>

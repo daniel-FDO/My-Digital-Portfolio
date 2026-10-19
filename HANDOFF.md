@@ -117,3 +117,26 @@ To reproduce: `npm run dev`, then `npm run test:daniel`, `npm run test:daniel:br
 - **Menu coverage:** on desktop the open menu covers Daniel (it opens upward from his corner). Choosing an action closes it, so the action is always visible.
 - **Hover region:** "over Daniel" is approximated as the middle 72% of his frame's width, not his exact silhouette.
 - **Likeness:** Daniel is still the procedural approximation of the concept sheet, not an exact likeness.
+
+# Later the same day: footer, projects, gallery, background, skills
+
+**Footer footballers on phones.** *Cause:* `football.ts` sized the players to at most 20% of the wordmark's font size and dropped anything under 34px. On phones the wordmark is only about 122–149px, so the cap (24–29px) was always below the minimum and the canvas was never shown. *Fix:* separate limits for footers narrower than 560px (`CONFIG.narrow`) and a minimum ball size. Tablet and desktop are unchanged. Result: both players at 390 and 430px, one juggling alone at 360px (where the ID card hangs over "iel"). `tests/footer-football.mjs` passes 44/44: seven sizes including landscape, touch, reduced motion, offscreen and hidden tab. Recording: `review/footer/football-390.mp4`.
+
+**Projects.** Removed Study Desk and Object Lab from `src/data/projects.json`. Their standalone pages remain in `public/projects/`, so they can still be reached by direct URL.
+
+**Gallery: a curved WebGL ribbon with a click-to-preview.**
+- Files: `src/components/gallery/ribbon.ts` (no dependencies), `gallery/Preview.tsx`, `Gallery.tsx`, `styles/gallery.css`.
+- The ribbon:
+  - the photos are meshes bent onto the inside of a cylinder
+  - it drifts left to right
+  - photos fade, dim and shrink slightly toward both ends, by screen position, into the real page background
+  - you can drag or swipe it, with inertia
+- Clicking or tapping a photo, or pressing Enter on the focused ribbon, opens a portalled modal. It has one backdrop-blur layer, the flat, complete photo (never enlarged), Previous/Next, a counter, arrow keys, swipe, and Escape or backdrop click to close. It also has a focus trap, an inert page, and a scroll lock without a width change. Closing restores the scroll position, the ribbon position, focus and the paused state.
+- Fallback: a plain horizontal strip of photo buttons shows while the ribbon loads and whenever WebGL fails.
+- `tests/gallery.mjs` passes 53/53 at 1440, 768 and 390px. Recording: `review/gallery/gallery.mp4`.
+
+**Background.** `PortfolioBackground.tsx` now defaults to `BACKGROUND_STYLE = 'atmosphere'`: three broad, faint fields of colour (burgundy and neutral) drifting on 70–110s loops. It uses transforms only, pauses in a hidden tab, and is static with reduced motion. The light theme has its own version. Set the constant to `'contours'` for the previous look.
+
+**Skills.** New "Design" group (Figma, Canva, Stitch, Lovable) and "AI tools" group (Claude, ChatGPT, Notion, Gemini). On screens 1200px and wider they sit in a middle column. Icons come from Simple Icons: Claude's from v15.22.0, the rest from v11.15.0, and ChatGPT uses the OpenAI mark. Stitch and Lovable have no published mark, so they use the section's letter tile.
+
+**Not tested:** real iOS Safari and real phones (all touch testing used emulation in Edge), and real tab switches (simulated with `visibilitychange`).

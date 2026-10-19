@@ -1,5 +1,17 @@
 /* =========================================================
    PORTFOLIO BACKGROUND — EXPERIMENT (reversible)
+
+   CURRENT LOOK: BACKGROUND_STYLE = 'atmosphere' — a quiet backdrop:
+   the near-black charcoal base with three very broad, very faint
+   fields of colour (two burgundy, one neutral) kept towards the
+   corners, so the text column stays dark and still. They drift and
+   breathe on slow 70–110s loops (transform only: no lines, particles,
+   pulses or blur filters), pause while the tab is hidden, and are
+   still with reduced motion. The light theme has its own warm, pale
+   version. A fine static grain sits over both.
+   Set BACKGROUND_STYLE = 'contours' for the previous look, below.
+
+   PREVIOUS LOOK ('contours'):
    Topographic contour lines around the edges of the screen, a faint
    burgundy glow in the top-right corner (near the red "D" widget)
    and a fine static grain, on the page's near-black base.
@@ -33,6 +45,8 @@ import { calm } from '../lib/motion';
 import '../styles/portfolio-background.css';
 
 export const ENABLE_BACKGROUND_EXPERIMENT = true;
+/** 'atmosphere' (quiet gradients, the current look) or 'contours' (the previous line-based one) */
+export const BACKGROUND_STYLE: 'atmosphere' | 'contours' = 'atmosphere';
 
 /** The livelier version, and its settings (enabled: false = the previous version) */
 export const LIFE = {
@@ -167,6 +181,32 @@ function buildLayers(w: number, h: number, groups: number, durations?: number[])
 }
 
 export function PortfolioBackground() {
+  return BACKGROUND_STYLE === 'atmosphere' ? <Atmosphere /> : <ContourBackground />;
+}
+
+/** The quiet backdrop: three broad, faint fields of colour, slowly drifting (CSS only) */
+function Atmosphere() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ENABLE_BACKGROUND_EXPERIMENT) return;
+    document.documentElement.classList.add('pbg-on');
+    const sync = () => rootRef.current?.classList.toggle('is-paused', document.hidden);
+    sync();
+    document.addEventListener('visibilitychange', sync);
+    return () => { document.documentElement.classList.remove('pbg-on'); document.removeEventListener('visibilitychange', sync); };
+  }, []);
+  if (!ENABLE_BACKGROUND_EXPERIMENT) return null;
+  return (
+    <div className="pbg pbg--air" ref={rootRef} aria-hidden="true">
+      <div className="pbg__air pbg__air--a"></div>
+      <div className="pbg__air pbg__air--b"></div>
+      <div className="pbg__air pbg__air--c"></div>
+      <div className="pbg__grain"></div>
+    </div>
+  );
+}
+
+function ContourBackground() {
   if (!ENABLE_BACKGROUND_EXPERIMENT) return null;
   return <Background />;
 }

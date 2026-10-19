@@ -642,6 +642,11 @@ body.is-previewing .page > :not(#projects), body.is-previewing .footer {
   margin-top: 1rem;
 }
 .skills .stack { margin-top: 0; padding-right: 2rem; }
+/* the skills themselves: one column of groups, or two side by side on wide screens */
+.stack__col { display: flex; flex-direction: column; gap: 1.25rem; }
+@media (min-width: 1200px) {
+  .skills .stack { display: grid; grid-template-columns: minmax(0, max-content) minmax(16rem, 1fr); align-items: start; column-gap: 2.5rem; }
+}
 .learn {
   display: flex; flex-direction: column; gap: 1.25rem;
   align-self: stretch;                 /* the divider runs the full height */

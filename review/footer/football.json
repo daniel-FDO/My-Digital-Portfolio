@@ -1,0 +1,222 @@
+[
+  {
+    "name": "360 portrait: footballers shown (solo, 36px)",
+    "pass": true,
+    "detail": "1446 inked px"
+  },
+  {
+    "name": "360 portrait: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "360 portrait: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":181,\"t\":372.6875,\"r\":220,\"b\":427.6875}"
+  },
+  {
+    "name": "360 portrait: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 360 / 360"
+  },
+  {
+    "name": "360 portrait: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 portrait: footballers shown (duo, 40px)",
+    "pass": true,
+    "detail": "3425 inked px"
+  },
+  {
+    "name": "390 portrait: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 portrait: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":196,\"t\":398.875,\"r\":275,\"b\":485.875}"
+  },
+  {
+    "name": "390 portrait: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 390 / 390"
+  },
+  {
+    "name": "390: double-tapping the ID card still flips it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: Pause (tap) stops the animation, players stay visible",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: Play (tap) resumes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: the \"a\" still cycles through scripts",
+    "pass": true,
+    "detail": "KOREAN → HEBREW"
+  },
+  {
+    "name": "390: offscreen, the loop stops",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: back on screen, it resumes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: hidden tab (simulated), the loop stops",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 portrait: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "430 portrait: footballers shown (duo, 44px)",
+    "pass": true,
+    "detail": "4080 inked px"
+  },
+  {
+    "name": "430 portrait: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "430 portrait: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":217,\"t\":471.0625,\"r\":303,\"b\":563.0625}"
+  },
+  {
+    "name": "430 portrait: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 430 / 430"
+  },
+  {
+    "name": "430 portrait: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 landscape: footballers shown (duo, 60px)",
+    "pass": true,
+    "detail": "7838 inked px"
+  },
+  {
+    "name": "390 landscape: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 landscape: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":437,\"t\":126.125,\"r\":588,\"b\":264.125}"
+  },
+  {
+    "name": "390 landscape: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 844 / 844"
+  },
+  {
+    "name": "390 landscape: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "430 landscape: footballers shown (duo, 61px)",
+    "pass": true,
+    "detail": "8108 inked px"
+  },
+  {
+    "name": "430 landscape: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "430 landscape: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":483,\"t\":143.4375,\"r\":638,\"b\":286.4375}"
+  },
+  {
+    "name": "430 landscape: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 932 / 932"
+  },
+  {
+    "name": "430 landscape: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768 tablet: footballers shown (duo, 54px)",
+    "pass": true,
+    "detail": "6351 inked px"
+  },
+  {
+    "name": "768 tablet: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768 tablet: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":398,\"t\":451.984375,\"r\":534,\"b\":577.984375}"
+  },
+  {
+    "name": "768 tablet: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 768 / 768"
+  },
+  {
+    "name": "768 tablet: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "desktop 1440: footballers shown (duo, 64px)",
+    "pass": true,
+    "detail": "8595 inked px"
+  },
+  {
+    "name": "desktop 1440: animating",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "desktop 1440: clear of the ID card, quote, links, footer text",
+    "pass": true,
+    "detail": "{\"l\":738,\"t\":375.796875,\"r\":897,\"b\":522.796875}"
+  },
+  {
+    "name": "desktop 1440: inside the page, no horizontal overflow",
+    "pass": true,
+    "detail": "scrollWidth 1440 / 1440"
+  },
+  {
+    "name": "desktop 1440: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion 390px: a still picture of the players, Play offered",
+    "pass": true,
+    "detail": "3574 inked px"
+  },
+  {
+    "name": "reduced motion 1440px: a still picture of the players, Play offered",
+    "pass": true,
+    "detail": "8916 inked px"
+  }
+]

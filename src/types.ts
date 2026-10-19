@@ -43,6 +43,8 @@ export interface SkillGroup {
   group: string;
   /** groups with `learning` go in the right-hand column */
   learning?: 'now' | 'next';
+  /** 'middle': a second column beside the first groups on wide screens */
+  column?: 'middle';
   items: SkillItem[];
 }
 

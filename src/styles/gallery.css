@@ -1,112 +1,184 @@
 /* =========================================================
-   GALLERY — the photo carousel (Gallery.tsx)
-   The cards are placed by the script (transform, z-index, --dim);
-   this file gives them their size, frame and finish.
-   Card width: about half the column on wide screens, most of it on
-   narrow ones (the script switches layouts at 560px, as here).
+   GALLERY — the curved photo ribbon (Gallery.tsx, gallery/ribbon.ts)
+   One frame holds two things in the same box:
+     .gal__strip  — the photos as a plain horizontal scroll strip
+                    (while the ribbon loads, or if WebGL can't run)
+     .gal__ribbon — the WebGL canvas, fading in over the strip once
+                    it has drawn; the strip then stays for screen
+                    readers only.
+   The frame's height sets the ribbon's shape: the script fits the
+   strip so the tallest (edge) photos just fill it.
    ========================================================= */
 
 .gal__edition { font: 0.6875rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 
-.gal__stage { margin-top: 1.25rem; container-type: inline-size; }   /* cqw = the carousel's width */
-.gal__view {
+.gal__stage { margin-top: 1.25rem; container-type: inline-size; }   /* cqw = the gallery's width */
+.gal__frame {
   position: relative;
-  height: calc(min(48cqw, 23rem) * 1.25 + 1.5rem);
+  height: clamp(15rem, 40cqw, 30rem);      /* room for the curve to read, not a full-screen section */
   overflow: hidden;
   overflow: clip;
-  perspective: 1400px;
+}
+
+/* The plain strip */
+.gal__strip {
+  display: flex; gap: 12px;
+  height: 100%;
+  margin: 0; padding: 0; list-style: none;
+  overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  outline: none;
+}
+.gal__item {
+  flex: none; height: 100%; aspect-ratio: 3 / 4;
+  scroll-snap-align: start;
+  border-radius: 0.6rem; overflow: hidden;
+  background: var(--soft);
+}
+.gal__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gal__strip:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); border-radius: 0.6rem; }
+
+/* The ribbon on top */
+.gal__ribbon {
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
   touch-action: pan-y;                     /* vertical swipes still scroll the page */
   user-select: none; -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
-  border-radius: 1rem;
+  cursor: grab;
   outline: none;
+  transition: opacity 0.45s var(--ease);
 }
-.gal__card {
-  position: absolute; left: 0; top: 0.75rem;
-  width: min(48cqw, 23rem);
-  aspect-ratio: 4 / 5;
-  margin: 0;
-  border-radius: 1.1rem;
-  overflow: hidden;
-  background: var(--soft);
-  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--widget-line);
-  transform-origin: 50% 50%;
-  will-change: transform;
-  cursor: pointer;
+.gal__ribbon.is-dragging { cursor: grabbing; }
+.gal__canvas { display: block; width: 100%; height: 100%; }
+.gal__stage.is-live .gal__ribbon { opacity: 1; visibility: visible; }
+.gal__ribbon:focus-visible::after {
+  content: ""; position: absolute; inset: 2px; border-radius: 0.75rem;
+  box-shadow: 0 0 0 2px var(--ring); pointer-events: none;
 }
-.gal__card.is-front { cursor: default; }
-.gal__card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-/* Neighbours dim; every card has a soft dark fade along the bottom */
-.gal__card::before, .gal__card::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
-.gal__card::before { background: linear-gradient(to top, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0) 38%); }
-.gal__card::after { background: #0b0b0a; opacity: var(--dim, 0); }
-.gal__num {
-  position: absolute; left: 0.85rem; top: 0.85rem; z-index: 1;
-  padding: 0.2rem 0.45rem; border-radius: 999px;
-  background: rgba(17, 17, 16, 0.5);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  font: 500 0.625rem/1.2 var(--mono); letter-spacing: 0.06em; color: #f4f2ef;
+/* once the ribbon is showing, the strip stays for screen readers only */
+.gal__stage.is-under .gal__strip {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
 }
-.gal__cap {
-  position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem; z-index: 1;
-  font-size: 1rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.03em; color: #fff;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
-}
-.gal__view:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); }
-.gal__view:focus-visible .gal__card.is-front { box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55), 0 0 0 2px var(--fg); }
 
-/* The "Drag" badge: precise pointers only, while over the photos */
-.gal__badge {
-  position: absolute; left: 0; top: 0; z-index: 200;
-  width: 0; height: 0;
-  pointer-events: none;
-}
-.gal__badge span {
-  position: absolute; left: -2rem; top: -2rem;
-  display: grid; place-items: center;
-  width: 4rem; height: 4rem; border-radius: 50%;
-  background: var(--fg); color: var(--bg);
-  font: 600 0.625rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
-  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5);
-  opacity: 0; transform: scale(0.5);
-  transition: opacity 0.18s ease, transform 0.25s var(--ease);
-}
-@media (hover: hover) and (pointer: fine) {
-  .gal__view.is-hinting { cursor: none; }
-  .gal__view.is-hinting .gal__badge span { opacity: 1; transform: none; }
-  .gal__view.is-hinting.is-dragging .gal__badge span { transform: scale(0.85); }
-}
-@media not ((hover: hover) and (pointer: fine)) { .gal__badge { display: none; } }
-
-/* Counter · hint · Previous / Next */
+/* Counter · hint · Previous / Play-Pause / Next */
 .gal__bar { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; }
 .gal__count { font: 0.75rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .gal__count b { font-weight: 500; color: var(--fg); }
+.gal__stage:not(.is-live) .gal__count { display: none; }
 .gal__hint { font: 0.6875rem/1.4 var(--mono); color: var(--muted); }
 .gal__nav { display: flex; gap: 0.4rem; margin-left: auto; }
 .gal__btn {
+  position: relative;
   display: grid; place-items: center;
   width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid var(--line); background: var(--card); color: var(--fg);
-  transition: background-color var(--fast) ease, border-color var(--fast) ease, opacity var(--fast) ease;
+  transition: background-color var(--fast) ease, border-color var(--fast) ease;
 }
+.gal__btn::before { content: ""; position: absolute; inset: -4px; }   /* a 44 × 44 target */
 .gal__btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .gal__btn:hover { background: var(--soft); border-color: color-mix(in srgb, var(--fg) 22%, transparent); }
 .gal__btn:active { transform: scale(0.96); }
-.gal__btn[aria-disabled="true"] { opacity: 0.4; cursor: default; }
-.gal__btn[aria-disabled="true"]:hover { background: var(--card); border-color: var(--line); }
-.gal__btn[aria-disabled="true"]:active { transform: none; }
 .gal__btn:focus-visible { border-radius: 50%; }
 
-/* Narrow (the carousel under 560px, as in the script): one main photo and a peek of the next */
-@container (max-width: 559px) {
-  .gal__view { height: calc(78cqw * 1.25 + 1.5rem); -webkit-mask-image: none; mask-image: none; }
-  .gal__card { width: 78cqw; }
+/* Tablets and phones: taller relative to the width, so the photos stay a useful size */
+@container (max-width: 759px) { .gal__frame { height: clamp(15rem, 56cqw, 26rem); } }
+@container (max-width: 479px) {
+  .gal__frame { height: clamp(14rem, 86cqw, 24rem); }
   .gal__hint { display: none; }
 }
-@media (pointer: coarse) { .gal__btn { width: 44px; height: 44px; } }
+@media (pointer: coarse) { .gal__btn { width: 44px; height: 44px; } .gal__btn::before { inset: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .gal__badge span { transition: none; }
+  .gal__ribbon { transition: none; }
+}
+
+/* The plain strip's photos are buttons (they open the preview) */
+.gal__open {
+  display: block; width: 100%; height: 100%;
+  padding: 0; border: 0; background: none; cursor: zoom-in;
+  border-radius: inherit;
+}
+.gal__open:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+
+/* =========================================================
+   PHOTO PREVIEW (gallery/Preview.tsx) — portalled into <body>
+   One fixed layer (.gpv__veil) darkens and blurs the whole site
+   behind, floating navigation included; the photo and controls sit
+   above it and are never blurred.
+   ========================================================= */
+.gpv {
+  position: fixed; inset: 0; z-index: 2000;
+  display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr);   /* one cell, exactly the space inside the padding */
+  padding:
+    calc(4.25rem + env(safe-area-inset-top)) calc(1rem + env(safe-area-inset-right))
+    calc(4.75rem + env(safe-area-inset-bottom)) calc(1rem + env(safe-area-inset-left));
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  touch-action: pan-y pinch-zoom;
+  -webkit-tap-highlight-color: transparent;
+}
+.gpv.is-in { opacity: 1; }
+.gpv__veil {
+  position: absolute; inset: 0;
+  background: rgba(8, 8, 8, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(0.85);
+  backdrop-filter: blur(14px) saturate(0.85);
+}
+:root[data-theme="light"] .gpv__veil { background: rgba(24, 21, 18, 0.5); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .gpv__veil { background: rgba(8, 8, 8, 0.88); }
+  :root[data-theme="light"] .gpv__veil { background: rgba(24, 21, 18, 0.84); }
+}
+.gpv__fig {
+  position: relative; margin: 0;
+  width: 100%; height: 100%; min-height: 0;
+  display: flex; align-items: center; justify-content: center;   /* a definite box, so the photo's max-height: 100% holds */
+  pointer-events: none;                 /* only the photo itself catches clicks: the rest is backdrop */
+}
+.gpv__img {
+  display: block;
+  width: auto; height: auto;            /* never larger than its own pixels… */
+  max-width: 100%; max-height: 100%;    /* …and always complete inside the space */
+  object-fit: contain;
+  border-radius: 0.6rem;
+  box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+  user-select: none; -webkit-user-select: none;
+  transform: scale(0.97);
+  transition: transform 0.22s var(--ease);
+}
+.gpv.is-in .gpv__img { transform: none; }
+.gpv__count {
+  position: absolute; left: 50%; bottom: calc(1.5rem + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  margin: 0; padding: 0.35rem 0.7rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font: 0.75rem/1 var(--mono); color: rgba(244, 242, 239, 0.75); font-variant-numeric: tabular-nums;
+}
+.gpv__count b { font-weight: 500; color: #f4f2ef; }
+.gpv__btn {
+  position: absolute; z-index: 1;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(30, 28, 26, 0.72); color: #f4f2ef;
+  cursor: pointer;
+  transition: background-color var(--fast) ease;
+}
+.gpv__btn:hover { background: rgba(60, 56, 52, 0.85); }
+.gpv__btn:focus-visible { outline: 2px solid #f4f2ef; outline-offset: 2px; }
+.gpv__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gpv__close { top: calc(1rem + env(safe-area-inset-top)); right: calc(1rem + env(safe-area-inset-right)); }
+.gpv__prev, .gpv__next { bottom: calc(1rem + env(safe-area-inset-bottom)); }
+.gpv__prev { left: calc(1rem + env(safe-area-inset-left)); }
+.gpv__next { right: calc(1rem + env(safe-area-inset-right)); }
+/* wide screens: previous / next at the sides, level with the photo */
+@media (min-width: 760px) {
+  .gpv { padding-inline: calc(5rem + env(safe-area-inset-left)) calc(5rem + env(safe-area-inset-right)); padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+  .gpv__prev, .gpv__next { bottom: auto; top: 50%; transform: translateY(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gpv { transition-duration: 0.12s; }
+  .gpv__img, .gpv.is-in .gpv__img { transform: none; transition: none; }
 }

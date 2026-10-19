@@ -158,3 +158,37 @@ html.pbg-on body { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .pbg__trace { display: none; }
 }
+
+/* =========================================================
+   ATMOSPHERE (BACKGROUND_STYLE = 'atmosphere', the current look)
+   Three oversized layers, each one soft radial field of colour placed
+   towards a corner; the middle of the page (the text column) stays the
+   plain base. Each layer only moves and scales, very slowly, out of
+   step with the others (70 / 90 / 110 s, alternating): no repeating
+   pulse, nothing sharp. Static with reduced motion.
+   ========================================================= */
+.pbg--air {
+  --air-a: rgba(122, 28, 38, 0.22);     /* burgundy, upper right */
+  --air-b: rgba(92, 22, 32, 0.16);      /* deeper burgundy, lower left */
+  --air-c: rgba(196, 186, 176, 0.045);  /* a neutral lift, upper left */
+  --pbg-grain: 0.05;
+}
+:root:not([data-theme="dark"]) .pbg--air {
+  --air-a: rgba(214, 120, 104, 0.13);   /* a warm blush */
+  --air-b: rgba(190, 140, 120, 0.11);
+  --air-c: rgba(255, 255, 255, 0.55);   /* paper-white lift */
+  --pbg-grain: 0.03;
+}
+.pbg__air { position: absolute; inset: -25%; will-change: transform; }
+.pbg__air--a { background: radial-gradient(38% 34% at 74% 22%, var(--air-a), transparent 72%); }
+.pbg__air--b { background: radial-gradient(42% 36% at 22% 80%, var(--air-b), transparent 72%); }
+.pbg__air--c { background: radial-gradient(46% 40% at 26% 18%, var(--air-c), transparent 70%); }
+@media (prefers-reduced-motion: no-preference) {
+  .pbg__air--a { animation: pbg-air-a 70s ease-in-out infinite alternate; }
+  .pbg__air--b { animation: pbg-air-b 90s ease-in-out infinite alternate; }
+  .pbg__air--c { animation: pbg-air-c 110s ease-in-out infinite alternate; }
+  .pbg.is-paused .pbg__air { animation-play-state: paused; }
+}
+@keyframes pbg-air-a { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-6%, 5%, 0) scale(1.08); } }
+@keyframes pbg-air-b { from { transform: translate3d(0, 0, 0) scale(1.04); } to { transform: translate3d(7%, -4%, 0) scale(0.97); } }
+@keyframes pbg-air-c { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(5%, 6%, 0) scale(1.06); } }

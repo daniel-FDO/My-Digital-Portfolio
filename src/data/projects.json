@@ -73,43 +73,5 @@
     ],
     "video": "previews/video/rock-paper-scissors.mp4",
     "poster": "previews/video/rock-paper-scissors.jpg"
-  },
-  {
-    "name": "Study Desk",
-    "category": "Study planner",
-    "url": "projects/study-desk/",
-    "image": "previews/study-desk.jpg",
-    "focus": "50% 20%",
-    "capture": false,
-    "description": "A coursework planner with deadlines, subject filters and a focus timer.",
-    "points": [
-      "Tasks are saved in your browser. No account needed."
-    ],
-    "tech": [
-      "HTML",
-      "CSS",
-      "JavaScript"
-    ],
-    "video": "previews/video/study-desk.mp4",
-    "poster": "previews/video/study-desk.jpg"
-  },
-  {
-    "name": "Object Lab",
-    "category": "Physics playground",
-    "url": "projects/object-lab/",
-    "image": "previews/object-lab.jpg",
-    "focus": "50% 45%",
-    "capture": false,
-    "description": "Drop, drag and throw shapes in a physics playground with adjustable gravity.",
-    "points": [
-      "Add circles and squares, pause the simulation or reset the scene."
-    ],
-    "tech": [
-      "HTML",
-      "CSS",
-      "JavaScript"
-    ],
-    "video": "previews/video/object-lab.mp4",
-    "poster": "previews/video/object-lab.jpg"
   }
 ]

@@ -59,7 +59,12 @@ const CONFIG = {
     duoMin: 46,                      // below this, one player juggling alone looks better than two
     step: 2,                         // shrink in 2px steps until everything fits
   },
+  // Phones (footer narrower than `below` px): the wordmark is only ~120–150px tall there, so
+  // 20% of it is under `min` and nobody would ever fit. These limits apply instead; wider
+  // footers (tablet, desktop) keep the settings above unchanged.
+  narrow: { below: 560, perFont: 0.3, min: 26, duoMin: 28 },
   ballSize: 0.13,                    // ball diameter, × player height
+  ballMin: 7,                        // ...but never under this many CSS px, so it stays visible on phones
   clearance: 8,                      // px kept free around the links and the ID card
   minArc: 0.22,                      // if the ball can't rise at least this much (× height), that layout doesn't fit
 
@@ -394,7 +399,7 @@ export function createFootball(els: FootballEls, onState: (s: FootballState) => 
 
     // The ball's route through the routine; null if it can't fly without hitting something
     function route(players: Placed[], height: number, solo: boolean) {
-      const r = (height * CONFIG.ballSize) / 2;
+      const r = Math.max(height * CONFIG.ballSize, CONFIG.ballMin) / 2;
       const steps: [number, Pose, number, number][] = solo ? CONFIG.solo.map(([pose, dur, arc]) => [0, pose, dur, arc]) : CONFIG.duo;
       const seq: Touch[] = steps.map(([q, pose, dur, arc]) => {
         const pl = players[q], t = pl.M.touch[pose]!;
@@ -417,12 +422,13 @@ export function createFootball(els: FootballEls, onState: (s: FootballState) => 
     }
 
     // Biggest size that fits: both players if there's room, otherwise one alone
-    const H = CONFIG.height;
+    const N = CONFIG.narrow, narrow = W < N.below;
+    const H = narrow ? { ...CONFIG.height, perFont: N.perFont, min: N.min, duoMin: N.duoMin } : CONFIG.height;
     const maxH = Math.min(H.max, Math.floor(fs * H.perFont));
     let next: Plan | null = null;
     for (let h = maxH; h >= H.duoMin && !next; h -= H.step) {
       const a = place(0, h), b = a && place(1, h);
-      if (!a || !b || !apart(a, b, h * CONFIG.ballSize * 2)) continue;   // too close to pass properly
+      if (!a || !b || !apart(a, b, Math.max(h * CONFIG.ballSize, CONFIG.ballMin) * 2)) continue;   // too close to pass properly
       const rt = route([a, b], h, false);
       if (rt) next = { mode: 'duo', height: h, players: [a, b], ...rt };
     }
