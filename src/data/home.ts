@@ -49,7 +49,7 @@ export const HOME: HomeData = {
   skills: [
     { group: 'Frontend', items: [['HTML', 'H', 'html'], ['CSS', 'C', 'css'], ['Tailwind CSS', 'Tw', 'tailwind'], ['Responsive design', '↔', 'responsive']] },
     { group: 'Python & data', items: [['Python', 'Py', 'python'], ['Flask', 'F', 'flask'], ['Pandas', 'Pd', 'pandas']] },
-    { group: 'Tools', items: [['VS Code', 'VS', 'vscode'], ['Git & GitHub', 'G', 'git github'], ['Chrome DevTools', 'Dt', 'chrome']] },
+    { group: 'Tools', items: [['VS Code', 'VS', 'vscode'], ['Git & GitHub', 'G', 'git github'], ['Chrome DevTools', 'Dt', 'chrome'], ['Antigravity', 'A', 'Antigravity']] },
     // Stitch and Lovable have no published brand mark in Simple Icons: their letter tile shows instead
     { group: 'Design', column: 'middle', items: [['Figma', 'F', 'figma'], ['Canva', 'C', 'canva'], ['Stitch', 'St', 'stitch'], ['Lovable', 'Lv', 'lovable']] },
     { group: 'AI tools', column: 'middle', items: [['Claude', 'Cl', 'claude'], ['ChatGPT', 'GP', 'chatgpt'], ['Notion', 'N', 'notion'], ['Gemini', 'G', 'gemini']] },
