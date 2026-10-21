@@ -31,7 +31,7 @@
      frames are slow), and everything — loop, listeners, GPU and audio
      resources — is released on unmount.
    ========================================================= */
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { motionQuery } from '../../lib/motion';
 import type { DanielController } from './daniel';
@@ -51,6 +51,18 @@ const SAY: Record<DanielAction, string> = {
 };
 /** The little label on him, for still poses (reduced motion, or the poster) */
 const ACK: Record<DanielAction, string> = { wave: 'Hi there!', waveBoth: 'Hi hi!', dance: 'Dance time!', nod: 'Yes!', sound: 'Chirp!' };
+/** Each action's icon: line icons on a 24px grid (paths adapted from Lucide, ISC licence) */
+const HAND = 'M18 11V6a2 2 0 0 0-4 0M14 10V4a2 2 0 0 0-4 0v2M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15';
+const SPEAKER = 'M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.6a1.4 1.4 0 0 1-1 .4H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.4a1.4 1.4 0 0 1 1 .4l3.4 3.4a.7.7 0 0 0 1.2-.5z';
+const ICON: Record<DanielAction | 'mute' | 'unmute', ReactNode> = {
+  wave: <path d={HAND} />,
+  waveBoth: <><g transform="translate(-3 2) scale(.72)"><path d={HAND} /></g><g transform="translate(27 2) scale(-.72 .72)"><path d={HAND} /></g></>,
+  dance: <><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></>,
+  nod: <><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01" /></>,
+  sound: <><path d={SPEAKER} /><path className="dnc-menu__wave1" d="M16 9a5 5 0 0 1 0 6" /><path className="dnc-menu__wave2" d="M19.4 18.4a9 9 0 0 0 0-12.8" /></>,
+  mute: <><path d={SPEAKER} /><path d="m22 9-6 6M16 9l6 6" /></>,
+  unmute: <><path d={SPEAKER} /><path d="M16 9a5 5 0 0 1 0 6" /></>,
+};
 const MUTE_KEY = 'daniel:muted';
 const readMuted = () => { try { return localStorage.getItem(MUTE_KEY) === '1'; } catch { return false; } };
 
@@ -228,7 +240,10 @@ export function DanielCharacter() {
 
   // ---- the action menu ----
   const [open, setOpen] = useState(false);
+  const [leaving, setLeaving] = useState(false);     // the closing animation is playing (the menu is already inert)
   const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
+  const [hl, setHl] = useState<{ y: number; h: number; on: boolean }>({ y: 0, h: 0, on: false });
+  const leaveTimer = useRef(0);
   const trigRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const focusOnOpen = useRef<'first' | 'last'>('first');
@@ -237,9 +252,15 @@ export function DanielCharacter() {
 
   const items = () => [...(menuRef.current?.querySelectorAll<HTMLElement>('[role^="menuitem"]') ?? [])];
   const close = useCallback((refocus: boolean) => {
-    setOpen(false); setPos(null);
+    // a short fade / scale out, then it's removed (straight away with reduced motion)
+    setLeaving(true);
+    clearTimeout(leaveTimer.current);
+    leaveTimer.current = window.setTimeout(() => { setOpen(false); setLeaving(false); setPos(null); setHl((v) => ({ ...v, on: false })); }, motionQuery.matches ? 0 : 140);
     if (refocus) trigRef.current?.focus({ preventScroll: true });
   }, []);
+  useEffect(() => () => clearTimeout(leaveTimer.current), []);
+  // the highlight pill glides to the item under the pointer / with keyboard focus
+  const lightUp = (el: HTMLElement) => setHl({ y: el.offsetTop, h: el.offsetHeight, on: true });
   const place = useCallback(() => {
     const t = trigRef.current, mnu = menuRef.current;
     if (!t || !mnu) return;
@@ -261,7 +282,7 @@ export function DanielCharacter() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, pos !== null]);
   useEffect(() => {
-    if (!open) return;
+    if (!open || leaving) return;
     const onDown = (e: PointerEvent) => {
       const el = e.target as Node;
       if (menuRef.current?.contains(el) || trigRef.current?.contains(el)) return;
@@ -279,9 +300,9 @@ export function DanielCharacter() {
       removeEventListener('resize', place);
       removeEventListener('scroll', onScroll, { capture: true });
     };
-  }, [open, close, place]);
+  }, [open, leaving, close, place]);
 
-  const openMenu = (focus: 'first' | 'last') => { focusOnOpen.current = focus; setOpen(true); };
+  const openMenu = (focus: 'first' | 'last') => { clearTimeout(leaveTimer.current); setLeaving(false); focusOnOpen.current = focus; setOpen(true); };
   const onTrigKey = (e: KeyboardEvent) => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); openMenu(e.key === 'ArrowUp' ? 'last' : 'first'); }
   };
@@ -331,28 +352,37 @@ export function DanielCharacter() {
       </button>
       <button
         ref={trigRef} type="button" className="dnc__more"
-        aria-label="Daniel’s actions" aria-haspopup="menu" aria-expanded={open} aria-controls={open ? menuId : undefined}
-        onClick={() => (open ? close(false) : openMenu('first'))}
+        aria-label="Daniel’s actions" aria-haspopup="menu" aria-expanded={open && !leaving} aria-controls={open && !leaving ? menuId : undefined}
+        onClick={() => (open && !leaving ? close(false) : openMenu('first'))}
         onKeyDown={onTrigKey}
       >
         <svg className="dnc__dots" viewBox="0 0 18 4" aria-hidden="true"><circle cx="2" cy="2" r="1.6" /><circle cx="9" cy="2" r="1.6" /><circle cx="16" cy="2" r="1.6" /></svg>
       </button>
       {open && createPortal(
         <div
-          ref={menuRef} id={menuId} role="menu" aria-label="Daniel’s actions" className="dnc-menu"
+          ref={menuRef} id={menuId} role="menu" aria-label="Daniel’s actions"
+          className={`dnc-menu${leaving ? ' is-leaving' : ''}`} inert={leaving}
           style={pos ? { left: pos.left, top: pos.top } : { left: 0, top: 0, visibility: 'hidden' }}
           onKeyDown={onMenuKey}
+          onFocus={(e) => { const it = (e.target as HTMLElement).closest<HTMLElement>('.dnc-menu__item'); if (it) lightUp(it); }}
+          onPointerLeave={() => setHl((v) => ({ ...v, on: false }))}
         >
-          {ACTIONS.map((a) => (
+          <span className={`dnc-menu__hl${hl.on ? ' is-on' : ''}`} aria-hidden="true" style={{ '--y': `${hl.y}px`, '--h': `${hl.h}px` } as CSSProperties}></span>
+          {ACTIONS.map((a, i) => (
             <button key={a} type="button" role="menuitem" tabIndex={-1} className="dnc-menu__item"
-              aria-disabled={busy || undefined} onClick={() => choose(a)} data-action={a}>
-              {LABEL[a]}
+              style={{ '--i': i } as CSSProperties}
+              aria-disabled={busy || undefined} onClick={() => choose(a)} data-action={a}
+              onPointerEnter={(e) => lightUp(e.currentTarget)}>
+              <svg className="dnc-menu__icon" viewBox="0 0 24 24" aria-hidden="true">{ICON[a]}</svg>
+              <span>{LABEL[a]}</span>
             </button>
           ))}
-          <div className="dnc-menu__sep" role="separator" />
-          <button type="button" role="menuitemcheckbox" tabIndex={-1} aria-checked={muted} className="dnc-menu__item dnc-menu__mute" onClick={toggleMute}>
+          <div className="dnc-menu__sep" role="separator" style={{ '--i': ACTIONS.length } as CSSProperties} />
+          <button type="button" role="menuitemcheckbox" tabIndex={-1} aria-checked={muted} className="dnc-menu__item dnc-menu__mute" onClick={toggleMute}
+            style={{ '--i': ACTIONS.length + 1 } as CSSProperties} onPointerEnter={(e) => lightUp(e.currentTarget)}>
+            <svg className="dnc-menu__icon" viewBox="0 0 24 24" aria-hidden="true">{muted ? ICON.mute : ICON.unmute}</svg>
             <span>Mute sounds</span>
-            <svg viewBox="0 0 16 16" aria-hidden="true" className="dnc-menu__check"><path d="M3.5 8.5l3 3 6-7" /></svg>
+            <span className="dnc-menu__switch" aria-hidden="true"><span></span></span>
           </button>
           {busy && <p className="dnc-menu__note" aria-hidden="true">Daniel is busy…</p>}
         </div>,

@@ -12,7 +12,7 @@
   {
     "name": "1440: drifts left → right",
     "pass": true,
-    "detail": "pos -0.165 → -0.221"
+    "detail": "pos -0.135 → -0.192"
   },
   {
     "name": "1440: clicking each visible photo opens that photo (6 clicks, across the loop seam)",
@@ -25,7 +25,7 @@
     "detail": ""
   },
   {
-    "name": "1440: wrapping across the loop leaves no holes (widest dark run in the middle 26px)",
+    "name": "1440: wrapping across the loop leaves no holes (widest dark run in the middle 25px)",
     "pass": true,
     "detail": ""
   },
@@ -42,7 +42,7 @@
   {
     "name": "preview: complete photo, never upscaled past its pixels",
     "pass": true,
-    "detail": "natural 480×640, shown 480×640"
+    "detail": "natural 1200×1600, shown 583×777"
   },
   {
     "name": "preview: all 11 photos fit the viewport whole, in proportion, never enlarged",
@@ -62,12 +62,12 @@
   {
     "name": "preview: ← → and Previous / Next move through the photos; counter shown",
     "pass": true,
-    "detail": "Photo 10 of 11 → Photo 11 of 11 → Photo 10 of 11; Photo 11 of 11 → Photo 10 of 11; counter \"10 / 11\""
+    "detail": "Photo 1 of 11 → Photo 2 of 11 → Photo 1 of 11; Photo 2 of 11 → Photo 1 of 11; counter \"01 / 11\""
   },
   {
     "name": "close: same scroll position, same ribbon position, page usable again",
     "pass": true,
-    "detail": "{\"y\":[2067,2067],\"pos\":[34.84931915459953,34.84931915459953]}"
+    "detail": "{\"y\":[2067,2067],\"pos\":[35.83892566541093,35.83892566541093]}"
   },
   {
     "name": "close: focus back on the ribbon it came from",
@@ -122,7 +122,7 @@
   {
     "name": "768: drifts left → right",
     "pass": true,
-    "detail": "pos -0.214 → -0.291"
+    "detail": "pos -0.217 → -0.296"
   },
   {
     "name": "768: clicking each visible photo opens that photo (5 clicks, across the loop seam)",
@@ -135,7 +135,7 @@
     "detail": ""
   },
   {
-    "name": "768: wrapping across the loop leaves no holes (widest dark run in the middle 21px)",
+    "name": "768: wrapping across the loop leaves no holes (widest dark run in the middle 22px)",
     "pass": true,
     "detail": ""
   },
@@ -157,7 +157,7 @@
   {
     "name": "390: drifts left → right",
     "pass": true,
-    "detail": "pos -0.315 → -0.438"
+    "detail": "pos -0.340 → -0.464"
   },
   {
     "name": "390: clicking each visible photo opens that photo (2 clicks, across the loop seam)",
@@ -170,14 +170,14 @@
     "detail": ""
   },
   {
-    "name": "390: wrapping across the loop leaves no holes (widest dark run in the middle 3px)",
+    "name": "390: wrapping across the loop leaves no holes (widest dark run in the middle 4px)",
     "pass": true,
     "detail": ""
   },
   {
     "name": "390 touch: a horizontal swipe moves the ribbon",
     "pass": true,
-    "detail": "pos 16.87 → 19.76"
+    "detail": "pos 16.98 → 19.62"
   },
   {
     "name": "390 touch: a swipe doesn't open the preview",
@@ -187,7 +187,7 @@
   {
     "name": "390 touch: a vertical swipe over the ribbon scrolls the page",
     "pass": true,
-    "detail": "scrollY 3121 → 3385"
+    "detail": "scrollY 3121 → 3311"
   },
   {
     "name": "390 touch: tapping the photo opens the preview",

@@ -13,8 +13,14 @@
      the very bottom of the page). While a click's scroll is running,
      the highlight stays on its target instead of flickering through.
    - Arrow keys move between the icons; Home / End jump to the ends.
-   - The labels show on hover and keyboard focus (one floating label,
-     so it's never clipped by the narrow row's scrolling).
+   - Wide screens with a precise pointer: an expanding action bar.
+     When a mouse rests on the rail, or keyboard focus is inside it,
+     every icon slides its label open (the rail grows leftwards, the
+     icons stay put) and a highlight pill glides to the hovered row;
+     it closes ~90 ms after the pointer leaves / focus moves out.
+     Otherwise (the narrow row, touch) one floating label shows on
+     hover / keyboard focus, so it's never clipped by the row's
+     scrolling. Reduced motion: no sliding or blurring.
    Sections are found by id; scroll-margin-top (home.css .sec) keeps
    them clear of the top edge, as there's no fixed header.
    ========================================================= */
@@ -67,6 +73,19 @@ export function SectionNav({ inert, onGo, onTop }: Props) {
   const lockRelease = useRef<() => void>(() => {});
   const railRef = useRef(rail);
   railRef.current = rail;
+  // the expanding rail: a resting mouse (pointer events check for it) or keyboard focus
+  const canExpand = rail;
+  // open while a mouse rests on it OR keyboard focus is inside it; closes 90 ms after neither is true
+  const [pointerIn, setPointerIn] = useState(false);
+  const [focusIn, setFocusIn] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [hover, setHover] = useState(-1);
+  useEffect(() => {
+    if (pointerIn || focusIn) { setExpanded(true); return; }
+    const t = window.setTimeout(() => setExpanded(false), 90);
+    return () => clearTimeout(t);
+  }, [pointerIn, focusIn]);
+  const open = expanded && canExpand;
 
   /* ---- Which section is on screen (and, narrow, whether to show at all) ---- */
   useEffect(() => {
@@ -155,36 +174,46 @@ export function SectionNav({ inert, onGo, onTop }: Props) {
 
   /* ---- The floating label ---- */
   const showTip = (i: number) => {
+    if (railRef.current && canExpandRef.current) return;      // the expanded rail shows its own labels
     const nav = navRef.current, btn = btnRefs.current[i];
     if (!nav || !btn) return;
     const n = nav.getBoundingClientRect(), b = btn.getBoundingClientRect();
     setTip({ i, on: true, at: railRef.current ? b.top + b.height / 2 - n.top : b.left + b.width / 2 - n.left });
   };
   const hideTip = (i: number) => setTip((t) => (t.i === i ? { ...t, on: false } : t));
-  const onFocus = (i: number) => (e: FocusEvent<HTMLButtonElement>) => { if (e.currentTarget.matches(':focus-visible')) showTip(i); };
-  const onEnter = (i: number) => (e: PointerEvent<HTMLButtonElement>) => { if (e.pointerType === 'mouse') showTip(i); };
+  const canExpandRef = useRef(canExpand); canExpandRef.current = canExpand;
+  const onFocus = (i: number) => (e: FocusEvent<HTMLButtonElement>) => {
+    if (!e.currentTarget.matches(':focus-visible')) return;
+    setFocusIn(true); setHover(i); showTip(i);
+  };
+  const onEnter = (i: number) => (e: PointerEvent<HTMLButtonElement>) => { if (e.pointerType === 'mouse') { setHover(i); showTip(i); } };
 
   return (
     <nav
-      className={`snav ${rail ? 'snav--rail' : 'snav--row'}${shown ? '' : ' is-hidden'}`}
+      className={`snav ${rail ? 'snav--rail' : 'snav--row'}${shown ? '' : ' is-hidden'}${open ? ' is-expanded' : ''}`}
       aria-label="Sections" ref={navRef} inert={inert || !shown}
+      onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPointerIn(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === 'mouse') { setPointerIn(false); setHover(-1); } }}
+      onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) { setFocusIn(false); if (!pointerIn) setHover(-1); } }}
     >
       <div className="snav__bar">
         <span className="snav__num" aria-hidden="true"><span key={active}>{two(active + 1)}</span></span>
         <span className="snav__line" aria-hidden="true"></span>
         <div className="snav__strip" ref={stripRef} onKeyDown={onKeyDown}>
-          <div className="snav__list" style={{ '--i': active } as CSSProperties}>
+          <div className="snav__list" style={{ '--i': active, '--h': Math.max(0, hover) } as CSSProperties}>
             <span className="snav__glow" aria-hidden="true"></span>
+            <span className={`snav__hover${hover >= 0 && hover !== active ? ' is-on' : ''}`} aria-hidden="true"></span>
             {SECTIONS.map((s, i) => (
               <button
                 key={s.id} type="button" className={`snav__btn${i === active ? ' is-active' : ''}`}
-                ref={(el) => { btnRefs.current[i] = el; }}
+                ref={(el) => { btnRefs.current[i] = el; }} style={{ '--n': i } as CSSProperties}
                 aria-label={s.label} aria-current={i === active ? 'location' : undefined}
                 onClick={() => go(i)}
                 onFocus={onFocus(i)} onBlur={() => hideTip(i)}
                 onPointerEnter={onEnter(i)} onPointerLeave={() => hideTip(i)}
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">{ICONS[s.id]}</svg>
+                {rail && <span className="snav__more" aria-hidden="true"><span>{s.label}</span></span>}
               </button>
             ))}
           </div>

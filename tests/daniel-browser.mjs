@@ -71,7 +71,7 @@ const waitState = async (page, want, ms = 8000) => { const t0 = Date.now(); whil
 const pose = (page) => page.evaluate(READ);
 const draws = (page) => page.evaluate(() => window.__draws);
 const audio = (page) => page.evaluate(() => ({ ...window.__audio }));
-const menuOpen = (page) => page.evaluate(() => !!document.querySelector('.dnc-menu'));
+const menuOpen = (page) => page.evaluate(() => !!document.querySelector('.dnc-menu:not(.is-leaving)'));   // (a closing menu fades out for 140 ms, already inert)
 
 try {
   // ================= desktop, mouse + keyboard =================

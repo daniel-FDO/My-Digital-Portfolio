@@ -6,6 +6,7 @@
    ========================================================= */
 import { useState, type FormEvent } from 'react';
 import { HOME } from '../data/home';
+import '../styles/contact-send.css';
 
 export function Contact() {
   const [subject, setSubject] = useState('');
@@ -38,7 +39,13 @@ export function Contact() {
         </label>
         <div className="mail__foot">
           <span className="mail__note">Opens your email app.</span>
-          <button className="mail__send" type="submit">Send<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg></button>
+          <button className="mail__send mail__send--animated" type="submit">
+            <span>Send</span>
+            <span className="mail__send-arrow" aria-hidden="true">
+              <span className="mail__send-trail" />
+              <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+            </span>
+          </button>
         </div>
       </form>
     </section>

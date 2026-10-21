@@ -11,6 +11,10 @@ import { SKILL_ICONS } from "../data/skill-icons";
 import type { SkillGroup as Group } from "../types";
 
 const OWN_ICONS: Record<string, ReactElement> = {
+  // Official brand asset: https://antigravity.google/press
+  Antigravity: (
+    <img src="/icons/antigravity.svg" width="15" height="15" alt="" />
+  ),
   ts: (
     <svg viewBox="0 0 16 16">
       <rect width="16" height="16" rx="3" fill="#3178c6" />

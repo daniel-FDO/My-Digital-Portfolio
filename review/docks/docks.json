@@ -1,0 +1,147 @@
+[
+  {
+    "name": "both docks: frosted (backdrop blur) with a coloured tint",
+    "pass": true,
+    "detail": "[\"blur(22px) saturate(1)\",\"blur(22px) saturate(1)\"]"
+  },
+  {
+    "name": "bottom dock: hover expands it, labels slide open",
+    "pass": true,
+    "detail": "397px → 544px"
+  },
+  {
+    "name": "bottom dock: the pill sits under the hovered button",
+    "pass": true,
+    "detail": "{\"on\":true,\"dx\":0.375,\"dw\":0.078125}"
+  },
+  {
+    "name": "bottom dock: expanded, it stays inside the screen",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "bottom dock: collapses when the pointer leaves",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "bottom dock: theme button still switches the theme",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "bottom dock: search still opens the command menu",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "bottom dock: keyboard focus expands it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "bottom dock: focus leaving collapses it",
+    "pass": true,
+    "detail": "BUTTON"
+  },
+  {
+    "name": "rail: hover expands it into labelled rows",
+    "pass": true,
+    "detail": "50px → 136px"
+  },
+  {
+    "name": "rail: the icons stay put as it grows (it opens leftwards)",
+    "pass": true,
+    "detail": "1409,1409,1409,1409,1410,1409,1409,1409,1410"
+  },
+  {
+    "name": "rail: expanded, it stays inside the screen",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "rail: the hover pill glides to the hovered row",
+    "pass": true,
+    "detail": "{\"on\":true,\"dy\":0.02093505859375}"
+  },
+  {
+    "name": "rail: stays open while the pointer rests on it after a click (focus moved to the section)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "rail: clicking a row still goes to that section",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "rail: collapses when the pointer leaves",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "rail: keyboard focus expands it; arrow keys still move between rows",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: the bottom dock expands and fits; no page overflow",
+    "pass": true,
+    "detail": "{\"l\":177.5,\"r\":590.5,\"vw\":768,\"sw\":768}"
+  },
+  {
+    "name": "768: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 touch: one tap switches the theme (no \"first tap expands\")",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: no overflow; the section row is shown compact",
+    "pass": true,
+    "detail": "{\"sw\":390,\"vw\":390,\"dock\":374,\"row\":\"snav snav--row\"}"
+  },
+  {
+    "name": "390: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: labels appear without sliding or blurring",
+    "pass": true,
+    "detail": "{\"op\":1,\"tf\":\"none\",\"tr\":\"1e-05s\"}"
+  },
+  {
+    "name": "menu: frosted glass, an icon on every row",
+    "pass": true,
+    "detail": "{\"blur\":\"blur(22px) saturate(1)\",\"icons\":6,\"items\":6}"
+  },
+  {
+    "name": "menu: the highlight glides to the hovered row",
+    "pass": true,
+    "detail": "{\"on\":true,\"dy\":0.453125}"
+  },
+  {
+    "name": "menu: the mute switch slides on",
+    "pass": true,
+    "detail": "matrix(1, 0, 0, 1, 12, 0)"
+  },
+  {
+    "name": "menu: Escape plays a short closing animation, then removes it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "menu: no console errors",
+    "pass": true,
+    "detail": ""
+  }
+]

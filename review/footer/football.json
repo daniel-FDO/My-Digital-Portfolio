@@ -2,7 +2,7 @@
   {
     "name": "360 portrait: footballers shown (solo, 36px)",
     "pass": true,
-    "detail": "1446 inked px"
+    "detail": "1483 inked px"
   },
   {
     "name": "360 portrait: animating",
@@ -27,7 +27,7 @@
   {
     "name": "390 portrait: footballers shown (duo, 40px)",
     "pass": true,
-    "detail": "3425 inked px"
+    "detail": "3579 inked px"
   },
   {
     "name": "390 portrait: animating",
@@ -62,7 +62,7 @@
   {
     "name": "390: the \"a\" still cycles through scripts",
     "pass": true,
-    "detail": "KOREAN → HEBREW"
+    "detail": "KOREAN → GEORGIAN"
   },
   {
     "name": "390: offscreen, the loop stops",
@@ -112,7 +112,7 @@
   {
     "name": "390 landscape: footballers shown (duo, 60px)",
     "pass": true,
-    "detail": "7838 inked px"
+    "detail": "7834 inked px"
   },
   {
     "name": "390 landscape: animating",
@@ -122,7 +122,7 @@
   {
     "name": "390 landscape: clear of the ID card, quote, links, footer text",
     "pass": true,
-    "detail": "{\"l\":437,\"t\":126.125,\"r\":588,\"b\":264.125}"
+    "detail": "{\"l\":437,\"t\":126.453125,\"r\":588,\"b\":264.453125}"
   },
   {
     "name": "390 landscape: inside the page, no horizontal overflow",
@@ -137,7 +137,7 @@
   {
     "name": "430 landscape: footballers shown (duo, 61px)",
     "pass": true,
-    "detail": "8108 inked px"
+    "detail": "8107 inked px"
   },
   {
     "name": "430 landscape: animating",
@@ -162,7 +162,7 @@
   {
     "name": "768 tablet: footballers shown (duo, 54px)",
     "pass": true,
-    "detail": "6351 inked px"
+    "detail": "6257 inked px"
   },
   {
     "name": "768 tablet: animating",
@@ -172,7 +172,7 @@
   {
     "name": "768 tablet: clear of the ID card, quote, links, footer text",
     "pass": true,
-    "detail": "{\"l\":398,\"t\":451.984375,\"r\":534,\"b\":577.984375}"
+    "detail": "{\"l\":398,\"t\":452.21875,\"r\":534,\"b\":578.21875}"
   },
   {
     "name": "768 tablet: inside the page, no horizontal overflow",
@@ -187,7 +187,7 @@
   {
     "name": "desktop 1440: footballers shown (duo, 64px)",
     "pass": true,
-    "detail": "8595 inked px"
+    "detail": "8915 inked px"
   },
   {
     "name": "desktop 1440: animating",
@@ -197,7 +197,7 @@
   {
     "name": "desktop 1440: clear of the ID card, quote, links, footer text",
     "pass": true,
-    "detail": "{\"l\":738,\"t\":375.796875,\"r\":897,\"b\":522.796875}"
+    "detail": "{\"l\":738,\"t\":376.796875,\"r\":897,\"b\":523.796875}"
   },
   {
     "name": "desktop 1440: inside the page, no horizontal overflow",

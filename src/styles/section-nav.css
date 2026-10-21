@@ -1,7 +1,9 @@
 /* =========================================================
    SECTION DOCK (SectionNav.tsx)
-   A dark, translucent pill in both themes. Wide screens (1000px+,
-   and tall enough): a rail on the right edge, vertically centred.
+   Tinted frosted glass in both themes (the shared --glass-* tokens,
+   dock.css). Wide screens (1000px+, and tall enough): a rail on the
+   right edge, vertically centred, that expands leftwards into
+   labelled rows on hover / keyboard focus (.is-expanded).
    Otherwise: a compact row centred above the toolbar (.dock), clear
    of the home indicator (safe area); its icons scroll sideways if
    the screen is too narrow for all of them.
@@ -9,7 +11,7 @@
 .snav {
   --s: 34px;                                  /* one icon button */
   --g: 4px;                                   /* the gap between them */
-  --ink: #ecebe7;
+  --ink: var(--glass-ink);
   position: fixed; z-index: 45;               /* above the edge blur (40), under the toolbar (50) */
 }
 .snav--rail { right: calc(14px + env(safe-area-inset-right)); top: 50%; transform: translateY(-50%); }
@@ -25,27 +27,31 @@
 @media (pointer: coarse) { .snav--row { --tb-h: 54px; } }
 
 .snav__bar {
+  --spring: cubic-bezier(0.32, 1.25, 0.5, 1);
   display: flex; align-items: center; gap: 8px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(17, 17, 16, 0.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  backdrop-filter: blur(20px) saturate(1.4);
-  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-line);
+  background: var(--glass-tint), var(--glass-base);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
   color: var(--ink);
-  transition: opacity 0.25s ease, transform 0.35s var(--ease), visibility 0s;
+  transition: opacity 0.25s ease, transform 0.35s var(--ease), visibility 0s, border-radius 0.38s var(--spring);
 }
-:root:not([data-theme="dark"]) .snav__bar { background: rgba(24, 23, 21, 0.78); border-color: rgba(0, 0, 0, 0.1); }
-.snav--rail .snav__bar { flex-direction: column; padding: 13px 7px; }
+.snav--rail .snav__bar { flex-direction: column; align-items: flex-end; padding: 13px 7px; }
+/* the numbers and lines stay centred over the icons as the rail grows leftwards */
+.snav--rail .snav__num { width: var(--s); text-align: center; }
+.snav--rail .snav__line { margin-right: calc((var(--s) - 1px) / 2); }
+.snav--rail.is-expanded .snav__bar { border-radius: 20px; }
 .snav--row .snav__bar { padding: 5px 12px; max-width: 100%; }
 .snav.is-hidden .snav__bar { opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.98); transition: opacity 0.2s ease, transform 0.3s var(--ease), visibility 0s linear 0.3s; pointer-events: none; }
 
 /* Current number · the count */
 .snav__num { font: 500 10px/1 var(--mono); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: var(--ink); flex: none; }
 .snav__num > span { display: inline-block; animation: snav-num 0.35s var(--ease); }
-.snav__num--total { color: rgba(236, 235, 231, 0.55); }
+.snav__num--total { color: var(--glass-muted); }
 @keyframes snav-num { from { opacity: 0; transform: translateY(3px); } }
-.snav__line { flex: none; width: 1px; height: 12px; background: rgba(255, 255, 255, 0.2); }
+.snav__line { flex: none; width: 1px; height: 12px; background: var(--glass-divider); }
 
 /* The icons + the highlight that slides to the active one */
 .snav__strip { min-width: 0; }
@@ -54,24 +60,31 @@
 .snav--row .snav__strip { padding: 3px; margin: -3px; }   /* room for the focus ring */
 .snav__list { position: relative; display: flex; gap: var(--g); }
 .snav--rail .snav__list { flex-direction: column; }
-.snav__glow {
+.snav__glow, .snav__hover {
   position: absolute; left: 0; top: 0;
   width: var(--s); height: var(--s);
   border-radius: 11px;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  background: var(--glass-pill);
+  box-shadow: inset 0 0 0 1px var(--glass-edge);
   transition: transform 0.45s var(--ease);
   pointer-events: none;
 }
 .snav--rail .snav__glow { transform: translateY(calc(var(--i) * (var(--s) + var(--g)))); }
+/* on the rail both highlights span the whole row (the row is as wide as the widest label) */
+.snav--rail .snav__glow, .snav--rail .snav__hover { width: 100%; transition: transform 0.4s var(--spring), opacity 0.18s ease; }
+/* the hover pill: glides to the row under the pointer (the active row has its own highlight) */
+.snav__hover { background: var(--soft); box-shadow: none; opacity: 0; }
+.snav--rail .snav__hover { transform: translateY(calc(var(--h) * (var(--s) + var(--g)))); }
+.snav__hover.is-on { opacity: 1; }
+.snav--row .snav__hover { display: none; }
 .snav--row .snav__glow { transform: translateX(calc(var(--i) * (var(--s) + var(--g)))); }
 
 .snav__btn {
   position: relative; flex: none;
   display: grid; place-items: center;
-  width: var(--s); height: var(--s);
+  min-width: var(--s); height: var(--s);
   border-radius: 11px;
-  color: rgba(236, 235, 231, 0.6);
+  color: var(--glass-muted);
   transition: color 0.2s ease;
 }
 .snav__btn svg {
@@ -80,13 +93,27 @@
   transform: scale(0.86);
   transition: transform 0.35s var(--ease);
 }
-.snav__btn.is-active { color: #fff; }
+/* rail rows: label on the left, icon fixed on the right */
+.snav--rail .snav__btn { display: flex; flex-direction: row-reverse; align-items: center; justify-content: flex-start; padding-right: 8px; padding-left: 0; }
+.snav--rail .snav__btn svg { flex: none; }
+.snav__more { display: grid; grid-template-columns: 0fr; transition: grid-template-columns 0.4s var(--spring); }
+.snav__more > span {
+  min-width: 0; overflow: hidden; white-space: nowrap;
+  font: 500 12.5px/1 var(--font); letter-spacing: -0.005em;
+  opacity: 0; transform: translateX(6px); filter: blur(4px);
+  transition: opacity 0.2s ease, transform 0.34s var(--spring), filter 0.25s ease;
+}
+.snav--rail.is-expanded .snav__more { grid-template-columns: 1fr; }
+.snav--rail.is-expanded .snav__more > span { padding: 0 10px 0 12px; opacity: 1; transform: none; filter: none; }
+/* each row's label arrives a beat after the one above it */
+.snav--rail.is-expanded .snav__btn:nth-child(n) .snav__more > span { transition-delay: calc(var(--n, 0) * 18ms); }
+.snav__btn.is-active { color: var(--glass-ink); }
 .snav__btn.is-active svg { transform: none; }
 @media (hover: hover) and (pointer: fine) {
-  .snav__btn:hover { color: rgba(255, 255, 255, 0.92); }
+  .snav__btn:hover { color: var(--glass-ink); }
   .snav__btn:not(.is-active):hover svg { transform: scale(0.95); }
 }
-.snav__btn:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.9); outline-offset: 1px; border-radius: 11px; }
+.snav__btn:focus-visible { outline: 2px solid var(--glass-ink); outline-offset: 1px; border-radius: 11px; }
 
 /* The label */
 .snav__tip {
@@ -105,7 +132,8 @@
 .snav--row .snav__tip.is-on { opacity: 1; transform: translate(-50%, 0); }
 
 @media (prefers-reduced-motion: reduce) {
-  .snav__bar, .snav__glow, .snav__btn svg, .snav__tip { transition: none; }
+  .snav__bar, .snav__glow, .snav__hover, .snav__btn svg, .snav__tip, .snav__more, .snav__more > span { transition: none !important; }
+  .snav__more > span { transform: none; filter: none; }
   .snav__num > span { animation: none; }
 }
 @media (forced-colors: active) {
