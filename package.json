@@ -17,7 +17,8 @@
     "video:render": "node video/render.mjs video",
     "test:daniel": "node --no-warnings tests/daniel-motion.mjs",
     "test:daniel:browser": "node tests/daniel-browser.mjs",
-    "record:daniel": "node tests/daniel-record.mjs"
+    "record:daniel": "node tests/daniel-record.mjs",
+    "test:name-fonts": "node tests/name-fonts.mjs"
   },
   "engines": {
     "node": ">=21.7"

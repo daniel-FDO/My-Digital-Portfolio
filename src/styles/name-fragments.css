@@ -1,0 +1,32 @@
+﻿/* The readable DOM lettering stays available if canvas or fonts fail. */
+.daniel__play {
+  position: relative;
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: crosshair;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.daniel__play:focus-visible { outline: 2px solid var(--brand); outline-offset: 7px; }
+.daniel__play > span { transition: opacity 180ms ease; }
+.daniel.is-fragmenting .daniel__play > span { opacity: 0; }
+.daniel__fragments {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+.daniel.is-fragmenting .daniel__fragments { opacity: 1; }
+.daniel__play .daniel__ch { will-change: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .daniel__fragments { display: none; }
+  .daniel__play > span { transition: none; }
+  .daniel.is-fragmenting .daniel__play > span { opacity: 1; }
+  .daniel__play:is(:hover, :focus-visible) .daniel__ch { color: var(--brand); }
+}

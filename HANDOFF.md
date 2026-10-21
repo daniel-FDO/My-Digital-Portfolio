@@ -140,3 +140,24 @@ To reproduce: `npm run dev`, then `npm run test:daniel`, `npm run test:daniel:br
 **Skills.** New "Design" group (Figma, Canva, Stitch, Lovable) and "AI tools" group (Claude, ChatGPT, Notion, Gemini). On screens 1200px and wider they sit in a middle column. Icons come from Simple Icons: Claude's from v15.22.0, the rest from v11.15.0, and ChatGPT uses the OpenAI mark. Stitch and Lovable have no published mark, so they use the section's letter tile.
 
 **Not tested:** real iOS Safari and real phones (all touch testing used emulation in Edge), and real tab switches (simulated with `visibilitychange`).
+
+# Font-cycling name (21 October 2026)
+- **What it does:** "Daniel Fasan" in the intro starts as the original Geist heading, then changes typeface every 3 seconds. It steps through all 24 installed fonts in order and repeats.
+- **Files:**
+  - `src/components/fontcycle/`: `FontCycleName.tsx` (the component), `loader.ts` (loading and verifying fonts), `fonts.ts` (the typed manifest of all 36 families, ready or blocked with reasons)
+  - `src/styles/font-cycle.css`
+- **Switch:** `ENABLE_FONT_CYCLE` in `Intro.tsx` (false = the original heading).
+- **Fonts:** `public/fonts/name/` (391 KB in total, each loaded only when needed), with licence documents. Research trail: `Desktop/typefree-font-handoff/{codex,claude}/`.
+- **How it works:**
+  - **Loading:** fonts load one ahead through the FontFace API, after the page settles. Each is checked against two fallbacks to prove it really renders the name.
+  - **Failures:** a font that fails is reported (a console warning) and skipped, and the current font stays up meanwhile.
+  - **Fitting:** each font is fitted into the original heading's box. Its ink height is matched to the original's, capped by the box width, then centred on the original ink. Two absolutely positioned layers crossfade over the in-flow original, so the layout never moves.
+  - **Controls:** a Pause / Resume control sits beside the name. Rotation also waits while the heading is offscreen or the tab is hidden, then resumes with a fresh 3 s.
+  - **Reduced motion:** the name stays static and the control becomes "Next font", which switches instantly.
+  - **Accessibility:** one h1 with one accessible name; the visual layers are `aria-hidden`.
+- **Development-only preview:** `/fonts-preview.html` on the dev server shows every font with its status, and the blocked list. It is not part of the build.
+- **Tests:** `npm run test:name-fonts` passes 37/37.
+  - The full rotation at 1440, 768 and 390 px; every font fits on one line, clear of the role line; the intro never moves.
+  - Progressive loading; a blocked font request; pause, resume and keyboard; offscreen and hidden tab; reduced motion; the real 3 s timing.
+  - Contact sheets: `review/name-fonts/`.
+- **Not tested:** real Safari / iOS, and real tab switches (simulated).

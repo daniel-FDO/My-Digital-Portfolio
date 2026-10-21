@@ -1,0 +1,187 @@
+[
+  {
+    "name": "1440: one h1, named \"Daniel Fasan\" once; the font layers are hidden",
+    "pass": true,
+    "detail": "- heading \"Daniel Fasan\" [level=1]"
+  },
+  {
+    "name": "1440: starts with the original heading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: the full rotation — every installed font (24), in order, then back to the start",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: screenshots of every font for the contact sheet",
+    "pass": true,
+    "detail": "24 captured"
+  },
+  {
+    "name": "1440: every font fits the heading's box (no wider, one line, clear of the role line)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: the intro never moves; no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: fonts load progressively (24 requests, the first 3420 ms after navigation)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: one h1, named \"Daniel Fasan\" once; the font layers are hidden",
+    "pass": true,
+    "detail": "- heading \"Daniel Fasan\" [level=1]"
+  },
+  {
+    "name": "768: starts with the original heading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: the full rotation — every installed font (24), in order, then back to the start",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: screenshots of every font for the contact sheet",
+    "pass": true,
+    "detail": "24 captured"
+  },
+  {
+    "name": "768: every font fits the heading's box (no wider, one line, clear of the role line)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: the intro never moves; no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: fonts load progressively (24 requests, the first 2755 ms after navigation)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: one h1, named \"Daniel Fasan\" once; the font layers are hidden",
+    "pass": true,
+    "detail": "- heading \"Daniel Fasan\" [level=1]"
+  },
+  {
+    "name": "390: starts with the original heading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: the full rotation — every installed font (24), in order, then back to the start",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: screenshots of every font for the contact sheet",
+    "pass": true,
+    "detail": "24 captured"
+  },
+  {
+    "name": "390: every font fits the heading's box (no wider, one line, clear of the role line)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: the intro never moves; no horizontal overflow",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: fonts load progressively (24 requests, the first 2028 ms after navigation)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "a failed font (Blackout) is skipped, the current one stays meanwhile, the next is shown",
+    "pass": true,
+    "detail": "Astloch → Sniglet → Chunk → League Script"
+  },
+  {
+    "name": "the failure is reported (console warning)",
+    "pass": true,
+    "detail": "[name fonts] \"Blackout\" could not be used: A network error occurred."
+  },
+  {
+    "name": "Pause holds the current font",
+    "pass": true,
+    "detail": "Sniglet"
+  },
+  {
+    "name": "Resume carries on (one step, not a burst of missed ones)",
+    "pass": true,
+    "detail": "Sniglet → Blackout"
+  },
+  {
+    "name": "the control works from the keyboard",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "offscreen: no changes",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "back on screen: it carries on",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "hidden tab: no changes (simulated visibilitychange)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: stays on the original heading",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: \"Next font\" shows the next one, instantly, and it stays",
+    "pass": true,
+    "detail": "Astloch, transition 1e-05s"
+  },
+  {
+    "name": "reduced motion: and again",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "default timing: about 3 s per font",
+    "pass": true,
+    "detail": "first change after 2850 ms, next 2982 ms later"
+  }
+]

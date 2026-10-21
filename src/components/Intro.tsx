@@ -7,6 +7,10 @@
 import type { CSSProperties } from 'react';
 import { HOME, INTRO } from '../data/home';
 import { pad2, useKentTime } from '../lib/kentClock';
+import { FontCycleName } from './fontcycle/FontCycleName';
+
+/** The name changes typeface every 3 seconds (fontcycle/). false = the original heading below. */
+export const ENABLE_FONT_CYCLE = true;
 import type { CopyState } from '../hooks/useCopyEmail';
 
 const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
@@ -20,7 +24,8 @@ export function Intro({ copy }: Props) {
     <header className="intro" id="intro" aria-labelledby="introName">
       <div className="intro__head">
         <div className="intro__id">
-          {/* The name, letter by letter (the letters are visual; the heading reads it whole) */}
+          {ENABLE_FONT_CYCLE ? <FontCycleName name={INTRO.name} /> : (
+          /* The name, letter by letter (the letters are visual; the heading reads it whole) */
           <h1 className="intro__name" id="introName">
             <span className="sr">{INTRO.name}</span>
             <span className="intro__letters" aria-hidden="true">
@@ -29,6 +34,7 @@ export function Intro({ copy }: Props) {
               ))}
             </span>
           </h1>
+          )}
           <p className="intro__role in" style={delay(40)}>{INTRO.role}</p>
         </div>
         {/* Where I am + the time there (Europe/London: GMT or BST) */}

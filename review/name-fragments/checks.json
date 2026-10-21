@@ -1,0 +1,98 @@
+[
+  {
+    "name": "1440: activates",
+    "pass": true
+  },
+  {
+    "name": "1440: painted fragments",
+    "pass": true
+  },
+  {
+    "name": "1440: settles and stops",
+    "pass": true
+  },
+  {
+    "name": "1440: no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "1440: keyboard activation",
+    "pass": true
+  },
+  {
+    "name": "1440: reduced motion stays readable",
+    "pass": true
+  },
+  {
+    "name": "1440: offscreen stops",
+    "pass": true
+  },
+  {
+    "name": "1440: no page errors",
+    "pass": true
+  },
+  {
+    "name": "768: activates",
+    "pass": true
+  },
+  {
+    "name": "768: painted fragments",
+    "pass": true
+  },
+  {
+    "name": "768: settles and stops",
+    "pass": true
+  },
+  {
+    "name": "768: no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "768: keyboard activation",
+    "pass": true
+  },
+  {
+    "name": "768: reduced motion stays readable",
+    "pass": true
+  },
+  {
+    "name": "768: offscreen stops",
+    "pass": true
+  },
+  {
+    "name": "768: no page errors",
+    "pass": true
+  },
+  {
+    "name": "390: activates",
+    "pass": true
+  },
+  {
+    "name": "390: painted fragments",
+    "pass": true
+  },
+  {
+    "name": "390: settles and stops",
+    "pass": true
+  },
+  {
+    "name": "390: no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "390: keyboard activation",
+    "pass": true
+  },
+  {
+    "name": "390: reduced motion stays readable",
+    "pass": true
+  },
+  {
+    "name": "390: offscreen stops",
+    "pass": true
+  },
+  {
+    "name": "390: no page errors",
+    "pass": true
+  }
+]

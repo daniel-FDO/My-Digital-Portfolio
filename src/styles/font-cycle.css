@@ -1,0 +1,47 @@
+/* =========================================================
+   FONT-CYCLING NAME (components/fontcycle/FontCycleName.tsx)
+   The original heading (.fcn__orig) stays in the flow and sets the
+   size of everything; the two font layers sit on top of it, absolutely
+   positioned, and take turns with a short crossfade. So the intro never
+   moves, whatever the font. The control floats beside the name (it
+   takes no room). Only the heading's own look is touched.
+   ========================================================= */
+.fcn { position: relative; width: fit-content; max-width: 100%; }
+.fcn__stage { position: relative; display: inline-block; vertical-align: top; }
+.fcn__layer { transition: opacity 0.42s ease; }
+.fcn__orig { opacity: 0; }
+.fcn__orig.is-on { opacity: 1; }
+.fcn__slot {
+  position: absolute; left: 0; top: 0;
+  white-space: nowrap;
+  line-height: 1;
+  font-feature-settings: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: 0 0;
+}
+.fcn__slot.is-on { opacity: 1; }
+.fcn__stage.is-instant .fcn__layer { transition: none; }
+/* marks the baseline, so each font's ink can be lined up with the original's */
+.fcn__probe { display: inline-block; width: 0; height: 0; vertical-align: baseline; }
+
+/* Pause / Resume (or "Next font" with reduced motion): quiet until wanted */
+.fcn__ctl {
+  position: absolute; left: 100%; top: 50%;
+  margin-left: 0.6rem;
+  display: grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  opacity: 0.6;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity var(--fast) ease, color var(--fast) ease, border-color var(--fast) ease;
+}
+.fcn__ctl::before { content: ""; position: absolute; inset: -8px; }   /* a 44 × 44 target */
+.fcn__ctl svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.fcn:hover .fcn__ctl, .fcn__ctl:focus-visible { opacity: 1; color: var(--fg); border-color: color-mix(in srgb, var(--fg) 30%, transparent); }
+.fcn__ctl:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+@media (pointer: coarse) { .fcn__ctl { opacity: 0.8; } }
+@media (prefers-reduced-motion: reduce) {
+  .fcn__layer, .fcn__ctl { transition: none; }
+}
