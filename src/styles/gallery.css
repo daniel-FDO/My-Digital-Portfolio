@@ -1,21 +1,37 @@
 /* =========================================================
-   GALLERY — the curved photo ribbon (Gallery.tsx, gallery/ribbon.ts)
+   GALLERY — the darkroom tide (Gallery.tsx, gallery/isophote.ts)
    One frame holds two things in the same box:
-     .gal__strip  — the photos as a plain horizontal scroll strip
-                    (only if WebGL can't run; unseen while the ribbon loads)
-     .gal__ribbon — the WebGL canvas, fading in over the strip once
-                    it has drawn; the strip then stays for screen
-                    readers only.
-   The frame's height sets the ribbon's shape: the script fits the
-   strip so the tallest (edge) photos just fill it.
+     .gal__strip — the photos as a plain horizontal scroll strip
+                   (only if WebGL can't run; unseen while the plate loads)
+     .gal__plate — the WebGL canvas: one photo on a paper plate, its
+                   neighbours as contour maps; it fades in over the
+                   strip once it has drawn, and the strip then stays
+                   for screen readers only.
+   The frame's height sets the plate's size (3:4, the frame's height).
+   The --gal-* colours are read by the script (comma lists: r, g, b[, a]),
+   again whenever the theme changes.
    ========================================================= */
 
 .gal__edition { font: 0.6875rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 
 .gal__stage { margin-top: 1.25rem; container-type: inline-size; }   /* cqw = the gallery's width */
+.gal__stage {
+  --gal-paper: 235, 231, 225;            /* the bare plate, mid-tide */
+  --gal-line: 30, 27, 24, 0.26;          /* contour lines on the plate */
+  --gal-ghost: 30, 27, 24, 0.22;         /* the neighbours' maps */
+  --gal-ink: 30, 27, 24, 0.45;           /* the loupe's lines over the photo */
+  --gal-copper: 184, 106, 68;            /* the fronts (the background streak's copper) */
+}
+:root[data-theme="dark"] .gal__stage {
+  --gal-paper: 26, 26, 24;
+  --gal-line: 233, 232, 228, 0.30;
+  --gal-ghost: 233, 232, 228, 0.16;
+  --gal-ink: 244, 242, 239, 0.45;
+  --gal-copper: 201, 132, 92;
+}
 .gal__frame {
   position: relative;
-  height: clamp(15rem, 40cqw, 30rem);      /* room for the curve to read, not a full-screen section */
+  height: clamp(15rem, 40cqw, 30rem);      /* the plate is this tall: big enough to enjoy, not a full-screen section */
   overflow: hidden;
   overflow: clip;
 }
@@ -38,14 +54,14 @@
 }
 .gal__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gal__strip:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); border-radius: 0.6rem; }
-/* while the ribbon loads, the strip waits unseen (still there for screen readers):
-   it only shows if the ribbon can't run, so the flat strip never flashes first */
+/* while the plate loads, the strip waits unseen (still there for screen readers):
+   it only shows if the plate can't run, so the flat strip never flashes first */
 .gal__stage.is-loading .gal__strip { opacity: 0; pointer-events: none; }
 .gal__stage.is-fallback .gal__strip { animation: gal-in 0.3s var(--ease); }
 @keyframes gal-in { from { opacity: 0; } }
 
-/* The ribbon on top */
-.gal__ribbon {
+/* The plate on top */
+.gal__plate {
   position: absolute; inset: 0;
   opacity: 0; visibility: hidden;
   touch-action: pan-y;                     /* vertical swipes still scroll the page */
@@ -55,14 +71,16 @@
   outline: none;
   transition: opacity 0.45s var(--ease);
 }
-.gal__ribbon.is-dragging { cursor: grabbing; }
+.gal__plate.is-over-hero { cursor: zoom-in; }
+.gal__plate.is-over-ghost { cursor: pointer; }
+.gal__plate.is-dragging { cursor: grabbing; }
 .gal__canvas { display: block; width: 100%; height: 100%; }
-.gal__stage.is-live .gal__ribbon { opacity: 1; visibility: visible; }
-.gal__ribbon:focus-visible::after {
+.gal__stage.is-live .gal__plate { opacity: 1; visibility: visible; }
+.gal__plate:focus-visible::after {
   content: ""; position: absolute; inset: 2px; border-radius: 0.75rem;
   box-shadow: 0 0 0 2px var(--ring); pointer-events: none;
 }
-/* once the ribbon is showing, the strip stays for screen readers only */
+/* once the plate is showing, the strip stays for screen readers only */
 .gal__stage.is-under .gal__strip {
   position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
@@ -73,7 +91,7 @@
 .gal__count { font: 0.75rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .gal__count b { font-weight: 500; color: var(--fg); }
 .gal__stage:not(.is-live) .gal__count { display: none; }
-.gal__stage.is-loading .gal__bar { visibility: hidden; }   /* the controls appear with the ribbon (or the strip) */
+.gal__stage.is-loading .gal__bar { visibility: hidden; }   /* the controls appear with the plate (or the strip) */
 .gal__hint { font: 0.6875rem/1.4 var(--mono); color: var(--muted); }
 .gal__nav { display: flex; gap: 0.4rem; margin-left: auto; }
 .gal__btn {
@@ -89,15 +107,15 @@
 .gal__btn:active { transform: scale(0.96); }
 .gal__btn:focus-visible { border-radius: 50%; }
 
-/* Tablets and phones: taller relative to the width, so the photos stay a useful size */
+/* Tablets and phones: taller relative to the width, so the photo stays a useful size */
 @container (max-width: 759px) { .gal__frame { height: clamp(15rem, 56cqw, 26rem); } }
 @container (max-width: 479px) {
-  .gal__frame { height: clamp(14rem, 86cqw, 24rem); }
+  .gal__frame { height: clamp(17rem, 108cqw, 28rem); }
   .gal__hint { display: none; }
 }
 @media (pointer: coarse) { .gal__btn { width: 44px; height: 44px; } .gal__btn::before { inset: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .gal__ribbon { transition: none; }
+  .gal__plate { transition: none; }
 }
 
 /* The plain strip's photos are buttons (they open the preview) */

@@ -18,6 +18,7 @@
    the trail's is an "r, g, b" triplet so it can fade in its own hue.
    ========================================================= */
 import { calm, isAmbientPaused, motionQuery, onAmbientPause } from '../../lib/motion';
+import { fbm } from '../../lib/noise';
 
 export const TOPO = {
   /** px between neighbouring lines, on average (small screens: fewer lines) */
@@ -34,23 +35,6 @@ export const TOPO = {
   /** trail length, px */
   trail: 150, mobileTrail: 95,
 };
-
-/* ---- Seeded value noise ---- */
-function hash(x: number, y: number, seed: number) {
-  let h = (x * 374761393 + y * 668265263 + seed * 2147483647) | 0;
-  h = Math.imul(h ^ (h >>> 13), 1274126177);
-  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
-}
-const fade = (t: number) => t * t * t * (t * (t * 6 - 15) + 10);
-function noise(x: number, y: number, seed: number) {
-  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
-  const u = fade(xf), v = fade(yf);
-  const a = hash(xi, yi, seed), b = hash(xi + 1, yi, seed), c = hash(xi, yi + 1, seed), d = hash(xi + 1, yi + 1, seed);
-  return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-}
-function fbm(x: number, y: number, seed: number) {
-  return noise(x, y, seed) * 0.7 + noise(x * 2.03, y * 2.03, seed + 7) * 0.25 + noise(x * 4.1, y * 4.1, seed + 13) * 0.05;
-}
 
 /** The height at a point (px): slow noise, gently warped so lines flow, on a slope
     that runs the bands from upper left to lower right (as on a hillside) */
