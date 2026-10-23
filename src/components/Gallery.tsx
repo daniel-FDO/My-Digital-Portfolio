@@ -13,7 +13,7 @@
      (gallery/Preview.tsx). Closing it leaves the ribbon, the page's
      scroll position and Play / Pause exactly as they were.
    - The same photos are also a plain horizontal scroll strip in the
-     page. It's what shows while the ribbon loads, and for good if
+     page. It stays unseen while the ribbon loads and shows only if
      WebGL isn't available or fails. Once the ribbon is drawn the
      strip stays only for screen readers (the canvas is decorative).
    - Reduced motion: no drift (Play still starts it) and no inertia.

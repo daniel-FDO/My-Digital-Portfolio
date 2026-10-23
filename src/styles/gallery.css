@@ -2,7 +2,7 @@
    GALLERY — the curved photo ribbon (Gallery.tsx, gallery/ribbon.ts)
    One frame holds two things in the same box:
      .gal__strip  — the photos as a plain horizontal scroll strip
-                    (while the ribbon loads, or if WebGL can't run)
+                    (only if WebGL can't run; unseen while the ribbon loads)
      .gal__ribbon — the WebGL canvas, fading in over the strip once
                     it has drawn; the strip then stays for screen
                     readers only.
@@ -38,6 +38,11 @@
 }
 .gal__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .gal__strip:focus-visible { box-shadow: inset 0 0 0 2px var(--ring); border-radius: 0.6rem; }
+/* while the ribbon loads, the strip waits unseen (still there for screen readers):
+   it only shows if the ribbon can't run, so the flat strip never flashes first */
+.gal__stage.is-loading .gal__strip { opacity: 0; pointer-events: none; }
+.gal__stage.is-fallback .gal__strip { animation: gal-in 0.3s var(--ease); }
+@keyframes gal-in { from { opacity: 0; } }
 
 /* The ribbon on top */
 .gal__ribbon {
@@ -68,6 +73,7 @@
 .gal__count { font: 0.75rem/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .gal__count b { font-weight: 500; color: var(--fg); }
 .gal__stage:not(.is-live) .gal__count { display: none; }
+.gal__stage.is-loading .gal__bar { visibility: hidden; }   /* the controls appear with the ribbon (or the strip) */
 .gal__hint { font: 0.6875rem/1.4 var(--mono); color: var(--muted); }
 .gal__nav { display: flex; gap: 0.4rem; margin-left: auto; }
 .gal__btn {
