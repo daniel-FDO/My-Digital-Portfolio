@@ -20,7 +20,7 @@
   --act-radius: 1rem;
 }
 
-/* ---- The lead: eyebrow + big line | a short note ---- */
+/* ---- The lead: eyebrow + big line ---- */
 .act__lead {
   display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem;
   margin-top: 1.5rem;
@@ -38,8 +38,6 @@
   text-wrap: balance;
 }
 .act__title em { font-style: italic; font-weight: 400; letter-spacing: -0.04em; color: var(--muted); }
-.act__intro { max-width: 17rem; font-size: 0.8125rem; line-height: 1.55; color: var(--muted); text-wrap: pretty; }
-.act__nowrap { white-space: nowrap; }
 
 /* ---- Cards ---- */
 .act__grid { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
@@ -205,7 +203,6 @@
 /* ---- Narrow ---- */
 @media (max-width: 639px) {
   .act__lead { flex-direction: column; align-items: flex-start; }
-  .act__intro { max-width: none; }
   .act__panel { padding: 1rem 0.9rem 1.1rem; }
   .act__panelHead { flex-wrap: wrap; row-gap: 0.25rem; }
   .act__heat { --cell-min: 10px; --gap: 2px; }

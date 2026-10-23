@@ -93,6 +93,11 @@ body {
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 img, svg, canvas { display: block; }
+
+/* Custom arrow cursor everywhere (hotspot = tip); text fields keep the I-beam */
+html, html * { cursor: url('../assets/cursor-arrow.png') 0 0, auto !important; }
+input:not([type='button'], [type='submit'], [type='checkbox'], [type='radio'], [type='range']),
+textarea, [contenteditable='true'] { cursor: text !important; }
 [hidden] { display: none !important; }
 ul { list-style: none; }
 kbd { font-family: var(--mono); }

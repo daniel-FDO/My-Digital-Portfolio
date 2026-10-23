@@ -45,10 +45,9 @@
   .tl__item { max-width: 36rem; }
 }
 
-/* ---- Activity: the two cards side by side, a little more apart; the lead's note sits beside the title ---- */
+/* ---- Activity: the two cards side by side, a little more apart ---- */
 @media (min-width: 1100px) {
   .act__grid { gap: 1rem; }
-  .act__intro { max-width: 22rem; }
 }
 
 /* ---- Gallery: the whole container width (the cards keep a sensible size) ---- */

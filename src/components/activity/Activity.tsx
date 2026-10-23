@@ -155,10 +155,6 @@ export function Activity() {
           <p className="act__eyebrow">GitHub · Claude Code · last 12 months</p>
           <p className="act__title">Code, one day <em>at a time.</em></p>
         </div>
-        <p className="act__intro">
-          Contributions from GitHub, and the tokens I’ve worked through with Claude Code.
-          {ghSummary && <> Counted over <span className="act__nowrap">{fmtShort.format(day(ghSummary.from))} – {fmtShort.format(day(ghSummary.to))}</span>.</>}
-        </p>
       </div>
 
       <div className="act__grid">
