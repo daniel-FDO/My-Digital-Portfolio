@@ -10,7 +10,8 @@
      size: the original heading reserves the box, every font is
      fitted inside it (its ink scaled to the original's height or
      width, whichever is tighter, then centred on the original ink).
-   - A small Pause / Resume control sits beside the name. Cycling also
+   - A small Pause / Resume control sits beside the name (it holds the
+     background's light streak too: setAmbientPaused). Cycling also
      waits while the heading is off screen or the tab is hidden, and
      resumes with a fresh 3 seconds (it never replays missed steps).
    - Reduced motion: no automatic changes; the control becomes
@@ -23,7 +24,7 @@
    Switch: ENABLE_FONT_CYCLE (Intro.tsx) — false = the original heading.
    ========================================================= */
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { useReducedMotion } from '../../lib/motion';
+import { setAmbientPaused, useReducedMotion } from '../../lib/motion';
 import { cssFamily, READY_FONTS, type ReadyFont } from './fonts';
 import { load, measureInk, NAME, type InkMetrics } from './loader';
 import '../../styles/font-cycle.css';
@@ -157,7 +158,8 @@ export function FontCycleName({ name = NAME }: { name?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => { api.current.setPaused(paused); }, [paused]);
+  useEffect(() => { api.current.setPaused(paused); setAmbientPaused(paused); }, [paused]);
+  useEffect(() => () => setAmbientPaused(false), []);
 
   const letters = [...name];
   return (
@@ -181,7 +183,7 @@ export function FontCycleName({ name = NAME }: { name?: string }) {
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
         </button>
       ) : (
-        <button type="button" className="fcn__ctl" aria-label={paused ? 'Resume the name’s font changes' : 'Pause the name’s font changes'}
+        <button type="button" className="fcn__ctl" aria-label={paused ? 'Resume animations' : 'Pause animations'}
           onClick={() => setPaused((p) => !p)}>
           {paused
             ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6.2v11.6a.6.6 0 0 0 .9.5l9-5.8a.6.6 0 0 0 0-1L9.4 5.7a.6.6 0 0 0-.9.5z" /></svg>

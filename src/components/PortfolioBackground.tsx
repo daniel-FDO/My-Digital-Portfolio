@@ -1,7 +1,14 @@
 /* =========================================================
    PORTFOLIO BACKGROUND — EXPERIMENT (reversible)
 
-   CURRENT LOOK: BACKGROUND_STYLE = 'atmosphere' — a quiet backdrop:
+   CURRENT LOOK: BACKGROUND_STYLE = 'topo' — fine topographic contour
+   lines at the upper-right and lower-left (the middle stays quiet),
+   in grey with the odd muted terracotta line, over the atmosphere's
+   faint colour fields and grain below. Now and then a small light
+   streaks diagonally across behind the page. The drawing and the
+   streak live in background/topo.ts.
+
+   ATMOSPHERE (BACKGROUND_STYLE = 'atmosphere'), the look before: a quiet backdrop:
    the near-black charcoal base with three very broad, very faint
    fields of colour (two burgundy, one neutral) kept towards the
    corners, so the text column stays dark and still. They drift and
@@ -9,7 +16,7 @@
    pulses or blur filters), pause while the tab is hidden, and are
    still with reduced motion. The light theme has its own warm, pale
    version. A fine static grain sits over both.
-   Set BACKGROUND_STYLE = 'contours' for the previous look, below.
+   Set BACKGROUND_STYLE = 'contours' for the look before that, below.
 
    PREVIOUS LOOK ('contours'):
    Topographic contour lines around the edges of the screen, a faint
@@ -41,12 +48,14 @@
    in the outer margins (the mask keeps the middle calm).
    ========================================================= */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { calm } from '../lib/motion';
+import { calm, onAmbientPause, isAmbientPaused } from '../lib/motion';
+import { createTopo } from './background/topo';
 import '../styles/portfolio-background.css';
 
 export const ENABLE_BACKGROUND_EXPERIMENT = true;
-/** 'atmosphere' (quiet gradients, the current look) or 'contours' (the previous line-based one) */
-export const BACKGROUND_STYLE: 'atmosphere' | 'contours' = 'atmosphere';
+/** 'topo' (contours + a passing light, the current look), 'atmosphere' (quiet gradients only)
+    or 'contours' (the older drifting hills) */
+export const BACKGROUND_STYLE: 'topo' | 'atmosphere' | 'contours' = 'topo';
 
 /** The livelier version, and its settings (enabled: false = the previous version) */
 export const LIFE = {
@@ -181,7 +190,42 @@ function buildLayers(w: number, h: number, groups: number, durations?: number[])
 }
 
 export function PortfolioBackground() {
+  if (BACKGROUND_STYLE === 'topo') return <Topo />;
   return BACKGROUND_STYLE === 'atmosphere' ? <Atmosphere /> : <ContourBackground />;
+}
+
+/** Contours and the passing light (background/topo.ts), on the atmosphere's colour fields */
+function Topo() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const linesRef = useRef<HTMLCanvasElement>(null);
+  const streakRef = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    if (!ENABLE_BACKGROUND_EXPERIMENT) return;
+    const root = rootRef.current!;
+    document.documentElement.classList.add('pbg-on');
+    const topo = createTopo(root, linesRef.current!, streakRef.current!);
+    // the colour fields' slow drift holds while hidden or paused, like the light
+    const sync = () => root.classList.toggle('is-paused', document.hidden || isAmbientPaused());
+    sync();
+    document.addEventListener('visibilitychange', sync);
+    const offPause = onAmbientPause(sync);
+    if (import.meta.env.DEV) (window as unknown as { __topo?: typeof topo }).__topo = topo;
+    return () => {
+      topo.destroy(); offPause();
+      document.removeEventListener('visibilitychange', sync);
+      document.documentElement.classList.remove('pbg-on');
+    };
+  }, []);
+  if (!ENABLE_BACKGROUND_EXPERIMENT) return null;
+  return (
+    <div className="pbg pbg--air pbg--topo" ref={rootRef} aria-hidden="true">
+      <div className="pbg__air pbg__air--a"></div>
+      <div className="pbg__air pbg__air--b"></div>
+      <canvas className="pbg__lines" ref={linesRef}></canvas>
+      <canvas className="pbg__streak" ref={streakRef}></canvas>
+      <div className="pbg__grain"></div>
+    </div>
+  );
 }
 
 /** The quiet backdrop: three broad, faint fields of colour, slowly drifting (CSS only) */

@@ -12,7 +12,7 @@
   {
     "name": "1440: drifts left → right",
     "pass": true,
-    "detail": "pos -0.152 → -0.223"
+    "detail": "pos -0.195 → -0.250"
   },
   {
     "name": "1440: clicking each visible photo opens that photo (6 clicks, across the loop seam)",
@@ -25,7 +25,7 @@
     "detail": ""
   },
   {
-    "name": "1440: wrapping across the loop leaves no holes (widest dark run in the middle 37px)",
+    "name": "1440: wrapping across the loop leaves no holes (widest dark run in the middle 31px)",
     "pass": true,
     "detail": ""
   },
@@ -67,7 +67,7 @@
   {
     "name": "close: same scroll position, same ribbon position, page usable again",
     "pass": true,
-    "detail": "{\"y\":[2067,2067],\"pos\":[34.546119150692455,34.546119150692455]}"
+    "detail": "{\"y\":[2067,2067],\"pos\":[34.04777634474075,34.04777634474075]}"
   },
   {
     "name": "close: focus back on the ribbon it came from",
@@ -122,7 +122,7 @@
   {
     "name": "768: drifts left → right",
     "pass": true,
-    "detail": "pos -0.201 → -0.282"
+    "detail": "pos -0.209 → -0.286"
   },
   {
     "name": "768: clicking each visible photo opens that photo (5 clicks, across the loop seam)",
@@ -157,7 +157,7 @@
   {
     "name": "390: drifts left → right",
     "pass": true,
-    "detail": "pos -0.310 → -0.433"
+    "detail": "pos -0.321 → -0.445"
   },
   {
     "name": "390: clicking each visible photo opens that photo (2 clicks, across the loop seam)",
@@ -170,14 +170,14 @@
     "detail": ""
   },
   {
-    "name": "390: wrapping across the loop leaves no holes (widest dark run in the middle 3px)",
+    "name": "390: wrapping across the loop leaves no holes (widest dark run in the middle 4px)",
     "pass": true,
     "detail": ""
   },
   {
     "name": "390 touch: a horizontal swipe moves the ribbon",
     "pass": true,
-    "detail": "pos 16.87 → 19.85"
+    "detail": "pos 16.86 → 19.75"
   },
   {
     "name": "390 touch: a swipe doesn't open the preview",
@@ -187,7 +187,7 @@
   {
     "name": "390 touch: a vertical swipe over the ribbon scrolls the page",
     "pass": true,
-    "detail": "scrollY 3313 → 3583"
+    "detail": "scrollY 3121 → 3396"
   },
   {
     "name": "390 touch: tapping the photo opens the preview",
@@ -258,5 +258,10 @@
     "name": "no WebGL: no page errors",
     "pass": true,
     "detail": ""
+  },
+  {
+    "name": "veil is a dimmed translucent layer on its own (fallback when blur is unsupported)",
+    "pass": true,
+    "detail": "rgba(8, 8, 8, 0.62)"
   }
 ]

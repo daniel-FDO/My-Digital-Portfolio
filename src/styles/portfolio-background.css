@@ -192,3 +192,49 @@ html.pbg-on body { background: transparent; }
 @keyframes pbg-air-a { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(-6%, 5%, 0) scale(1.08); } }
 @keyframes pbg-air-b { from { transform: translate3d(0, 0, 0) scale(1.04); } to { transform: translate3d(7%, -4%, 0) scale(0.97); } }
 @keyframes pbg-air-c { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(5%, 6%, 0) scale(1.06); } }
+
+/* =========================================================
+   TOPO (BACKGROUND_STYLE = 'topo', the current look; background/topo.ts)
+   The atmosphere's two colour fields, then the contour canvas (masked
+   to the upper-right and lower-left, quiet in the middle), then the
+   streak canvas, then the grain. Colours for the canvases are read
+   from these properties by the script, again on every theme change;
+   --streak-trail-rgb is an "r, g, b" triplet.
+   ========================================================= */
+.pbg--topo {
+  --topo-line: rgba(233, 232, 228, 0.1);
+  --topo-accent: rgba(196, 98, 72, 0.42);      /* muted terracotta */
+  --streak-head: #f7efe2;                      /* warm ivory */
+  --streak-trail-rgb: 201, 132, 92;            /* copper */
+}
+:root:not([data-theme="dark"]) .pbg--topo {
+  --topo-line: rgba(30, 27, 24, 0.095);
+  --topo-accent: rgba(204, 108, 82, 0.55);
+  --streak-head: #b0613a;                      /* muted copper */
+  --streak-trail-rgb: 184, 106, 68;
+}
+.pbg__lines, .pbg__streak { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pbg__lines {
+  /* two corners of lines: upper right and lower left; the text column stays clear */
+  -webkit-mask-image:
+    radial-gradient(ellipse 62% 78% at 100% 0%, #000 30%, rgba(0, 0, 0, 0.5) 58%, transparent 82%),
+    radial-gradient(ellipse 48% 70% at 0% 100%, #000 28%, rgba(0, 0, 0, 0.5) 58%, transparent 84%);
+  mask-image:
+    radial-gradient(ellipse 62% 78% at 100% 0%, #000 30%, rgba(0, 0, 0, 0.5) 58%, transparent 82%),
+    radial-gradient(ellipse 48% 70% at 0% 100%, #000 28%, rgba(0, 0, 0, 0.5) 58%, transparent 84%);
+}
+@media (max-width: 639px) {
+  .pbg--topo { --topo-line: rgba(233, 232, 228, 0.07); }
+  :root:not([data-theme="dark"]) .pbg--topo { --topo-line: rgba(30, 27, 24, 0.08); }
+  .pbg__lines {
+    -webkit-mask-image:
+      radial-gradient(ellipse 80% 42% at 100% 0%, #000 25%, transparent 80%),
+      radial-gradient(ellipse 80% 40% at 0% 100%, #000 25%, transparent 80%);
+    mask-image:
+      radial-gradient(ellipse 80% 42% at 100% 0%, #000 25%, transparent 80%),
+      radial-gradient(ellipse 80% 40% at 0% 100%, #000 25%, transparent 80%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pbg__streak { display: none; }
+}

@@ -30,7 +30,7 @@
     "detail": ""
   },
   {
-    "name": "1440: fonts load progressively (24 requests, the first 3420 ms after navigation)",
+    "name": "1440: fonts load progressively (24 requests, the first 3690 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -70,7 +70,7 @@
     "detail": ""
   },
   {
-    "name": "768: fonts load progressively (24 requests, the first 2755 ms after navigation)",
+    "name": "768: fonts load progressively (24 requests, the first 2940 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -110,7 +110,7 @@
     "detail": ""
   },
   {
-    "name": "390: fonts load progressively (24 requests, the first 2028 ms after navigation)",
+    "name": "390: fonts load progressively (24 requests, the first 2145 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -182,6 +182,6 @@
   {
     "name": "default timing: about 3 s per font",
     "pass": true,
-    "detail": "first change after 2850 ms, next 2982 ms later"
+    "detail": "first change after 2859 ms, next 2984 ms later"
   }
 ]

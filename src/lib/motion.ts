@@ -25,3 +25,18 @@ export function useMediaQuery(query: string): boolean {
     () => window.matchMedia(query).matches,
   );
 }
+
+/* The visitor's Pause (the control beside the name): ambient motion that
+   isn't the name itself, such as the background's light streak, holds too */
+let ambientPaused = false;
+const pauseListeners = new Set<() => void>();
+export const isAmbientPaused = () => ambientPaused;
+export function setAmbientPaused(p: boolean) {
+  if (p === ambientPaused) return;
+  ambientPaused = p;
+  pauseListeners.forEach((fn) => fn());
+}
+export function onAmbientPause(fn: () => void) {
+  pauseListeners.add(fn);
+  return () => { pauseListeners.delete(fn); };
+}

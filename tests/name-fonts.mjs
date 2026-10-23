@@ -138,16 +138,16 @@ try {
     const { ctx, page } = await open();
     const font = () => page.evaluate(() => document.querySelector('.fcn__stage').dataset.font);
     await sleep(STEP * 2.5);
-    await page.getByRole('button', { name: 'Pause the name’s font changes' }).click();
+    await page.getByRole('button', { name: 'Pause animations' }).click();
     const p0 = await font(); await sleep(STEP * 3); const p1 = await font();
-    check('Pause holds the current font', p0 === p1 && (await page.getByRole('button', { name: 'Resume the name’s font changes' }).isVisible()), p0);
-    await page.getByRole('button', { name: 'Resume the name’s font changes' }).click();
+    check('Pause holds the current font', p0 === p1 && (await page.getByRole('button', { name: 'Resume animations' }).isVisible()), p0);
+    await page.getByRole('button', { name: 'Resume animations' }).click();
     await sleep(STEP * 1.6);
     check('Resume carries on (one step, not a burst of missed ones)', (await font()) !== p1 && (await font()) === ORDER[(ORDER.indexOf(p1) + 1) % ORDER.length] || (p1 === ORDER.at(-1) && (await font()) === 'original'), `${p1} → ${await font()}`);
     // keyboard
-    await page.getByRole('button', { name: 'Pause the name’s font changes' }).focus();
+    await page.getByRole('button', { name: 'Pause animations' }).focus();
     await page.keyboard.press('Enter');
-    check('the control works from the keyboard', await page.getByRole('button', { name: 'Resume the name’s font changes' }).isVisible());
+    check('the control works from the keyboard', await page.getByRole('button', { name: 'Resume animations' }).isVisible());
     await page.keyboard.press('Enter');
     // offscreen
     await page.evaluate(() => scrollTo(0, 2500)); await sleep(300);
