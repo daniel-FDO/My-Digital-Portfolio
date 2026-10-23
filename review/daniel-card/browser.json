@@ -15,14 +15,14 @@
     "detail": "{\"family\":\"\\\"Nunito Variable\\\", Geist, ui-sans-serif, system-ui, -apple-system, \\\"Segoe UI\\\", sans-serif\",\"wght\":\"\\\"wght\\\" 560\",\"ready\":true}"
   },
   {
-    "name": "hint reads \"Say hello to Daniel\"",
+    "name": "no hint line under the name",
     "pass": true,
     "detail": ""
   },
   {
     "name": "hover: a brief rise on entry, then settles",
     "pass": true,
-    "detail": "peak lift 0.0397, held 0.0100 (rest 0.0000)"
+    "detail": "peak lift 0.0377, held 0.0100 (rest 0.0000)"
   },
   {
     "name": "hover: eyes towards the pointer, head tilted, attentive lean",
@@ -207,7 +207,7 @@
   {
     "name": "menu inside the viewport at 1440px, next to the trigger, not clipped by the card",
     "pass": true,
-    "detail": "{\"m\":[515,301,709,534],\"vw\":1440,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":1440}"
+    "detail": "{\"m\":[516,295,709,527],\"vw\":1440,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":1440}"
   },
   {
     "name": "no horizontal overflow at 1440px",
@@ -217,7 +217,7 @@
   {
     "name": "menu inside the viewport at 768px, next to the trigger, not clipped by the card",
     "pass": true,
-    "detail": "{\"m\":[539,621,728,848],\"vw\":768,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":768}"
+    "detail": "{\"m\":[539,614,728,841],\"vw\":768,\"vh\":900,\"near\":true,\"parent\":\"BODY\",\"sw\":768}"
   },
   {
     "name": "no horizontal overflow at 768px",
@@ -226,12 +226,12 @@
   },
   {
     "name": "menu inside the viewport at 390px, next to the trigger, not clipped by the card",
-    "pass": true,
-    "detail": "{\"m\":[174,169,361,394],\"vw\":390,\"vh\":844,\"near\":true,\"parent\":\"BODY\",\"sw\":390}"
+    "pass": false,
+    "detail": "{\"m\":[172,169,359,394],\"vw\":390,\"vh\":844,\"near\":true,\"parent\":\"BODY\",\"sw\":392}"
   },
   {
     "name": "no horizontal overflow at 390px",
-    "pass": true,
+    "pass": false,
     "detail": ""
   },
   {

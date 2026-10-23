@@ -85,7 +85,7 @@ try {
     // the resting weight from the stylesheet (the letters' inline weight swells while the name animates)
     const font = await page.evaluate(() => { const x = document.createElement('span'); x.className = 'daniel__ch'; document.querySelector('.daniel__word').append(x); const s = getComputedStyle(x); queueMicrotask(() => x.remove()); return { family: s.fontFamily, wght: s.fontVariationSettings, ready: document.fonts.check('560 64px "Nunito Variable"') }; });
     check('name set in the bundled rounded font, medium weight', /Nunito/.test(font.family) && /560/.test(font.wght) && font.ready, JSON.stringify(font));
-    check('hint reads "Say hello to Daniel"', (await page.locator('.daniel__hint').innerText()).trim() === 'Say hello to Daniel');
+    check('no hint line under the name', (await page.locator('.daniel__hint').count()) === 0);
 
     // --- hover ---
     await page.mouse.move(5, 5); await sleep(1200);

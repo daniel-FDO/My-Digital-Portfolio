@@ -1,39 +1,45 @@
 /* =========================================================
-   ACTIVITY — GitHub: a summary on the left, the heatmap and the
-   months on the right (stacked on narrower screens).
-   Data: /api/github-contributions (lib/github.js). The server asks
-   GitHub with a token from .env and caches the answer for an hour;
-   this page never sees the token. Settings: github-config.json.
+   ACTIVITY — a small developer dashboard: GitHub contributions and
+   Claude Code token usage, two matching cards side by side (stacked on
+   narrower screens). Each card: a header with its status, a GitHub-
+   style heatmap of the last 12 months, and a bar per month.
 
-   The period is the days GitHub returns (the last 12 months, to
-   today). Every number in the summary — total, busiest day, longest
-   streak, the monthly bars — is counted from those same days.
-   Stars / followers / repositories come with them, from the profile.
+   GitHub   — /api/github-contributions (lib/github.js): the server asks
+              GitHub with a token from .env and caches the answer for an
+              hour; this page never sees the token. github-config.json.
+   Claude   — /api/claude-usage (lib/claude-usage.js): daily token totals
+              published by a collector on Daniel's computer
+              (scripts/claude-usage-sync.mjs, which runs ccusage). Only
+              numbers per day — never prompts, conversations or code.
+              Re-asked every 5 minutes while the section is on screen.
+              "Live" = the collector ran in the last 30 minutes; otherwise
+              the card says when it last did.
 
-   States:
-     loading     → quiet placeholders (one soft pulse)
-     ready       → the real numbers; "Updated n min ago" (when GitHub
-                   was last asked), or "Cached copy" if GitHub didn't
-                   answer and an older real answer is shown
-     unavailable → says so, with the profile link (never made-up
-                   squares, and an error is never shown as zero)
-   Interaction:
-     hover / tap / focus a square or a month → a tooltip with the
-     date(s) and count. Keyboard: Tab into the grid (or the months)
-     once, then the arrow keys move; Home / End = first / last.
+   States (per card):
+     loading     → quiet placeholders
+     ready       → the real numbers and when they're from
+     unavailable → says so (never made-up squares; an error is never
+                   shown as zero). Claude: "not connected" when no data
+                   has been published yet.
+   Interaction (both heatmaps and both month charts):
+     hover / tap / focus → a tooltip with the date(s) and the exact
+     count. Keyboard: Tab in once, then the arrow keys; Home / End.
    ========================================================= */
-import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react';
 import CONFIG from '../../../github-config.json';
-import type { ContributionDay, Contributions, GithubConfig } from '../../types';
+import type { ClaudeUsage, ContributionDay, Contributions, GithubConfig } from '../../types';
 import { loadContributions } from '../../lib/github';
+import { loadClaudeUsage, UsageUnavailable } from '../../lib/claudeUsage';
 import { NewTab } from '../icons';
+import { SKILL_ICONS } from '../../data/skill-icons';
 import { useMiniTip, type MiniTipApi } from './MiniTip';
 import { summarise, type MonthTotal, type Summary } from './stats';
 
 const C: GithubConfig = CONFIG;
 const locale = C.locale || 'en-GB';
-// GitHub dates are calendar days ("2026-10-04") → read and print them in UTC so they never shift a day
+// Dates are calendar days ("2026-10-04") → read and print them in UTC so they never shift a day
 const day = (s: string) => new Date(s + 'T00:00:00Z');
+const iso = (d: Date) => d.toISOString().slice(0, 10);
 const fmtLong = new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const fmtTip = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 const fmtShort = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
@@ -42,50 +48,86 @@ const fmtMonth = new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UT
 const fmtMonthYear = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const nf = new Intl.NumberFormat(locale);
 const compact = new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 });
-const big = (n: number) => (n >= 10000 ? compact.format(n) : nf.format(n));
-const plural = (n: number) => (n === 0 ? 'No contributions' : `${nf.format(n)} contribution${n === 1 ? '' : 's'}`);
+
+/** How each card names its counts: exact (tooltips, screen readers) and short (labels) */
+interface Unit { exact: (n: number) => string; short: (n: number) => string }
+const CONTRIBUTIONS: Unit = {
+  exact: (n) => (n === 0 ? 'No contributions' : `${nf.format(n)} contribution${n === 1 ? '' : 's'}`),
+  short: (n) => nf.format(n),
+};
+const TOKENS: Unit = {
+  exact: (n) => (n === 0 ? 'No tokens' : `${nf.format(n)} token${n === 1 ? '' : 's'}`),
+  short: (n) => (n >= 10000 ? compact.format(n) : nf.format(n)),
+};
 const monthLabel = (m: MonthTotal) => fmtMonthYear.format(day(m.first))
   + (m.partial ? ` (${fmtDayMonth.format(day(m.first))} – ${fmtDayMonth.format(day(m.last))})` : '');
 
-function ago(iso: string) {
-  const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
+function ago(isoTime: string, verb = 'Updated') {
+  const min = Math.round((Date.now() - Date.parse(isoTime)) / 60000);
   if (!Number.isFinite(min)) return null;
-  if (min < 1) return 'Updated just now';
-  if (min < 60) return `Updated ${min} min ago`;
+  if (min < 1) return `${verb} just now`;
+  if (min < 60) return `${verb} ${min} min ago`;
   const h = Math.round(min / 60);
-  return h < 48 ? `Updated ${h} h ago` : `Updated ${fmtShort.format(new Date(iso))}`;
+  return h < 48 ? `${verb} ${h} h ago` : `${verb} ${fmtShort.format(new Date(isoTime))}`;
 }
-
-type Load = { state: 'loading' } | { state: 'ready'; data: Contributions } | { state: 'unavailable' };
 
 const GitHubMark = () => (
   <svg className="act__mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /><path d="M9 18c-4.51 2-5-2-7-2" /></svg>
 );
+// Claude's mark: the Simple Icons path the Skills section already uses, in Claude's colour
+const ClaudeMark = () => (
+  <svg className="act__mark act__mark--claude" viewBox="0 0 24 24" aria-hidden="true"><path d={SKILL_ICONS.claude[1]} /></svg>
+);
 const Arrow = () => <svg className="act__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" /></svg>;
-const STAT_ICONS = {
-  stars: <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1L3.2 9.4l6.1-.8z" /></svg>,
-  followers: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5" /><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.4A6.5 6.5 0 0 1 21.5 20" /></svg>,
-  repos: <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2.2" /><circle cx="18" cy="5" r="2.2" /><circle cx="12" cy="19" r="2.2" /><path d="M6 7.2v1.3a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V7.2M12 11.5v5.3" /></svg>,
-};
+
+type GhLoad = { state: 'loading' } | { state: 'ready'; data: Contributions } | { state: 'unavailable' };
+type ClLoad = { state: 'loading' } | { state: 'ready'; data: ClaudeUsage; offline?: boolean } | { state: 'not-configured' } | { state: 'unavailable' };
+
+const REFRESH_MS = 5 * 60 * 1000;
 
 export function Activity() {
   const rootRef = useRef<HTMLElement>(null);
-  const [load, setLoad] = useState<Load>({ state: 'loading' });
+  const [gh, setGh] = useState<GhLoad>({ state: 'loading' });
+  const [cl, setCl] = useState<ClLoad>({ state: 'loading' });
   const [seen, setSeen] = useState(false);        // on screen once → the entrance plays
+  const [, setTick] = useState(0);                // re-render now and then so "n min ago" stays true
   const [tip, tipPortal] = useMiniTip();
 
-  // Fetch once, when the section is getting close (shared with the GitHub widget: one request)
+  // Fetch when the section is getting close; Claude's numbers are asked again every 5 minutes
+  // while the section is on screen and the tab is visible
   useEffect(() => {
-    let gone = false;
+    let gone = false, near = false, timer = 0;
+    const askClaude = () => {
+      loadClaudeUsage()
+        .then((data) => { if (!gone) setCl({ state: 'ready', data }); })
+        .catch((err: unknown) => {
+          if (gone) return;
+          const reason = err instanceof UsageUnavailable ? err.reason : 'unavailable';
+          // a failed refresh keeps the numbers already shown (marked offline); the first failure says why
+          setCl((prev) => (prev.state === 'ready' ? { ...prev, offline: true } : { state: reason }));
+        });
+    };
+    const loop = () => {
+      clearTimeout(timer);
+      if (!near || document.hidden) return;
+      timer = window.setTimeout(() => { askClaude(); setTick((n) => n + 1); loop(); }, REFRESH_MS);
+    };
+    let first = true;
     const obs = new IntersectionObserver((entries) => {
-      if (!entries[0].isIntersecting) return;
-      obs.disconnect();
-      loadContributions()
-        .then((data) => { if (!gone) setLoad({ state: 'ready', data }); })
-        .catch(() => { if (!gone) setLoad({ state: 'unavailable' }); });
+      near = entries[0].isIntersecting;
+      if (near && first) {
+        first = false;
+        loadContributions()
+          .then((data) => { if (!gone) setGh({ state: 'ready', data }); })
+          .catch(() => { if (!gone) setGh({ state: 'unavailable' }); });
+        askClaude();
+      }
+      loop();
     }, { rootMargin: '800px 0px' });
     obs.observe(rootRef.current!);
-    return () => { gone = true; obs.disconnect(); };
+    const onVis = () => { if (!document.hidden && near && !first) { askClaude(); setTick((n) => n + 1); } loop(); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => { gone = true; clearTimeout(timer); obs.disconnect(); document.removeEventListener('visibilitychange', onVis); };
   }, []);
 
   useEffect(() => {
@@ -96,14 +138,13 @@ export function Activity() {
     return () => obs.disconnect();
   }, []);
 
-  const data = load.state === 'ready' ? load.data : null;
-  const summary = useMemo(() => (data ? summarise(data.weeks.flat()) : null), [data]);
-  const status = load.state === 'loading' ? 'Loading'
-    : load.state === 'unavailable' ? 'Unavailable'
-    : data!.stale ? 'Cached copy' : (ago(data!.fetchedAt) ?? 'From GitHub');
+  const ghData = gh.state === 'ready' ? gh.data : null;
+  const ghSummary = useMemo(() => (ghData ? summarise(ghData.weeks.flat()) : null), [ghData]);
+  // the Claude heatmap covers the same days as GitHub's (or the last 12 months, if GitHub isn't there)
+  const range = ghSummary ? { from: ghSummary.from, to: ghSummary.to } : null;
 
   return (
-    <section className={`sec act is-${load.state}${seen ? ' is-in' : ''}`} id="activity" aria-labelledby="activityTitle" ref={rootRef}>
+    <section className={`sec act is-${gh.state === 'loading' && cl.state === 'loading' ? 'loading' : 'ready'}${seen ? ' is-in' : ''}`} id="activity" aria-labelledby="activityTitle" ref={rootRef}>
       <div className="sec__head">
         <h2 className="h" id="activityTitle">Activity</h2>
         <a className="sec__link" href={C.profileUrl} target="_blank" rel="noopener noreferrer">GitHub<NewTab /></a>
@@ -111,95 +152,136 @@ export function Activity() {
 
       <div className="act__lead">
         <div>
-          <p className="act__eyebrow">GitHub · last 12 months</p>
+          <p className="act__eyebrow">GitHub · Claude Code · last 12 months</p>
           <p className="act__title">Code, one day <em>at a time.</em></p>
         </div>
         <p className="act__intro">
-          Contributions, followers and public repositories, from GitHub.
-          {summary && <> Counted over <span className="act__nowrap">{fmtShort.format(day(summary.from))} – {fmtShort.format(day(summary.to))}</span>.</>}
+          Contributions from GitHub, and the tokens I’ve worked through with Claude Code.
+          {ghSummary && <> Counted over <span className="act__nowrap">{fmtShort.format(day(ghSummary.from))} – {fmtShort.format(day(ghSummary.to))}</span>.</>}
         </p>
       </div>
 
-      {load.state === 'unavailable' ? (
-        <div className="act__card act__empty" role="status">
-          <p className="act__label">GitHub activity</p>
-          <p className="act__emptyTitle">Unavailable right now.</p>
-          <p className="act__muted">GitHub didn't answer, so there are no numbers to show here. Nothing is estimated.</p>
-          <a className="act__pill" href={C.profileUrl} target="_blank" rel="noopener noreferrer"><GitHubMark />@{C.username}<Arrow /><NewTab /></a>
-        </div>
-      ) : (
-        <div className="act__grid">
-          <div className="act__side">
-            <SummaryCard summary={summary} stale={!!data?.stale} />
-            <ul className="act__stats" aria-label="GitHub profile">
-              <StatCard k="stars" label="Stars" hint="On public repositories" value={data ? data.profile?.stars ?? null : undefined} d={1} />
-              <StatCard k="followers" label="Followers" value={data ? data.profile?.followers ?? null : undefined} d={2} />
-              <StatCard k="repos" label="Repos" hint="Public repositories" value={data ? data.profile?.publicRepos ?? null : undefined} d={3} />
-            </ul>
-          </div>
-
-          <div className="act__card act__panel" style={{ '--d': 2 } as CSSProperties}>
-            <div className="act__panelHead">
-              <span className="act__who"><GitHubMark />@{data?.username ?? C.username}</span>
-              <span className={`act__badge${data && !data.stale ? ' is-fresh' : ''}`} role="status">{status}</span>
-              <a className="act__view" href={C.profileUrl} target="_blank" rel="noopener noreferrer">View profile<Arrow /><NewTab /></a>
-            </div>
-            {data && summary ? (
-              <>
-                <Calendar weeks={data.weeks} summary={summary} tip={tip} />
-                <MonthBars summary={summary} tip={tip} />
-              </>
-            ) : (
-              <div className="act__skeleton" aria-hidden="true"><i></i><i></i></div>
-            )}
-          </div>
-        </div>
-      )}
+      <div className="act__grid">
+        <GitHubCard load={gh} summary={ghSummary} tip={tip} />
+        <ClaudeCard load={cl} range={range} tip={tip} />
+      </div>
       {tipPortal}
     </section>
   );
 }
 
-/* ---------- Summary (left) ---------- */
-function SummaryCard({ summary, stale }: { summary: Summary | null; stale: boolean }) {
-  const s = summary;
+/* ---------- GitHub ---------- */
+function GitHubCard({ load, summary, tip }: { load: GhLoad; summary: Summary | null; tip: MiniTipApi }) {
+  const data = load.state === 'ready' ? load.data : null;
+  const status = load.state === 'loading' ? 'Loading' : load.state === 'unavailable' ? 'Unavailable'
+    : data!.stale ? 'Cached copy' : (ago(data!.fetchedAt) ?? 'From GitHub');
   return (
-    <div className="act__card act__summary" style={{ '--d': 0 } as CSSProperties}>
-      <p className="act__label">Last 12 months</p>
-      <p className="act__big">{s ? nf.format(s.total) : <span className="act__ph act__ph--big"></span>}</p>
-      <p className="act__muted">contribution{s?.total === 1 ? '' : 's'} on GitHub</p>
-      {s && <p className="act__period">{fmtShort.format(day(s.from))} – {fmtShort.format(day(s.to))}{stale && <><br /><span className="act__stale">Not the latest: GitHub didn't answer, so this is the last copy it sent.</span></>}</p>}
-      <dl className="act__facts">
-        <div>
-          <dt>Busiest day</dt>
-          {/* the period is under a year, so a day + month is never ambiguous; the full date is in the title */}
-          <dd title={s?.busiest ? fmtLong.format(day(s.busiest.date)) : undefined}>{!s ? <span className="act__ph"></span> : s.busiest ? <>{nf.format(s.busiest.count)} <span className="act__dim">·</span> <span className="act__nowrap">{fmtDayMonth.format(day(s.busiest.date))}</span><span className="sr"> {day(s.busiest.date).getUTCFullYear()}</span></> : 'None yet'}</dd>
+    <div className="act__card act__panel" style={{ '--d': 0 } as CSSProperties}>
+      <div className="act__panelHead">
+        <span className="act__who"><GitHubMark />@{data?.username ?? C.username}</span>
+        <span className={`act__badge${data && !data.stale ? ' is-fresh' : ''}`} role="status">{status}</span>
+        <a className="act__view" href={C.profileUrl} target="_blank" rel="noopener noreferrer">View profile<Arrow /><NewTab /></a>
+      </div>
+      {load.state === 'unavailable' ? (
+        <div className="act__empty" role="status">
+          <p className="act__emptyTitle">Unavailable right now.</p>
+          <p className="act__muted">GitHub didn't answer, so there are no numbers to show here. Nothing is estimated.</p>
         </div>
-        <div>
-          <dt>Longest streak</dt>
-          <dd>{!s ? <span className="act__ph"></span> : `${nf.format(s.longestStreak)} day${s.longestStreak === 1 ? '' : 's'}`}</dd>
-        </div>
-      </dl>
+      ) : data && summary ? (
+        <>
+          <Calendar idp="gh" title="Contributions, day by day" weeks={data.weeks} summary={summary} unit={CONTRIBUTIONS} tip={tip} />
+          <MonthBars idp="gh" title="Contributions by month" summary={summary} unit={CONTRIBUTIONS} tip={tip} />
+        </>
+      ) : (
+        <div className="act__skeleton" aria-hidden="true"><i></i><i></i></div>
+      )}
     </div>
   );
 }
 
-function StatCard({ k, label, hint, value, d }: { k: keyof typeof STAT_ICONS; label: string; hint?: string; value: number | null | undefined; d: number }) {
-  // undefined = still loading; null = GitHub didn't give this number
-  const shown: ReactNode = value === undefined ? <span className="act__ph"></span> : value === null ? '—' : big(value);
+/* ---------- Claude Code ---------- */
+/** Claude's days laid out like GitHub's calendar: weeks Sunday → Saturday, levels by quartile */
+function claudeWeeks(usage: ClaudeUsage, range: { from: string; to: string } | null) {
+  const byDate = new Map(usage.days.map((d) => [d.date, d]));
+  // the same period as the GitHub card, or the last 12 months ending on the latest day the collector saw
+  const end = range ? day(range.to) : day(usage.days.at(-1)?.date ?? iso(new Date()));
+  const start = range ? day(range.from) : new Date(end.getTime() - 364 * 864e5);
+  const totals = usage.days.filter((d) => d.date >= iso(start) && d.date <= iso(end) && d.total > 0).map((d) => d.total).sort((a, b) => a - b);
+  // GitHub-style intensity: the non-zero days split into four equal groups
+  const q = (p: number) => totals[Math.min(totals.length - 1, Math.floor(p * totals.length))] ?? Infinity;
+  const cut = [q(0.25), q(0.5), q(0.75)];
+  const level = (n: number): ContributionDay['level'] => (n <= 0 ? 0 : n < cut[0] ? 1 : n < cut[1] ? 2 : n < cut[2] ? 3 : 4);
+  const weeks: ContributionDay[][] = [];
+  for (let t = start.getTime(); t <= end.getTime(); t += 864e5) {
+    const d = new Date(t), date = iso(d), weekday = d.getUTCDay();
+    if (!weeks.length || weekday === 0) weeks.push([]);
+    const total = byDate.get(date)?.total ?? 0;
+    weeks[weeks.length - 1].push({ date, weekday, count: total, level: level(total) });
+  }
+  return weeks;
+}
+
+function ClaudeCard({ load, range, tip }: { load: ClLoad; range: { from: string; to: string } | null; tip: MiniTipApi }) {
+  const usage = load.state === 'ready' ? load.data : null;
+  const weeks = useMemo(() => (usage ? claudeWeeks(usage, range) : null), [usage, range]);
+  const summary = useMemo(() => (weeks ? summarise(weeks.flat()) : null), [weeks]);
+  const stats = useMemo(() => {
+    if (!usage || !summary) return null;
+    const inRange = usage.days.filter((d) => d.date >= summary.from && d.date <= summary.to);
+    const sum = (k: 'total' | 'input' | 'output' | 'cacheWrite' | 'cacheRead', list = inRange) => list.reduce((n, d) => n + d[k], 0);
+    const month = summary.to.slice(0, 7), thisMonth = inRange.filter((d) => d.date.startsWith(month));
+    return { total: sum('total'), month: sum('total', thisMonth), input: sum('input'), output: sum('output'), cache: sum('cacheWrite') + sum('cacheRead'), monthLabel: fmtMonth.format(day(summary.to)) };
+  }, [usage, summary]);
+
+  let status = 'Loading', fresh = false;
+  if (load.state === 'not-configured') status = 'Not connected';
+  else if (load.state === 'unavailable') status = 'Unavailable';
+  else if (usage) {
+    fresh = usage.live && !usage.stale && !(load.state === 'ready' && load.offline);
+    status = load.state === 'ready' && load.offline ? 'Offline · ' + (ago(usage.collectedAt, 'synced') ?? '')
+      : fresh ? (ago(usage.collectedAt, 'Live · synced') ?? 'Live') : (ago(usage.collectedAt, 'Last synced') ?? 'Not live');
+  }
+
   return (
-    <li className="act__card act__stat" style={{ '--d': d } as CSSProperties} title={hint}>
-      <span className="act__statIcon">{STAT_ICONS[k]}</span>
-      <span className="act__statNum">{shown}</span>
-      <span className="act__label">{label}{value === null && <span className="sr"> (not available)</span>}</span>
-    </li>
+    <div className="act__card act__panel act__claude" style={{ '--d': 1 } as CSSProperties}>
+      <div className="act__panelHead">
+        <span className="act__who"><ClaudeMark />Claude Code</span>
+        <span className={`act__badge${fresh ? ' is-fresh' : ''}`} role="status" title={usage ? `Collector last ran ${new Date(usage.collectedAt).toLocaleString(locale)}` : undefined}>{status}</span>
+        <span className="act__unit" aria-hidden="true">Tokens</span>
+      </div>
+      {load.state === 'not-configured' ? (
+        <div className="act__empty" role="status">
+          <p className="act__emptyTitle">Not connected yet.</p>
+          <p className="act__muted">Token usage appears here once the local collector has published it. Nothing is estimated.</p>
+        </div>
+      ) : load.state === 'unavailable' ? (
+        <div className="act__empty" role="status">
+          <p className="act__emptyTitle">Unavailable right now.</p>
+          <p className="act__muted">The usage data couldn't be loaded, so there are no numbers to show. Nothing is estimated.</p>
+        </div>
+      ) : usage && weeks && summary && stats ? (
+        <>
+          <dl className="act__nums">
+            <div><dt>Total</dt><dd title={TOKENS.exact(stats.total)}>{TOKENS.short(stats.total)}</dd></div>
+            <div><dt>This month</dt><dd title={`${TOKENS.exact(stats.month)} in ${stats.monthLabel}`}>{TOKENS.short(stats.month)}</dd></div>
+            <div><dt>Input</dt><dd title={TOKENS.exact(stats.input)}>{TOKENS.short(stats.input)}</dd></div>
+            <div><dt>Output</dt><dd title={TOKENS.exact(stats.output)}>{TOKENS.short(stats.output)}</dd></div>
+          </dl>
+          <p className="act__note">Total includes {TOKENS.short(stats.cache)} cache reads and writes.</p>
+          <Calendar idp="cl" title="Claude Code tokens, day by day" weeks={weeks} summary={summary} unit={TOKENS} tip={tip} />
+          <MonthBars idp="cl" title="Tokens by month" summary={summary} unit={TOKENS} tip={tip} />
+        </>
+      ) : (
+        <div className="act__skeleton" aria-hidden="true"><i></i><i></i></div>
+      )}
+    </div>
   );
 }
 
-/* ---------- The heatmap ---------- */
+/* ---------- The heatmap (both cards) ---------- */
 interface Cell extends ContributionDay { i: number; col: number }
 
-function Calendar({ weeks, summary, tip }: { weeks: ContributionDay[][]; summary: Summary; tip: MiniTipApi }) {
+function Calendar({ idp, title, weeks, summary, unit, tip }: { idp: string; title: string; weeks: ContributionDay[][]; summary: Summary; unit: Unit; tip: MiniTipApi }) {
   const { days, cols, months, rows } = useMemo(() => {
     const cells: Cell[] = [];
     weeks.forEach((w, col) => w.forEach((d) => cells.push({ ...d, i: cells.length, col })));
@@ -226,9 +308,9 @@ function Calendar({ weeks, summary, tip }: { weeks: ContributionDay[][]; summary
   const gridRef = useRef<HTMLDivElement>(null);
   const tap = useRef<{ x: number; y: number } | null>(null);
   const cellEl = (i: number) => gridRef.current?.querySelector<HTMLElement>(`[data-i="${i}"]`) ?? null;
-  const tipText = (k: number) => `${plural(days[k].count)} · ${fmtTip.format(day(days[k].date))}`;
+  const tipText = (k: number) => `${unit.exact(days[k].count)} · ${fmtTip.format(day(days[k].date))}`;
 
-  // Narrow screens: the year is wider than the box → it scrolls sideways inside it, starting at today
+  // When the year is wider than the card it scrolls sideways inside it, starting at today
   useLayoutEffect(() => {
     const s = scrollerRef.current!;
     s.scrollLeft = s.scrollWidth;
@@ -275,7 +357,7 @@ function Calendar({ weeks, summary, tip }: { weeks: ContributionDay[][]; summary
 
   return (
     <div className="act__heat">
-      <h3 className="sr" id="ghTitle">Contributions, day by day</h3>
+      <h3 className="sr" id={`${idp}Title`}>{title}</h3>
       <div className="act__scroll scroll-thin" ref={scrollerRef} onScroll={() => tip.hide()}>
         <div className="act__cal" style={{ '--cols': cols } as CSSProperties}>
           <div className="act__months" aria-hidden="true">
@@ -283,7 +365,7 @@ function Calendar({ weeks, summary, tip }: { weeks: ContributionDay[][]; summary
           </div>
           <div className="act__wd" aria-hidden="true"><span style={{ gridRow: 2 }}>Mon</span><span style={{ gridRow: 4 }}>Wed</span><span style={{ gridRow: 6 }}>Fri</span></div>
           <div
-            className="act__cells" role="grid" aria-labelledby="ghTitle" aria-describedby="ghRange ghKeys" ref={gridRef}
+            className="act__cells" role="grid" aria-labelledby={`${idp}Title`} aria-describedby={`${idp}Range ${idp}Keys`} ref={gridRef}
             onKeyDown={onKeyDown}
             onFocus={(e) => { const c = cellOf(e.target); if (c) { setCurrent(idx(c)); activate(idx(c), c); } }}
             onBlur={(e) => { const c = cellOf(e.target); if (c && !gridRef.current?.contains(e.relatedTarget as Node | null)) deactivate(idx(c), c); }}
@@ -304,41 +386,41 @@ function Calendar({ weeks, summary, tip }: { weeks: ContributionDay[][]; summary
           >
             {rows.map((r, w) => (
               <div className="act__row" role="row" key={w}>
-                {r.map((d) => <DayCell key={d.i} d={d} focusable={d.i === current} active={d.i === active} />)}
+                {r.map((d) => <DayCell key={d.i} d={d} unit={unit} focusable={d.i === current} active={d.i === active} />)}
               </div>
             ))}
           </div>
         </div>
       </div>
       <div className="act__heatFoot">
-        <span id="ghRange">{fmtShort.format(day(summary.from))} – {fmtShort.format(day(summary.to))}</span>
+        <span id={`${idp}Range`}>{fmtShort.format(day(summary.from))} – {fmtShort.format(day(summary.to))}</span>
         <span className="act__legend" aria-hidden="true">Less <i data-l="0"></i><i data-l="1"></i><i data-l="2"></i><i data-l="3"></i><i data-l="4"></i> More</span>
-        <span className="sr" id="ghKeys">Use the arrow keys to move between days.</span>
+        <span className="sr" id={`${idp}Keys`}>Use the arrow keys to move between days.</span>
       </div>
     </div>
   );
 }
 
 // ~370 squares: only the ones whose focus / highlight changes re-render
-const DayCell = memo(function DayCell({ d, focusable, active }: { d: Cell; focusable: boolean; active: boolean }) {
+const DayCell = memo(function DayCell({ d, unit, focusable, active }: { d: Cell; unit: Unit; focusable: boolean; active: boolean }) {
   return (
     <span
       className={`act__cell${active ? ' is-active' : ''}`} role="gridcell" tabIndex={focusable ? 0 : -1} data-i={d.i} data-l={d.level}
       style={{ gridColumn: d.col + 1, gridRow: d.weekday + 1 }}
-      aria-label={`${plural(d.count)} on ${fmtLong.format(day(d.date))}`}
+      aria-label={`${unit.exact(d.count)} on ${fmtLong.format(day(d.date))}`}
     ></span>
   );
 });
 
-/* ---------- Contributions by month ---------- */
-function MonthBars({ summary, tip }: { summary: Summary; tip: MiniTipApi }) {
+/* ---------- Totals by month (both cards) ---------- */
+function MonthBars({ idp, title, summary, unit, tip }: { idp: string; title: string; summary: Summary; unit: Unit; tip: MiniTipApi }) {
   const { months } = summary;
   const max = Math.max(0, ...months.map((m) => m.count));
   const top = max > 0 ? months.reduce((a, b) => (b.count >= a.count ? b : a)) : null;   // the latest busiest month
   const [current, setCurrent] = useState(months.length - 1);
   const listRef = useRef<HTMLOListElement>(null);
   const barEl = (i: number) => listRef.current?.children[i] as HTMLElement | undefined;
-  const text = (m: MonthTotal) => `${plural(m.count)} · ${monthLabel(m)}`;
+  const text = (m: MonthTotal) => `${unit.exact(m.count)} · ${monthLabel(m)}`;
 
   useEffect(() => () => tip.hide(), [tip]);
 
@@ -358,14 +440,14 @@ function MonthBars({ summary, tip }: { summary: Summary; tip: MiniTipApi }) {
   return (
     <div className="act__monthly">
       <div className="act__monthlyHead">
-        <h3 className="act__label" id="actMonthsTitle">Contributions by month</h3>
-        {top && <span className="act__top">Busiest: <b>{fmtMonth.format(day(top.first))}</b> · {nf.format(top.count)}</span>}
+        <h3 className="act__label" id={`${idp}MonthsTitle`}>{title}</h3>
+        {top && <span className="act__top" title={unit.exact(top.count)}>Busiest: <b>{fmtMonth.format(day(top.first))}</b> · {unit.short(top.count)}</span>}
       </div>
-      <ol className="act__bars" aria-labelledby="actMonthsTitle" ref={listRef} onKeyDown={onKeyDown} style={{ '--n': months.length } as CSSProperties}>
+      <ol className="act__bars" aria-labelledby={`${idp}MonthsTitle`} ref={listRef} onKeyDown={onKeyDown} style={{ '--n': months.length } as CSSProperties}>
         {months.map((m, i) => (
           <li
             key={m.key} className={`act__bar${m.count === 0 ? ' is-zero' : ''}`} tabIndex={i === current ? 0 : -1}
-            aria-label={`${monthLabel(m)}: ${plural(m.count).toLowerCase()}`}
+            aria-label={`${monthLabel(m)}: ${unit.exact(m.count).toLowerCase()}`}
             style={{ '--h': max ? m.count / max : 0, '--i': i } as CSSProperties}
             onFocus={(e) => { setCurrent(i); tip.show(e.currentTarget, text(m)); }}
             onBlur={(e) => tip.hide(e.currentTarget)}

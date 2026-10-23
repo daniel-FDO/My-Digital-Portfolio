@@ -186,14 +186,9 @@
 .daniel--with-character .daniel__word {
   font-size: min(7rem, (100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 3.4rem) / 3.4);
 }
-.daniel--with-character .w__label, .daniel--with-character .daniel__hint {
+.daniel--with-character .w__label {
   max-width: calc(100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 2.6rem);
 }
-.daniel__hint-dnc, .daniel__hint-name { display: none; }
-.daniel--with-character .daniel__hint-dnc { display: inline; }
-.daniel--with-character:has(.dnc[hidden]) .daniel__hint-dnc { display: none; }
-.daniel:not(.daniel--with-character) .daniel__hint-name,
-.daniel--with-character:has(.dnc[hidden]) .daniel__hint-name { display: inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .dnc__poster, .dnc__tip, .dnc__dots { transition: none; }

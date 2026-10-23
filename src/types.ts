@@ -162,4 +162,25 @@ export interface Contributions {
   stale?: boolean;
 }
 
+/** One day of Claude Code token totals (lib/claude-usage.js) */
+export interface ClaudeDay {
+  date: string;
+  input: number;
+  output: number;
+  cacheWrite: number;
+  cacheRead: number;
+  /** input + output + cacheWrite + cacheRead (ccusage's totalTokens) */
+  total: number;
+}
+export interface ClaudeUsage {
+  days: ClaudeDay[];
+  /** when the local collector last ran */
+  collectedAt: string;
+  timezone: string;
+  /** the collector ran within the last 30 minutes */
+  live: boolean;
+  /** the server couldn't read the newest copy, this is an older one */
+  stale?: boolean;
+}
+
 export type Theme = 'light' | 'dark';

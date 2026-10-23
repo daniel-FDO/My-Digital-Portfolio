@@ -18,7 +18,10 @@
     "test:daniel": "node --no-warnings tests/daniel-motion.mjs",
     "test:daniel:browser": "node tests/daniel-browser.mjs",
     "record:daniel": "node tests/daniel-record.mjs",
-    "test:name-fonts": "node tests/name-fonts.mjs"
+    "test:name-fonts": "node tests/name-fonts.mjs",
+    "usage:sync": "node scripts/claude-usage-sync.mjs",
+    "usage:watch": "node scripts/claude-usage-sync.mjs --watch",
+    "test:activity": "node tests/activity.mjs"
   },
   "engines": {
     "node": ">=21.7"

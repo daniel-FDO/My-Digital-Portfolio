@@ -161,3 +161,20 @@ To reproduce: `npm run dev`, then `npm run test:daniel`, `npm run test:daniel:br
   - Progressive loading; a blocked font request; pause, resume and keyboard; offscreen and hidden tab; reduced motion; the real 3 s timing.
   - Contact sheets: `review/name-fonts/`.
 - **Not tested:** real Safari / iOS, and real tab switches (simulated).
+
+# Activity: GitHub + Claude Code dashboard (22 October 2026)
+- **Layout:** the old left column is deleted (component and CSS): the 12-month summary, busiest day, longest streak, and the stars/followers/repos cards. In its place are two equal cards, GitHub contributions and Claude Code tokens. They sit side by side from 900px and stack below that. Both cards share the same heatmap and month-chart components.
+- **GitHub:** unchanged backend (`lib/github.js`). The heatmap is compact and scrolls sideways inside the card when the year doesn't fit, and its tooltips and keyboard navigation still work. The server still returns profile counts, which the page no longer shows.
+- **Claude Code numbers:** these come from **ccusage** (pinned `ccusage@20.0.40`, `claude daily`: Claude Code only, Europe/London days).
+  - **Collector:** `scripts/claude-usage-sync.mjs`, run as `npm run usage:sync` or `usage:watch` (every 10 minutes).
+  - **Kept:** per-day totals only (input, output, cache writes, cache reads, total). No prompts, content, paths, projects, sessions, models or costs.
+  - **Merged:** each run is merged into the published history, because Claude Code keeps only about a month of local records.
+  - **Published:** written to `.cache/claude-usage.json` (git-ignored) and, once configured, to a private GitHub Gist.
+- **Endpoint:** `/api/claude-usage` (`lib/claude-usage.js` and `api/claude-usage.js`, also routed in `server.js` and the dev server).
+  - **Reads:** the Gist (`CLAUDE_USAGE_GIST_ID`), or the local file when no Gist is set.
+  - **Validates:** it checks the file (a day's categories must add up to its total) and caches for 2 minutes.
+  - **Status:** "live" means the collector ran within 30 minutes. If the Gist can't be read, it serves an older real copy marked stale.
+- **Page:** asks again every 5 minutes while the section is on screen. The Claude badge shows one of: Live · synced n min ago / Last synced … / Offline · synced … / Not connected / Unavailable.
+- **Totals:** total = input + output + cache writes + cache reads (ccusage's `totalTokens`, checked per day). The card shows total, this month, input and output, with a line saying how much of the total is cache.
+- **Setup still needed for the deployed site:** create the Gist token, run `--create-gist`, add the ID to `.env` and to Vercel, then keep `npm run usage:watch` running. Until then the deployed card says "Not connected yet".
+- **Tests:** `npm run test:activity` passes 19/19. It covers GitHub staying live, the Claude figures matching the source exactly, every state, both themes, and 1440/768/390 px.

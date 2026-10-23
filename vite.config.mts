@@ -21,6 +21,7 @@ function api(): Plugin {
       const routes: Record<string, Handler> = {
         '/api/now-playing': require('./lib/spotify.js').handler,
         '/api/github-contributions': require('./lib/github.js').handler,
+        '/api/claude-usage': require('./lib/claude-usage.js').handler,
       };
       server.middlewares.use((req, res, next) => {
         const route = routes[(req.url || '').split('?')[0]];

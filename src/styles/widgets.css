@@ -179,20 +179,11 @@
   color: color-mix(in srgb, var(--fg) calc(82% + var(--k, 0) * 18%), var(--muted));
   will-change: transform;
 }
-.daniel__dot { color: var(--brand); font-variation-settings: 'wght' 900; margin-left: 0.01em; }
+.daniel__dot { display: inline-block; color: var(--brand); font-variation-settings: 'wght' 900; margin-left: 0.01em; transform-origin: 50% 100%; }   /* it hops (useNameHop.ts) */
+.daniel__ch { transform-origin: 50% 100%; }
 /* the supporting lines: the same rounded face, sentence case, quieter */
 .daniel > .w__label {
   font: 700 0.875rem/1.3 "Nunito Variable", var(--font); letter-spacing: 0.01em; text-transform: none;
-}
-.daniel__hint {
-  margin-top: 0.55rem;
-  font: 600 0.8125rem/1.35 "Nunito Variable", var(--font); letter-spacing: 0.01em;
-  color: var(--muted);
-}
-.daniel__hint-touch { display: none; }
-@media (hover: none), (pointer: coarse) {
-  .daniel__hint-fine { display: none; }
-  .daniel__hint-touch { display: inline; }
 }
 
 /* ---- Studying: the course, and where I am on it ---- */

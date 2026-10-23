@@ -15,3 +15,6 @@ dist/
 # Video tooling scratch (video/README.md)
 video/.probe/
 video/stills/
+
+# Claude Code usage collector's local copy (npm run usage:sync)
+.cache/

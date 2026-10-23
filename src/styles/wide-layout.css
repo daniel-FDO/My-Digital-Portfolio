@@ -45,11 +45,9 @@
   .tl__item { max-width: 36rem; }
 }
 
-/* ---- GitHub activity: more room for the panel; the lead's note sits beside the title ---- */
+/* ---- Activity: the two cards side by side, a little more apart; the lead's note sits beside the title ---- */
 @media (min-width: 1100px) {
-  .act__grid { grid-template-columns: minmax(16rem, 0.36fr) minmax(0, 1fr); gap: 1rem; }
-  .act__side { gap: 1rem; }
-  .act__stats { gap: 0.75rem; }
+  .act__grid { gap: 1rem; }
   .act__intro { max-width: 22rem; }
 }
 

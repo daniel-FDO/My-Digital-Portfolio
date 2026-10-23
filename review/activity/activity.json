@@ -1,0 +1,97 @@
+[
+  {
+    "name": "GitHub card: live GitHub data (heatmap + months)",
+    "pass": true,
+    "detail": "{\"badge\":\"Updated 29 min ago\",\"fresh\":true,\"cells\":365,\"months\":13}"
+  },
+  {
+    "name": "the old summary / stats column is gone (not just hidden)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Claude card: totals agree with the source data exactly (total, this month, input, output)",
+    "pass": true,
+    "detail": "card 1,637,918,264 / 1,522,590,213 / 8,976 / 7,165,088 · source 1,637,918,264 / 1,522,590,213 / 8,976 / 7,165,088 (23 Oct 2025 – 22 Oct 2026)"
+  },
+  {
+    "name": "Claude totals: input + output + cache = total for every day (no double counting)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Claude heatmap: every day's square carries its exact token count (20 days with data)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Claude card: live badge while the collector runs",
+    "pass": true,
+    "detail": "Live · synced 8 min ago"
+  },
+  {
+    "name": "hovering a Claude square shows its date and exact token count",
+    "pass": true,
+    "detail": "42,958,516 tokens · 17 October 2026"
+  },
+  {
+    "name": "desktop: two equal cards side by side, same height",
+    "pass": true,
+    "detail": "[{\"l\":144,\"w\":568.53125,\"h\":419.71875},{\"l\":727.46875,\"w\":568.53125,\"h\":419.71875}]"
+  },
+  {
+    "name": "desktop: no horizontal overflow; no console errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "state: stale (collector not running)",
+    "pass": true,
+    "detail": "Last synced 3 h ago"
+  },
+  {
+    "name": "state: not connected (nothing published yet)",
+    "pass": true,
+    "detail": "Not connected · Not connected yet."
+  },
+  {
+    "name": "state: unavailable (server error)",
+    "pass": true,
+    "detail": "Unavailable · Unavailable right now."
+  },
+  {
+    "name": "state: network failure",
+    "pass": true,
+    "detail": "Unavailable · Unavailable right now."
+  },
+  {
+    "name": "state: empty history (connected, no usage yet)",
+    "pass": true,
+    "detail": "Live · synced just now"
+  },
+  {
+    "name": "state: offline after it had loaded — keeps the numbers, says \"Offline\"",
+    "pass": true,
+    "detail": "Offline · synced just now"
+  },
+  {
+    "name": "768 light: cards stacked, full width, no overflow",
+    "pass": true,
+    "detail": "[{\"l\":36,\"t\":221,\"w\":696},{\"l\":36,\"t\":599,\"w\":696}]"
+  },
+  {
+    "name": "768 dark: cards stacked, full width, no overflow",
+    "pass": true,
+    "detail": "[{\"l\":36,\"t\":222,\"w\":696},{\"l\":36,\"t\":600,\"w\":696}]"
+  },
+  {
+    "name": "390 light: cards stacked, full width, no overflow",
+    "pass": true,
+    "detail": "[{\"l\":25,\"t\":216,\"w\":340},{\"l\":25,\"t\":626,\"w\":340}]"
+  },
+  {
+    "name": "390 dark: cards stacked, full width, no overflow",
+    "pass": true,
+    "detail": "[{\"l\":25,\"t\":218,\"w\":340},{\"l\":25,\"t\":628,\"w\":340}]"
+  }
+]

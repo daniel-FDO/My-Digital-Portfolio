@@ -1,7 +1,8 @@
 /* =========================================================
-   ACTIVITY — GitHub (Activity.tsx)
-   A large editorial line, then: a summary on the left and the
-   heatmap + months on the right (from 1024px); stacked below that.
+   ACTIVITY — GitHub + Claude Code (Activity.tsx)
+   A large editorial line, then two matching cards: GitHub
+   contributions | Claude Code tokens (side by side from 900px,
+   stacked below that). Each: header, heatmap, months.
    Colours are the site's own: the neutral heatmap greys (--gh-*),
    text tokens, and the red --brand for a few small accents.
    The squares' tooltip is .mini-tip (home.css).
@@ -48,7 +49,6 @@
   background: var(--act-card);
   transition: border-color var(--fast) ease;
 }
-.act__side { display: grid; gap: 0.75rem; align-content: start; }
 .act__label {
   font: 500 0.6875rem/1.4 var(--mono);
   letter-spacing: 0.12em; text-transform: uppercase;
@@ -56,42 +56,38 @@
 }
 .act__muted { font-size: 0.8125rem; line-height: 1.5; color: var(--muted); }
 
-.act__summary { display: flex; flex-direction: column; padding: 1.25rem 1.25rem 1.1rem; }
-.act__big {
-  margin-top: 0.9rem;
-  font-size: 3rem; font-weight: 600; line-height: 1; letter-spacing: -0.06em;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg);
-}
-.act__summary .act__muted { margin-top: 0.35rem; }
-.act__period { margin-top: 0.25rem; font: 0.75rem/1.5 var(--mono); color: var(--muted); }
-.act__stale { font-family: var(--font); color: var(--muted); }
-.act__facts {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
-  margin-top: auto; padding-top: 1rem;
-}
-.act__summary .act__facts { margin-top: 1.25rem; border-top: 1px solid var(--line); }
-.act__facts dd { order: -1; font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); font-variant-numeric: tabular-nums; }
-.act__facts div { display: flex; flex-direction: column; gap: 0.15rem; }
-.act__facts dt { font: 500 0.625rem/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-.act__dim { color: var(--muted); font-weight: 400; }
-
-.act__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
-.act__stat { display: flex; flex-direction: column; padding: 0.85rem 0.9rem 0.8rem; min-width: 0; }
-.act__statIcon { display: grid; width: 15px; height: 15px; color: var(--act-accent); }
-.act__statIcon svg, .act__mark, .act__arrow { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-.act__statNum {
-  margin-top: 1.1rem;
-  font-size: 1.375rem; font-weight: 600; line-height: 1.1; letter-spacing: -0.045em;
-  font-variant-numeric: tabular-nums; color: var(--fg);
-}
-.act__stat .act__label { margin-top: 0.3rem; font-size: 0.5625rem; letter-spacing: 0.08em; }
+.act__mark, .act__arrow { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
 @media (hover: hover) and (pointer: fine) {
   .act__card:hover { border-color: color-mix(in srgb, var(--fg) 20%, transparent); }
 }
 
 /* ---- The panel ---- */
-.act__panel { min-width: 0; padding: 1.1rem 1.25rem 1.2rem; }
+.act__panel { display: flex; flex-direction: column; min-width: 0; padding: 1.1rem 1.25rem 1.2rem; }
+/* matching cards: the month chart takes whatever height is left, so neither card has a hole in it */
+.act__panel > .act__monthly { flex: 1; display: flex; flex-direction: column; }
+.act__panel > .act__monthly .act__bars { flex: 1; }
+.act__panel > .act__monthly .act__barTrack { flex: 1; min-height: 5.5rem; height: auto; }
+
+/* ---- Claude Code: the same card, with a quiet identity (its mark in Claude's colour,
+   the heatmap's greys warmed very slightly) ---- */
+.act__claude {
+  --act-claude: #d97757;
+  --act-accent: var(--act-claude);
+  --act-1: color-mix(in srgb, var(--gh-1) 82%, var(--act-claude) 18%);
+  --act-2: color-mix(in srgb, var(--gh-2) 82%, var(--act-claude) 18%);
+  --act-3: color-mix(in srgb, var(--gh-3) 84%, var(--act-claude) 16%);
+  --act-4: color-mix(in srgb, var(--gh-4) 86%, var(--act-claude) 14%);
+  --act-bar: var(--act-3);
+}
+.act__mark--claude { fill: var(--act-claude); stroke: none; }
+.act__unit { margin-left: auto; font: 500 0.625rem/1.5 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+/* the four numbers: small, in a row */
+.act__nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1rem; }
+.act__nums div { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.act__nums dt { font: 500 0.625rem/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.act__nums dd { order: -1; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; }
+.act__note { margin-top: 0.45rem; font-size: 0.75rem; line-height: 1.4; color: var(--muted); }
+.act__claude .act__heat { margin-top: 0.85rem; }
 .act__panelHead { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
 .act__who { display: inline-flex; align-items: center; gap: 0.45rem; min-width: 0; white-space: nowrap; font-size: 0.875rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); }
 .act__who .act__mark { width: 16px; height: 16px; flex: none; }
@@ -113,7 +109,7 @@
 }
 .act__view:hover { color: var(--fg); }
 .act__arrow { width: 12px; height: 12px; flex: none; transition: transform var(--fast) var(--ease); }
-.act__view:hover .act__arrow, .act__pill:hover .act__arrow { transform: translate(1px, -1px); }
+.act__view:hover .act__arrow { transform: translate(1px, -1px); }
 
 /* Heatmap: fluid squares when there's room; on narrow screens they
    keep a usable size and the year scrolls sideways inside the panel */
@@ -183,21 +179,11 @@
 .act__barLabel { font: 0.625rem/1 var(--mono); color: var(--muted); text-align: center; white-space: nowrap; overflow: hidden; }
 
 /* ---- Loading / unavailable ---- */
-.act__ph { display: inline-block; width: 4.5rem; max-width: 100%; height: 0.9em; border-radius: 4px; background: var(--act-0); vertical-align: middle; animation: act-wait 1.6s ease-in-out infinite; }
-.act__ph--big { width: 7rem; height: 0.8em; }
 .act__skeleton { display: grid; gap: 1rem; margin-top: 1.1rem; }
 .act__skeleton i { display: block; height: 7.5rem; border-radius: 0.5rem; background: var(--act-0); animation: act-wait 1.6s ease-in-out infinite; }
 @keyframes act-wait { 50% { opacity: 0.45; } }
-.act__empty { margin-top: 1.5rem; padding: 1.4rem 1.25rem; display: grid; justify-items: start; gap: 0.35rem; }
+.act__empty { margin-top: 1.1rem; display: grid; justify-items: start; gap: 0.35rem; }
 .act__emptyTitle { margin-top: 0.4rem; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.035em; color: var(--fg); }
-.act__pill {
-  display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 0.75rem;
-  padding: 0.45rem 0.9rem; border-radius: 999px; border: 1px solid var(--line);
-  font-size: 0.8125rem; font-weight: 500; color: var(--fg);
-  transition: background-color var(--fast) ease;
-}
-.act__pill:hover { background: var(--soft); }
-.act__pill .act__mark { width: 15px; height: 15px; }
 
 /* ---- Entrance: cards rise in turn, the bars grow (once, when reached) ---- */
 @media (prefers-reduced-motion: no-preference) {
@@ -207,33 +193,26 @@
 @keyframes act-in { from { opacity: 0; transform: translateY(10px); } }
 @keyframes act-grow { from { transform: scaleY(0); } }
 
-/* ---- Wide: summary | panel ---- */
-@media (min-width: 1024px) {
-  .act__grid { grid-template-columns: minmax(14rem, 0.42fr) minmax(0, 1fr); align-items: stretch; }
-  .act__side { grid-template-rows: 1fr auto; }
-  .act__summary .act__facts { margin-top: auto; }
-  .act__summary .act__period { margin-bottom: 1.25rem; }
-}
-/* ---- Medium: stacked; the summary's facts sit beside the total ---- */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .act__summary { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto auto auto; column-gap: 2rem; }
-  .act__summary > :not(.act__facts) { grid-column: 1; }
-  .act__summary .act__facts { grid-column: 2; grid-row: 1 / 5; align-self: end; margin: 0; padding: 0 0 0 1.5rem; border-top: 0; border-left: 1px solid var(--line); grid-template-columns: auto; gap: 1rem; }
+/* ---- Two cards, side by side (equal halves) ---- */
+@media (min-width: 900px) {
+  .act__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  /* compact heatmaps: smaller squares; the year scrolls sideways in the card if it doesn't fit */
+  .act__heat { --cell-min: 8px; --gap: 2px; }
+  .act__wd, .act__months { font-size: 0.5625rem; }
+  .act__bars { gap: 0.25rem; }
+  .act__barLabel { font-size: 0.5625rem; }
 }
 /* ---- Narrow ---- */
 @media (max-width: 639px) {
   .act__lead { flex-direction: column; align-items: flex-start; }
   .act__intro { max-width: none; }
-  .act__big { font-size: 2.6rem; }
   .act__panel { padding: 1rem 0.9rem 1.1rem; }
   .act__panelHead { flex-wrap: wrap; row-gap: 0.25rem; }
   .act__heat { --cell-min: 10px; --gap: 2px; }
   .act__bars { gap: 0.2rem; }
   .act__barTrack { height: 5.5rem; }
   .act__barLabel { font-size: 0.5625rem; letter-spacing: -0.02em; }
-  .act__stat { padding: 0.75rem 0.7rem 0.7rem; }
-  .act__statNum { font-size: 1.2rem; margin-top: 0.8rem; }
-  .act__stat .act__label { font-size: 0.5625rem; letter-spacing: 0.08em; }
+  .act__nums { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0.75rem; }
 }
 @media (max-width: 380px) {
   .act__panelHead { flex-wrap: wrap; }

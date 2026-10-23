@@ -4,6 +4,7 @@
    - serves the built website (dist/: index.html, secret.html, assets…)
    - GET /api/now-playing → what you're playing on Spotify
    - GET /api/github-contributions → your GitHub contribution calendar
+   - GET /api/claude-usage → Claude Code daily token totals (from the collector)
    Your secrets are read from .env (never sent to the browser).
    For development with hot reload use  npm run dev  (vite.config.mts
    mounts the same two endpoints).
@@ -17,6 +18,7 @@ try { process.loadEnvFile(path.join(__dirname, '.env')); } catch (e) { /* no .en
 
 const { handler } = require('./lib/spotify');
 const github = require('./lib/github');
+const claudeUsage = require('./lib/claude-usage');
 
 const DIST = path.join(__dirname, 'dist');
 if (!fs.existsSync(path.join(DIST, 'index.html'))) {
@@ -34,6 +36,8 @@ app.disable('x-powered-by');
 app.get('/api/now-playing', handler);
 // The GitHub contributions endpoint (token from .env, cached for an hour)
 app.get('/api/github-contributions', github.handler);
+// Claude Code token totals (published by scripts/claude-usage-sync.mjs; see lib/claude-usage.js)
+app.get('/api/claude-usage', claudeUsage.handler);
 
 // Everything else = the built website (dist/ only holds public files)
 app.use(express.static(DIST, { dotfiles: 'deny', index: 'index.html' }));
