@@ -150,7 +150,7 @@ export function Skills() {
   return (
     <section className="sec" id="skills" aria-labelledby="skillsTitle">
       <h2 className="h" id="skillsTitle">
-        Skills &amp; tools
+        Tech stack
       </h2>
       {/* Left: the skills I use. Right: what I'm learning now / next. */}
       <div className="skills">

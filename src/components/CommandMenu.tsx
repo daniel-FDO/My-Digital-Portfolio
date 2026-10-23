@@ -84,7 +84,7 @@ export function CommandMenu({ open, setOpen, blocked, actions }: Props) {
       { group: 'Sections', label: 'Projects', icon: I.section, kw: 'work built portfolio sites', run: () => actions.go('projects') },
       { group: 'Sections', label: 'About', icon: I.section, kw: 'story me who', run: () => actions.go('about') },
       { group: 'Sections', label: 'Education', icon: I.section, kw: 'college school study t-level course ekc canterbury', run: () => actions.go('education') },
-      { group: 'Sections', label: 'Skills & tools', icon: I.section, kw: 'stack tech languages ' + skillWords, run: () => actions.go('skills') },
+      { group: 'Sections', label: 'Tech stack', icon: I.section, kw: 'stack tech languages ' + skillWords, run: () => actions.go('skills') },
       { group: 'Sections', label: 'Gallery', icon: I.section, kw: 'photos pictures images carousel', run: () => actions.go('gallery') },
       { group: 'Sections', label: 'Activity', icon: I.section, kw: 'github contributions commits code', run: () => actions.go('activity') },
       { group: 'Sections', label: 'Contact', icon: I.section, kw: 'email hello hire message', run: () => actions.go('contact') },

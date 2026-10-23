@@ -39,7 +39,7 @@ export const HOME: HomeData = {
     position: '62% 50%',
   },
 
-  // Skills & tools: the old Skills section, plus what the About page says
+  // Tech stack: the old Skills section, plus what the About page says
   // I'm sharpening (Python, Flask, Pandas) and learning (Tailwind, TypeScript).
   // Each item: [name, abbr, icon]. `icon` is one or more keys (space-separated)
   // in skill-icons.ts (brand marks) or SkillIcon's OWN_ICONS; `abbr` is only the

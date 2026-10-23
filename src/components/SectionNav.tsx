@@ -44,7 +44,7 @@ export const SECTIONS: { id: string; label: string }[] = [
   { id: 'projects', label: 'Projects' },
   { id: 'about', label: 'About' },
   { id: 'education', label: 'Education' },
-  { id: 'skills', label: 'Skills & tools' },
+  { id: 'skills', label: 'Tech stack' },
   { id: 'gallery', label: 'Gallery' },
   { id: 'activity', label: 'Activity' },
   { id: 'faq', label: 'Questions' },
