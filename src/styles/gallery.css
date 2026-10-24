@@ -31,7 +31,9 @@
 }
 .gal__frame {
   position: relative;
-  height: clamp(15rem, 40cqw, 30rem);      /* the plate is this tall: big enough to enjoy, not a full-screen section */
+  height: clamp(20rem, 44cqw, 33rem);
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 50% 65%, color-mix(in srgb, var(--fg) 5%, transparent), transparent 65%);
   overflow: hidden;
   overflow: clip;
 }
@@ -75,6 +77,44 @@
 .gal__plate.is-over-ghost { cursor: pointer; }
 .gal__plate.is-dragging { cursor: grabbing; }
 .gal__canvas { display: block; width: 100%; height: 100%; }
+.gal__track { position: absolute; inset: 0; }
+.gal__track .gal__card {
+  position: absolute; left: 50%; top: 50%;
+  width: var(--card-w); aspect-ratio: 3 / 4;
+  border-radius: 12px; overflow: hidden;
+  background: var(--soft);
+  box-shadow: 0 18px 35px -18px rgb(0 0 0 / 45%), 0 0 0 1px color-mix(in srgb, var(--fg) 10%, transparent);
+  cursor: pointer;
+}
+.gal__card.is-centre { cursor: zoom-in; }
+.gal__card img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.gal__veil { position: absolute; inset: 0; background: var(--bg, #151513); pointer-events: none; }
+.gal__pill {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 4px; padding: 5px;
+  border: 1px solid color-mix(in srgb, var(--fg) 18%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 16%), 0 4px 14px rgb(0 0 0 / 5%);
+}
+.gal__toolbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; margin-top: 16px; padding: 0 4px; }
+.gal__expand { justify-self: end; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--muted); font: 0.75rem var(--mono); cursor: pointer; }
+.gal__expand:hover { color: var(--fg); }
+.gal__expand span { font: 1.1rem sans-serif; }
+.gal__thumbs { position: relative; display: flex; gap: 8px; width: max-content; max-width: 100%; margin: 20px auto 0; padding: 7px 4px 10px; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
+.gal__thumbs::-webkit-scrollbar { display: none; }
+.gal__thumb { flex: 0 0 44px; height: 56px; padding: 3px; border: 1px solid transparent; border-radius: 7px; background: transparent; opacity: 0.5; cursor: pointer; transition: opacity .25s, transform .35s, border-color .25s; }
+.gal__thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+.gal__thumb:hover { opacity: 0.85; transform: translateY(-2px); }
+.gal__thumb[aria-pressed="true"] { opacity: 1; border-color: var(--fg); transform: translateY(-3px); }
+.gal__thumb:focus-visible, .gal__expand:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.gal__pill .gal__btn { width: 44px; height: 44px; background: transparent; border-color: transparent; }
+.gal__pill .gal__btn::before { inset: 0; }
+.gal__pill .gal__btn:hover { background: var(--soft); }
+.gal__pill .gal__count { display: flex; gap: 7px; padding: 0 8px; white-space: nowrap; }
+.gal__count i { font-style: normal; opacity: 0.5; }
+.gal__stage.is-loading .gal__pill { visibility: hidden; }
 .gal__stage.is-live .gal__plate { opacity: 1; visibility: visible; }
 .gal__plate:focus-visible::after {
   content: ""; position: absolute; inset: 2px; border-radius: 0.75rem;
@@ -110,12 +150,18 @@
 /* Tablets and phones: taller relative to the width, so the photo stays a useful size */
 @container (max-width: 759px) { .gal__frame { height: clamp(15rem, 56cqw, 26rem); } }
 @container (max-width: 479px) {
-  .gal__frame { height: clamp(17rem, 108cqw, 28rem); }
+  .gal__frame { height: clamp(20rem, 112cqw, 28rem); }
   .gal__hint { display: none; }
+  .gal__toolbar { grid-template-columns: auto auto; justify-content: space-between; gap: 8px; margin-top: 8px; }
+  .gal__pill { gap: 0; padding: 3px; }
+  .gal__pill .gal__count { gap: 4px; padding: 0 3px; }
+  .gal__expand { font-size: 0.6875rem; gap: 4px; }
+  .gal__thumbs { margin-top: 14px; }
 }
 @media (pointer: coarse) { .gal__btn { width: 44px; height: 44px; } .gal__btn::before { inset: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .gal__plate { transition: none; }
+  .gal__thumb { transition: none; }
 }
 
 /* The plain strip's photos are buttons (they open the preview) */

@@ -1,32 +1,29 @@
 /* =========================================================
-   GALLERY — the photos as a darkroom tide
-   (photos: data/gallery.ts; the plate itself: gallery/isophote.ts)
-   - One photo at a time, on a paper plate (WebGL). Changing photo is
-     a tide: the photo washes off into a contour map of itself (the
-     page background's fine lines), the next photo's map comes in, and
-     it develops up through it behind a copper line, like a print in a
-     developer tray. The neighbours show as their maps alone.
-   - Autoplay waits ~4 s per photo, then a copper line climbs through
-     its tones and becomes the tide. Drag or swipe scrubs the tide by
-     hand; Previous / Next and Play / Pause below it; ← → when it has
-     focus. Keyboard focus inside the gallery, dragging, an open
-     preview and the visitor's Pause stop autoplay.
-   - Click / tap the photo (not a drag), or Enter on the focused plate:
+   GALLERY — the photos as a spring carousel, iOS-style
+   (photos: data/gallery.ts; the carousel itself: gallery/carousel.ts)
+   - One big photo in the middle, its neighbours either side, smaller
+     and dimmed. Drag or swipe it: it follows the finger, carries on
+     with the flick and settles on a photo with a soft spring.
+   - A floating Liquid Glass pill over the photo holds the counter and
+     Previous / Play-Pause / Next; ← → when the carousel has focus.
+     Keyboard focus inside the gallery, dragging, an open preview and
+     the visitor's Pause stop autoplay.
+   - Click / tap the middle photo, or Enter on the focused carousel:
      it opens flat and whole in a preview above the page
-     (gallery/Preview.tsx). Clicking a neighbour's map goes to it.
-     Closing the preview leaves the plate, the page's scroll position
-     and Play / Pause exactly as they were.
+     (gallery/Preview.tsx). Clicking a neighbour brings it to the
+     middle. Closing the preview leaves the carousel, the page's
+     scroll position and Play / Pause exactly as they were.
    - The same photos are also a plain horizontal scroll strip in the
-     page. It stays unseen while the plate loads and shows only if
-     WebGL isn't available or fails. Once the plate is drawn the
-     strip stays only for screen readers (the canvas is decorative).
-   - Reduced motion: no autoplay (Play still starts it) and no tide:
-     a plain cross-fade.
+     page: it carries the descriptions for screen readers (the
+     carousel's cards are decorative), and shows only if the carousel
+     can't start.
+   - Reduced motion: no autoplay (Play still starts it); changes are
+     instant (no spring, no momentum).
    - Vertical swipes and the mouse wheel keep scrolling the page.
    ========================================================= */
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { GALLERY } from '../data/gallery';
-import { createIsophote, type Isophote } from './gallery/isophote';
+import { createCarousel, type Carousel } from './gallery/carousel';
 import { Preview } from './gallery/Preview';
 
 const two = (n: number) => String(n).padStart(2, '0');
@@ -36,21 +33,23 @@ export function Gallery() {
   const photos = GALLERY;
   const n = photos.length;
   const [mode, setMode] = useState<Mode>('loading');
-  const [under, setUnder] = useState(false);          // the strip has faded under the plate
+  const [under, setUnder] = useState(false);          // the strip has faded under the carousel
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [said, setSaid] = useState('');
   const hostRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<HTMLUListElement>(null);
-  const engine = useRef<Isophote | null>(null);
+  const thumbsRef = useRef<HTMLDivElement>(null);
+  const engine = useRef<Carousel | null>(null);
+  const focusHeld = useRef(false);    // autoplay is held for keyboard focus in the gallery
   const [preview, setPreview] = useState<{ i: number; opener: HTMLElement | null } | null>(null);
   const open = (i: number, opener: HTMLElement | null) => { engine.current?.hold('preview', true); setPreview({ i, opener }); };
   const openRef = useRef(open); openRef.current = open;
 
   useEffect(() => {
-    let r: Isophote | null = null, timer = 0;
+    let r: Carousel | null = null, timer = 0;
     try {
-      r = createIsophote(hostRef.current!, photos, {
+      r = createCarousel(hostRef.current!, photos, {
         onIndex: setIndex,
         onPlaying: setPlaying,
         onPick: (i) => openRef.current(i, hostRef.current),
@@ -66,16 +65,23 @@ export function Gallery() {
   }, [photos]);
 
   const live = mode === 'live';
+  useEffect(() => {
+    const strip = thumbsRef.current;
+    const item = strip?.children[index] as HTMLElement | undefined;
+    if (strip && item) strip.scrollTo({ left: item.offsetLeft - strip.offsetWidth / 2 + item.offsetWidth / 2, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+  }, [index, live]);
   // the plain strip: previous / next scroll it by one photo
   const scrollStrip = (dir: 1 | -1) => {
     const s = stripRef.current, first = s?.firstElementChild as HTMLElement | null;
     if (s && first) s.scrollBy({ left: dir * (first.offsetWidth + 12), behavior: 'smooth' });
   };
   const step = (dir: 1 | -1) => {
-    if (engine.current) {
-      if (dir > 0) engine.current.next(); else engine.current.prev();
-      const i = (index + dir + n) % n;
-      setSaid(`Photo ${i + 1} of ${n}: ${photos[i].alt}`);
+    const e = engine.current;
+    if (e) {
+      const before = e.index;
+      if (dir > 0) e.next(); else e.prev();
+      // announce only a step that happened (one is ignored mid-swipe)
+      if (e.index !== before) setSaid(`Photo ${e.index + 1} of ${n}: ${photos[e.index].alt}`);
     } else scrollStrip(dir);
   };
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -95,11 +101,17 @@ export function Gallery() {
       <div
         className={`gal__stage is-${mode}${under ? ' is-under' : ''}`}
         role="region" aria-roledescription="carousel" aria-label="Photos"
-        onFocus={() => engine.current?.hold('focus', true)}
-        onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) engine.current?.hold('focus', false); }}
+        onFocus={(e) => {
+          // keyboard focus only: a mouse click on the carousel or a button mustn't stop autoplay for good
+          const kb = (e.target as Element).matches(':focus-visible');
+          if (kb !== focusHeld.current) { focusHeld.current = kb; engine.current?.hold('focus', kb); }
+        }}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node) && focusHeld.current) { focusHeld.current = false; engine.current?.hold('focus', false); }
+        }}
       >
         <div className="gal__frame">
-          {/* The same photos, plainly: shown only if the plate can't run */}
+          {/* The same photos, plainly: shown only if the carousel can't start */}
           <ul className="gal__strip" ref={stripRef} tabIndex={live ? -1 : 0} aria-label="Photos (scroll sideways)">
             {photos.map((ph, i) => (
               <li key={ph.src} className="gal__item">
@@ -111,23 +123,21 @@ export function Gallery() {
               </li>
             ))}
           </ul>
-          {/* The plate (its canvas is decorative: the strip above carries the descriptions) */}
+          {/* The carousel (its cards are decorative: the strip above carries the descriptions) */}
           <div
             className="gal__plate" ref={hostRef} role="group"
             tabIndex={live ? 0 : -1} aria-hidden={!live}
-            aria-label="Photo plate: left and right arrow keys change the photo, Enter opens it"
+            aria-label="Photo carousel: left and right arrow keys change the photo, Enter opens it"
             onKeyDown={onKeyDown}
           />
         </div>
-
-        <div className="gal__bar">
-          <span className="gal__count" aria-hidden="true"><b>{two(index + 1)}</b> / {two(n)}</span>
-          <span className="sr" aria-live="polite" aria-atomic="true">{said}</span>
-          <span className="gal__hint" aria-hidden="true">{live ? 'Drag, swipe or use ← → · click to open' : 'Scroll sideways · tap to open'}</span>
-          <span className="gal__nav">
+        <div className="gal__toolbar">
+          <span className="gal__hint" aria-hidden="true">{live ? 'Drag to explore' : 'Scroll to explore'}</span>
+          <div className="gal__pill">
             <button type="button" className="gal__btn" aria-label="Previous photo" onClick={() => step(-1)}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" /></svg>
             </button>
+            <span className="gal__count" aria-hidden="true"><b>{two(index + 1)}</b><i>/</i>{two(n)}</span>
             {live && (
               <button type="button" className="gal__btn" aria-label={playing ? 'Pause the slideshow' : 'Play the slideshow'}
                 onClick={() => engine.current?.toggle()}>
@@ -139,7 +149,19 @@ export function Gallery() {
             <button type="button" className="gal__btn" aria-label="Next photo" onClick={() => step(1)}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
             </button>
-          </span>
+          </div>
+          {live && <button type="button" className="gal__expand" onClick={(e) => open(index, e.currentTarget)}>View photo <span aria-hidden="true">↗</span></button>}
+        </div>
+
+        {live && <div className="gal__thumbs" ref={thumbsRef} role="group" aria-label="Choose a photo">
+          {photos.map((ph, i) => <button type="button" key={ph.src} className="gal__thumb" aria-label={`Show photo ${i + 1}`} aria-pressed={index === i}
+            onClick={() => { engine.current?.select(i); setSaid(`Photo ${i + 1} of ${n}: ${ph.alt}`); }}>
+            <img src={ph.src} alt="" loading="lazy" draggable={false} />
+          </button>)}
+        </div>}
+
+        <div className="gal__bar">
+          <span className="sr" aria-live="polite" aria-atomic="true">{said}</span>
         </div>
       </div>
       {preview && (

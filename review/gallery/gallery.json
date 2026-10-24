@@ -1,6 +1,16 @@
 [
   {
-    "name": "1440: ribbon live",
+    "name": "1440: plate live",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "1440: autoplay advances (rest → crest → tide)",
+    "pass": true,
+    "detail": "index 0 → 1, pos 0.00 → 1.00, phases rest → crest → tide → rest (6591 ms)"
+  },
+  {
+    "name": "1440: nothing draws at rest (frames stop within 1 s of the tide ending)",
     "pass": true,
     "detail": ""
   },
@@ -10,14 +20,34 @@
     "detail": "1440 / 1440"
   },
   {
-    "name": "1440: drifts left → right",
+    "name": "1440: clicking the photo opens that photo",
     "pass": true,
-    "detail": "pos -0.195 → -0.250"
+    "detail": "expected 2, got 2"
   },
   {
-    "name": "1440: clicking each visible photo opens that photo (6 clicks, across the loop seam)",
+    "name": "1440: clicking each neighbour's map goes to it without opening the preview (4 ghosts)",
     "pass": true,
     "detail": ""
+  },
+  {
+    "name": "1440: Next ×11 visits every photo and wraps back to the start",
+    "pass": true,
+    "detail": "index 1 → 2,3,4,5,6,7,8,9,10,0,1; pos 1 → 12"
+  },
+  {
+    "name": "1440: after wrapping, the photo opens as itself",
+    "pass": true,
+    "detail": "expected 2, got 2"
+  },
+  {
+    "name": "1440: rapid Next ×6 (156 ms): |queue| never above 3",
+    "pass": true,
+    "detail": "max |queue| 1; index after each press 2,3,4,5,6,7"
+  },
+  {
+    "name": "1440: rapid Next ×6 lands on start + 6",
+    "pass": true,
+    "detail": "index 1 → 7 (expected 7); pos 12 → 18; phases rest → tide → rest"
   },
   {
     "name": "1440: releasing a drag doesn't open the preview",
@@ -25,7 +55,12 @@
     "detail": ""
   },
   {
-    "name": "1440: wrapping across the loop leaves no holes (widest dark run in the middle 31px)",
+    "name": "1440: 14 drags across the seam each commit one photo",
+    "pass": true,
+    "detail": "index 8 → 0 (expected 0), pos 19 → 33"
+  },
+  {
+    "name": "1440: wrapping leaves no holes (a photo after every drag; lowest middle-row spread 13.5)",
     "pass": true,
     "detail": ""
   },
@@ -42,7 +77,7 @@
   {
     "name": "preview: complete photo, never upscaled past its pixels",
     "pass": true,
-    "detail": "natural 480×640, shown 480×640"
+    "detail": "natural 1200×1600, shown 583×777"
   },
   {
     "name": "preview: all 11 photos fit the viewport whole, in proportion, never enlarged",
@@ -62,17 +97,17 @@
   {
     "name": "preview: ← → and Previous / Next move through the photos; counter shown",
     "pass": true,
-    "detail": "Photo 9 of 11 → Photo 10 of 11 → Photo 9 of 11; Photo 10 of 11 → Photo 9 of 11; counter \"09 / 11\""
+    "detail": "Photo 1 of 11 → Photo 2 of 11 → Photo 1 of 11; Photo 2 of 11 → Photo 1 of 11; counter \"01 / 11\""
   },
   {
-    "name": "close: same scroll position, same ribbon position, page usable again",
+    "name": "close: same scroll position, same photo on the plate, page usable again",
     "pass": true,
-    "detail": "{\"y\":[2067,2067],\"pos\":[34.04777634474075,34.04777634474075]}"
+    "detail": "{\"y\":[2067,2067],\"pos\":[33,33],\"index\":[0,0]}"
   },
   {
-    "name": "close: focus back on the ribbon it came from",
+    "name": "close: focus back on the plate it came from",
     "pass": true,
-    "detail": "gal__ribbon"
+    "detail": "gal__plate"
   },
   {
     "name": "close: the paused gallery stays paused",
@@ -80,12 +115,12 @@
     "detail": ""
   },
   {
-    "name": "close: no drift after closing while paused",
+    "name": "close: no change after closing while paused",
     "pass": true,
-    "detail": ""
+    "detail": "pos 33 → 33, phase rest → rest"
   },
   {
-    "name": "keyboard: Enter on the ribbon opens the middle photo",
+    "name": "keyboard: Enter on the plate opens the photo shown",
     "pass": true,
     "detail": ""
   },
@@ -95,9 +130,24 @@
     "detail": ""
   },
   {
-    "name": "keyboard focus inside the gallery pauses the drift",
+    "name": "preview opened mid-tide: the photo under the pointer opens, and the plate rests on it after closing",
     "pass": true,
-    "detail": ""
+    "detail": "clicked at t=0.46 (0 → 1); opened 1; after: phase rest, t 0, index 1"
+  },
+  {
+    "name": "a mouse click on Play leaves autoplay running (only keyboard focus holds it)",
+    "pass": true,
+    "detail": "index 1 → 2"
+  },
+  {
+    "name": "keyboard focus on the plate holds autoplay (6 s at rest, dwell not advancing)",
+    "pass": true,
+    "detail": "playing true, phases rest, dwell 0.001 → 0.001"
+  },
+  {
+    "name": "themes: tide order 0 on light, 1 on dark",
+    "pass": true,
+    "detail": "light: 0, dark: 1"
   },
   {
     "name": "adjacent sections present; #gallery anchor intact",
@@ -110,7 +160,17 @@
     "detail": ""
   },
   {
-    "name": "768: ribbon live",
+    "name": "768: plate live",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "768: autoplay advances (rest → crest → tide)",
+    "pass": true,
+    "detail": "index 0 → 1, pos 0.00 → 1.00, phases rest → crest → tide → rest (6972 ms)"
+  },
+  {
+    "name": "768: nothing draws at rest (frames stop within 1 s of the tide ending)",
     "pass": true,
     "detail": ""
   },
@@ -120,14 +180,34 @@
     "detail": "768 / 768"
   },
   {
-    "name": "768: drifts left → right",
+    "name": "768: clicking the photo opens that photo",
     "pass": true,
-    "detail": "pos -0.209 → -0.286"
+    "detail": "expected 2, got 2"
   },
   {
-    "name": "768: clicking each visible photo opens that photo (5 clicks, across the loop seam)",
+    "name": "768: clicking each neighbour's map goes to it without opening the preview (2 ghosts)",
     "pass": true,
     "detail": ""
+  },
+  {
+    "name": "768: Next ×11 visits every photo and wraps back to the start",
+    "pass": true,
+    "detail": "index 1 → 2,3,4,5,6,7,8,9,10,0,1; pos 1 → 12"
+  },
+  {
+    "name": "768: after wrapping, the photo opens as itself",
+    "pass": true,
+    "detail": "expected 2, got 2"
+  },
+  {
+    "name": "768: rapid Next ×6 (266 ms): |queue| never above 3",
+    "pass": true,
+    "detail": "max |queue| 3; index after each press 2,3,4,5,6,7"
+  },
+  {
+    "name": "768: rapid Next ×6 lands on start + 6",
+    "pass": true,
+    "detail": "index 1 → 7 (expected 7); pos 12 → 18; phases rest → tide → rest"
   },
   {
     "name": "768: releasing a drag doesn't open the preview",
@@ -135,7 +215,12 @@
     "detail": ""
   },
   {
-    "name": "768: wrapping across the loop leaves no holes (widest dark run in the middle 22px)",
+    "name": "768: 14 drags across the seam each commit one photo",
+    "pass": true,
+    "detail": "index 8 → 0 (expected 0), pos 19 → 33"
+  },
+  {
+    "name": "768: wrapping leaves no holes (a photo after every drag; lowest middle-row spread 12.1)",
     "pass": true,
     "detail": ""
   },
@@ -145,7 +230,17 @@
     "detail": ""
   },
   {
-    "name": "390: ribbon live",
+    "name": "390: plate live",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390: autoplay advances (rest → crest → tide)",
+    "pass": true,
+    "detail": "index 0 → 1, pos 0.00 → 1.00, phases rest → crest → tide → rest (6992 ms)"
+  },
+  {
+    "name": "390: nothing draws at rest (frames stop within 1 s of the tide ending)",
     "pass": true,
     "detail": ""
   },
@@ -155,14 +250,34 @@
     "detail": "390 / 390"
   },
   {
-    "name": "390: drifts left → right",
+    "name": "390: clicking the photo opens that photo",
     "pass": true,
-    "detail": "pos -0.321 → -0.445"
+    "detail": "expected 2, got 2"
   },
   {
-    "name": "390: clicking each visible photo opens that photo (2 clicks, across the loop seam)",
+    "name": "390: clicking each neighbour's map goes to it without opening the preview (2 ghosts)",
     "pass": true,
     "detail": ""
+  },
+  {
+    "name": "390: Next ×11 visits every photo and wraps back to the start",
+    "pass": true,
+    "detail": "index 1 → 2,3,4,5,6,7,8,9,10,0,1; pos 1 → 12"
+  },
+  {
+    "name": "390: after wrapping, the photo opens as itself",
+    "pass": true,
+    "detail": "expected 2, got 2"
+  },
+  {
+    "name": "390: rapid Next ×6 (113 ms): |queue| never above 3",
+    "pass": true,
+    "detail": "max |queue| 1; index after each press 2,3,4,5,6,7"
+  },
+  {
+    "name": "390: rapid Next ×6 lands on start + 6",
+    "pass": true,
+    "detail": "index 1 → 7 (expected 7); pos 12 → 18; phases rest → tide → rest"
   },
   {
     "name": "390: releasing a drag doesn't open the preview",
@@ -170,14 +285,19 @@
     "detail": ""
   },
   {
-    "name": "390: wrapping across the loop leaves no holes (widest dark run in the middle 4px)",
+    "name": "390: 14 drags across the seam each commit one photo",
+    "pass": true,
+    "detail": "index 8 → 0 (expected 0), pos 19 → 33"
+  },
+  {
+    "name": "390: wrapping leaves no holes (a photo after every drag; lowest middle-row spread 13.8)",
     "pass": true,
     "detail": ""
   },
   {
-    "name": "390 touch: a horizontal swipe moves the ribbon",
+    "name": "390 touch: a horizontal swipe changes the photo",
     "pass": true,
-    "detail": "pos 16.86 → 19.75"
+    "detail": "index 0 → 1, pos 33.00 → 34.00, rest"
   },
   {
     "name": "390 touch: a swipe doesn't open the preview",
@@ -185,9 +305,9 @@
     "detail": ""
   },
   {
-    "name": "390 touch: a vertical swipe over the ribbon scrolls the page",
+    "name": "390 touch: a vertical swipe over the plate scrolls the page",
     "pass": true,
-    "detail": "scrollY 3121 → 3396"
+    "detail": "scrollY 3158 → 3400"
   },
   {
     "name": "390 touch: tapping the photo opens the preview",
@@ -202,7 +322,7 @@
   {
     "name": "390 touch: swiping in the preview changes photo (and doesn't close it)",
     "pass": true,
-    "detail": "Photo 6 of 11 → Photo 7 of 11"
+    "detail": "Photo 2 of 11 → Photo 3 of 11"
   },
   {
     "name": "390 touch: Close works",
@@ -220,9 +340,14 @@
     "detail": ""
   },
   {
-    "name": "reduced motion: dragging still works, without inertia",
+    "name": "reduced motion: dragging still works, without inertia (one photo, then still)",
     "pass": true,
-    "detail": ""
+    "detail": "index 0 → 1; pos 0 → 1 → 1; rest"
+  },
+  {
+    "name": "reduced motion: Next is a short plain fade (no tide)",
+    "pass": true,
+    "detail": "phases rest → fade → rest in 302 ms; index 2"
   },
   {
     "name": "reduced motion: the preview opens without scaling",

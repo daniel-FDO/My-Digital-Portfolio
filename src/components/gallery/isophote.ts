@@ -191,18 +191,23 @@ const eOut3 = (x: number) => 1 - Math.pow(1 - x, 3);
 /** the tide's slant: the background streak's, about 28° below level */
 const SLANT = { x: 0.883, y: 0.469 };
 
-/** separable box blur of a MAP_W × MAP_H field, radius r, edges clamped (tmp: scratch of the same size) */
+/** separable box blur of a MAP_W × MAP_H field, radius r, edges clamped (tmp: scratch of the same size).
+    A running sum along each row / column, so a wide blur costs no more than a narrow one. */
 function blur(a: Float32Array, tmp: Float32Array, r: number) {
-  for (let y = 0; y < MAP_H; y++) for (let x = 0; x < MAP_W; x++) {
-    let sum = 0;
-    for (let k = -r; k <= r; k++) sum += a[y * MAP_W + Math.min(MAP_W - 1, Math.max(0, x + k))];
-    tmp[y * MAP_W + x] = sum / (2 * r + 1);
-  }
-  for (let y = 0; y < MAP_H; y++) for (let x = 0; x < MAP_W; x++) {
-    let sum = 0;
-    for (let k = -r; k <= r; k++) sum += tmp[Math.min(MAP_H - 1, Math.max(0, y + k)) * MAP_W + x];
-    a[y * MAP_W + x] = sum / (2 * r + 1);
-  }
+  const d = 2 * r + 1;
+  const pass = (src: Float32Array, dst: Float32Array, len: number, lines: number, step: number, stride: number) => {
+    for (let l = 0; l < lines; l++) {
+      const o = l * stride, at = (i: number) => src[o + Math.min(len - 1, Math.max(0, i)) * step];
+      let sum = 0;
+      for (let k = -r; k <= r; k++) sum += at(k);
+      for (let i = 0; i < len; i++) {
+        dst[o + i * step] = sum / d;
+        sum += at(i + r + 1) - at(i - r);
+      }
+    }
+  };
+  pass(a, tmp, MAP_W, MAP_H, 1, MAP_W);   // rows
+  pass(tmp, a, MAP_H, MAP_W, MAP_W, 1);   // columns
 }
 function normalise(a: Float32Array) {
   let lo = Infinity, hi = -Infinity;
@@ -314,7 +319,7 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   let from = 0, to = 0, dir = 1, m = 0, t = 0;
   let rate = 0;                  // tide: t per ms
   let kind: 'auto' | 'step' = 'step';
-  let queue = 0, collapse = false;
+  let pending = 0;               // steps pressed while a tide runs (net); more than TIDE.queue → one tide straight there
   let posBase = 0;               // `from`, unwrapped (for tests)
   let settle = { t0: 0, t1: 0, dur: 1, el: 0 };
   let crestMs = 0, crestA = 0;
@@ -361,7 +366,11 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     fadePx = Math.min(96, Math.max(20, 0.08 * Wc));
     const need = Math.min(coarse ? 768 : 1024, Math.max(256, Math.ceil(hh * dpr)));
     texH = need;
-    for (const it of items) if (it.photo && (need > it.photoH || need < it.photoH * 0.7)) uploadPhoto(it);
+    for (const it of items) {
+      if (!it.photo || !it.img) continue;
+      const can = Math.min(need, it.img.naturalHeight, Math.round(it.img.naturalWidth / ASPECT));   // never past its own pixels
+      if (can > it.photoH || can < it.photoH * 0.7) uploadPhoto(it);
+    }
   }
   /** the neighbours' boxes that are (at least 12px) on the canvas */
   function ghosts() {
@@ -417,14 +426,32 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     } catch { /* no lines for this one */ }
     wake();
   }
+  /* The maps are built one per idle moment (about 10–30 ms each), nearest to the photo shown first,
+     so scrolling to the gallery never stalls behind all eleven at once. */
+  let mapJob = 0;
+  const hasIdle = typeof window.requestIdleCallback === 'function';
+  const idle = (fn: () => void) => (hasIdle ? window.requestIdleCallback(fn, { timeout: 400 }) : window.setTimeout(fn, 16));
+  const cancelIdle = (id: number) => (hasIdle ? window.cancelIdleCallback(id) : clearTimeout(id));
+  function scheduleMaps() {
+    if (mapJob || destroyed) return;
+    mapJob = idle(() => {
+      mapJob = 0;
+      const todo = items.map((it, i) => ({ it, i })).filter(({ it }) => it.img && !it.map);
+      if (!todo.length) return;
+      const dist = (i: number) => { const d = mod(i - index, n); return Math.min(d, n - d); };
+      todo.sort((a, b) => dist(a.i) - dist(b.i));
+      buildMap(todo[0].it, todo[0].i);
+      scheduleMaps();
+    });
+  }
   function loadAll() {
     if (started) return;
     started = true;
-    items.forEach((it, i) => {
+    items.forEach((it) => {
       it.loading = true;
       const img = new Image();
       img.decoding = 'async';
-      img.onload = () => { if (destroyed) return; it.img = img; window.setTimeout(() => buildMap(it, i), 0); wake(); };
+      img.onload = () => { if (destroyed) return; it.img = img; scheduleMaps(); wake(); };
       img.onerror = () => { it.failed = true; wake(); };
       img.src = it.ph.src;
     });
@@ -536,8 +563,9 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   /* ---- the clock: frames only while something changes ---- */
   function animating() {
     if (phase === 'crest' || phase === 'tide' || phase === 'settle' || phase === 'fade' || phase === 'drag') return true;
-    if (crestA > 0 || Math.abs(loupe.a - loupe.target) > 1e-3 || (loupe.target > 0 && performance.now() - loupe.lastMove > TIDE.loupeIdle)) return true;
-    if (hover.a > 0 && hover.k === 0) return true;
+    // the loupe stays live until the pointer has rested long enough for it to fade
+    if (crestA > 0 || loupe.target > 0 || Math.abs(loupe.a - loupe.target) > 1e-3) return true;
+    if (hover.a !== (hover.k ? 1 : 0)) return true;
     for (const it of items) if ((it.photo && it.fade < 1) || (it.mapTex && it.mapFade < 1)) return true;
     return !ready;
   }
@@ -616,18 +644,17 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     rate = 1 / dur; kind = how;
     phase = reduce.matches ? 'fade' : 'tide';
     if (phase === 'fade') rate = 1 / TIDE.reducedFade;
-    setIndex(to + queue);
+    setIndex(to + pending);
     wake();
   }
   function commit() {
     posBase += dir * m;
     from = to; t = 0; m = 0;
     phase = 'rest';
-    if (queue) {
-      const k = collapse ? queue : Math.sign(queue);
-      queue -= k; if (!queue) collapse = false;
-      startTide(k, collapse || Math.abs(k) > 1 ? TIDE.step : TIDE.fast, 'step');
-      collapse = false;
+    if (pending) {
+      const k = Math.abs(pending) > TIDE.queue ? pending : Math.sign(pending);
+      pending -= k;
+      startTide(k, Math.abs(k) > 1 ? TIDE.step : TIDE.fast, 'step');
       return;
     }
     restLeft = restTotal = reduce.matches ? TIDE.reducedEvery : kind === 'auto' ? TIDE.rest : TIDE.restAfterStep;
@@ -637,16 +664,17 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   }
   /** finish whatever is under way, at once (the preview opening, a theme change, reduced motion switching on) */
   function resolve() {
+    const wasDrag = phase === 'drag';
     if (phase === 'crest') { phase = 'rest'; crestA = 0; }
     if (phase === 'tide' || phase === 'fade' || phase === 'settle' || phase === 'drag') {
       if (phase === 'settle' && settle.t1 === 0) { t = 0; to = from; m = 0; phase = 'rest'; setIndex(from); }
       else if (phase === 'drag' && t < 0.5) { t = 0; to = from; m = 0; phase = 'rest'; setIndex(from); }
       else {
         posBase += dir * m;
-        from = mod(to + queue, n); posBase += queue;
-        to = from; queue = 0; collapse = false; t = 0; m = 0; phase = 'rest'; setIndex(from);
+        from = mod(to + pending, n); posBase += pending;
+        to = from; pending = 0; t = 0; m = 0; phase = 'rest'; setIndex(from);
       }
-      drag = null; host.classList.remove('is-dragging');
+      if (wasDrag) endPointer();
     }
     restLeft = restTotal = reduce.matches ? TIDE.reducedEvery : TIDE.rest;
   }
@@ -661,11 +689,9 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     }
     if (phase === 'rest' || phase === 'crest') { cancelCrest(); crestA = 0; startTide(k, TIDE.step, 'step'); return; }
     // a tide is running: it hurries to its end, and this step waits its turn
-    if (Math.abs(queue + k) > TIDE.queue) collapse = true;
-    queue += k;
-    if (!collapse) queue = Math.max(-TIDE.queue, Math.min(TIDE.queue, queue));
+    pending += k;
     rate = Math.max(rate, (1 - t) / TIDE.finish);
-    setIndex(to + queue);
+    setIndex(to + pending);
   }
 
   /* ---- input: drag / swipe scrubs the tide by hand ---- */
@@ -685,7 +711,7 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   }
   /** take over from whatever is happening, for a drag or a trackpad swipe: returns where the scrub starts */
   function grab() {
-    disarm(); queue = 0; collapse = false;
+    disarm(); pending = 0;
     let s0 = 0;
     if (phase === 'crest') { phase = 'rest'; crestA = 0; }
     if ((phase === 'tide' || phase === 'settle') && m === 1) s0 = dir * t;
@@ -716,7 +742,9 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   /** sample a CPU map at uv (bilinear) */
   function sample(map: Float32Array | null, u: number, v: number) {
     if (!map) return 0.5;
-    const x = clamp01(u) * (MAP_W - 1), y = clamp01(v) * (MAP_H - 1), xi = Math.floor(x), yi = Math.floor(y);
+    // texel centres, as the GPU samples (the map is smooth enough that bilinear matches the B-spline closely)
+    const x = Math.min(MAP_W - 1, Math.max(0, clamp01(u) * MAP_W - 0.5)), y = Math.min(MAP_H - 1, Math.max(0, clamp01(v) * MAP_H - 0.5));
+    const xi = Math.floor(x), yi = Math.floor(y);
     const x1 = Math.min(MAP_W - 1, xi + 1), y1 = Math.min(MAP_H - 1, yi + 1), fx = x - xi, fy = y - yi;
     const a = map[yi * MAP_W + xi], b = map[yi * MAP_W + x1], c = map[y1 * MAP_W + xi], d = map[y1 * MAP_W + x1];
     return (a * (1 - fx) + b * fx) * (1 - fy) + (c * (1 - fx) + d * fx) * fy;
@@ -740,8 +768,16 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     for (const g of ghosts()) if (inRect(p, g) && p.x >= 0 && p.x <= Wc) return { kind: 'ghost' as const, photo: mod(index + g.offset, n), offset: g.offset };
     return { kind: null, photo: -1 };
   }
+  /** forget the pointer being tracked (its drag, capture and hold) */
+  function endPointer() {
+    if (drag && canvas.hasPointerCapture(drag.id)) canvas.releasePointerCapture(drag.id);
+    drag = null;
+    held.delete('drag');
+    host.classList.remove('is-dragging');
+  }
   function onDown(e: PointerEvent) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (drag || !e.isPrimary) return;   // a second finger doesn't take over (or turn the drag into a tap)
     drag = { id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, s0: 0, s: 0, samples: [{ x: e.clientX, t: e.timeStamp }] };
   }
   function onMove(e: PointerEvent) {
@@ -759,6 +795,8 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     }
     const g = drag;
     if (!g || g.id !== e.pointerId) return;
+    // a mouse press that ended outside the canvas (no pointerup reached us): let it go
+    if (e.pointerType === 'mouse' && !(e.buttons & 1)) { onUp(e, true); return; }
     const dx = e.clientX - g.x, dy = e.clientY - g.y;
     if (!g.moved) {
       if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(dy)) return;   // not yet / a vertical scroll
@@ -775,11 +813,8 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   function onUp(e: PointerEvent, cancelled: boolean) {
     const g = drag;
     if (!g || g.id !== e.pointerId) return;
-    drag = null;
-    host.classList.remove('is-dragging');
-    if (canvas.hasPointerCapture(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+    endPointer();
     if (g.moved) {
-      held.delete('drag');
       resumeAt = performance.now() + TIDE.resumeAfter;
       const a = g.samples[0], b = g.samples[g.samples.length - 1];
       const v = b.t > a.t ? (b.x - a.x) / (b.t - a.t) : 0;
@@ -795,7 +830,7 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
       if (k.kind === 'hero') {
         // mid-tide, the photo under the pointer is the one that opens (and stays when the preview closes)
         if (phase === 'tide' || phase === 'settle' || phase === 'fade') {
-          queue = 0; collapse = false;
+          pending = 0;
           if (k.photo === from) { t = 0; to = from; m = 0; phase = 'rest'; setIndex(from); }
           else { t = 1; commit(); }
         } else if (phase === 'crest') { phase = 'rest'; crestA = 0; }
@@ -863,6 +898,15 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
   addEventListener('scroll', onScroll, { passive: true });
   const ro = new ResizeObserver(() => { fit(); onScroll(); if (running()) draw(); });
   ro.observe(host);
+  // the pixel density can change without the size (a window moved to another monitor)
+  let dprQuery: MediaQueryList | null = null;
+  const onDpr = () => { fit(); if (running()) draw(); watchDpr(); };
+  function watchDpr() {
+    dprQuery?.removeEventListener('change', onDpr);
+    dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    dprQuery.addEventListener('change', onDpr);
+  }
+  watchDpr();
   const onVis = () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; last = 0; disarm(); } else { wake(); arm(); } };
   document.addEventListener('visibilitychange', onVis);
   const onMotion = () => {
@@ -888,7 +932,8 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     (window as unknown as { __gallery: unknown }).__gallery = {
       get index() { return index; }, get from() { return from; }, get to() { return to; },
       get t() { return t; }, get phase() { return phase; }, get pos() { return posBase + dir * m * t; },
-      get running() { return !!raf; }, get playing() { return playing(); }, get queue() { return queue; },
+      get running() { return !!raf; }, get playing() { return playing(); }, /** steps waiting, as separate tides (a longer wait runs as one) */
+      get queue() { return Math.abs(pending) > TIDE.queue ? Math.sign(pending) : pending; },
       get dwell() {
         if (!playing()) return 0;
         const total = restTotal + TIDE.crest;
@@ -937,6 +982,8 @@ export function createIsophote(host: HTMLElement, photos: IsophotePhoto[], ev: I
     destroy() {
       destroyed = true;
       cancelAnimationFrame(raf); clearTimeout(restTimer);
+      if (mapJob) cancelIdle(mapJob);
+      dprQuery?.removeEventListener('change', onDpr);
       if (wheel) clearTimeout(wheel.timer);
       cancelAnimationFrame(checkQueued);
       io.disconnect(); ro.disconnect(); themeWatch.disconnect();

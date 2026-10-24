@@ -30,7 +30,7 @@
     "detail": ""
   },
   {
-    "name": "1440: fonts load progressively (24 requests, the first 3690 ms after navigation)",
+    "name": "1440: fonts load progressively (24 requests, the first 3767 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -70,7 +70,7 @@
     "detail": ""
   },
   {
-    "name": "768: fonts load progressively (24 requests, the first 2940 ms after navigation)",
+    "name": "768: fonts load progressively (24 requests, the first 2874 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -110,7 +110,7 @@
     "detail": ""
   },
   {
-    "name": "390: fonts load progressively (24 requests, the first 2145 ms after navigation)",
+    "name": "390: fonts load progressively (24 requests, the first 2865 ms after navigation)",
     "pass": true,
     "detail": ""
   },
@@ -132,12 +132,12 @@
   {
     "name": "Pause holds the current font",
     "pass": true,
-    "detail": "Sniglet"
+    "detail": "Blackout"
   },
   {
     "name": "Resume carries on (one step, not a burst of missed ones)",
     "pass": true,
-    "detail": "Sniglet → Blackout"
+    "detail": "Blackout → Chunk"
   },
   {
     "name": "the control works from the keyboard",
@@ -182,6 +182,6 @@
   {
     "name": "default timing: about 3 s per font",
     "pass": true,
-    "detail": "first change after 2859 ms, next 2984 ms later"
+    "detail": "first change after 2766 ms, next 3094 ms later"
   }
 ]

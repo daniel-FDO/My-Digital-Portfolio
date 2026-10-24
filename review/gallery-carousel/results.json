@@ -1,0 +1,150 @@
+[
+  {
+    "name": "1440: cards and controls fit",
+    "pass": true
+  },
+  {
+    "name": "1440: Next changes photo",
+    "pass": true
+  },
+  {
+    "name": "1440: keyboard previous",
+    "pass": true
+  },
+  {
+    "name": "1440: preview opens and isolates page",
+    "pass": true
+  },
+  {
+    "name": "1440: preview restores focus and scroll",
+    "pass": true
+  },
+  {
+    "name": "1440: dragging changes photo without opening preview",
+    "pass": true
+  },
+  {
+    "name": "1440: thumbnail selects the last photo",
+    "pass": true
+  },
+  {
+    "name": "1440: next wraps to first photo",
+    "pass": true
+  },
+  {
+    "name": "1440: View photo opens current image",
+    "pass": true
+  },
+  {
+    "name": "1440: no page errors",
+    "pass": true
+  },
+  {
+    "name": "768: cards and controls fit",
+    "pass": true
+  },
+  {
+    "name": "768: Next changes photo",
+    "pass": true
+  },
+  {
+    "name": "768: keyboard previous",
+    "pass": true
+  },
+  {
+    "name": "768: preview opens and isolates page",
+    "pass": true
+  },
+  {
+    "name": "768: preview restores focus and scroll",
+    "pass": true
+  },
+  {
+    "name": "768: dragging changes photo without opening preview",
+    "pass": true
+  },
+  {
+    "name": "768: thumbnail selects the last photo",
+    "pass": true
+  },
+  {
+    "name": "768: next wraps to first photo",
+    "pass": true
+  },
+  {
+    "name": "768: View photo opens current image",
+    "pass": true
+  },
+  {
+    "name": "768: no page errors",
+    "pass": true
+  },
+  {
+    "name": "390: cards and controls fit",
+    "pass": true
+  },
+  {
+    "name": "390: Next changes photo",
+    "pass": true
+  },
+  {
+    "name": "390: keyboard previous",
+    "pass": true
+  },
+  {
+    "name": "390: preview opens and isolates page",
+    "pass": true
+  },
+  {
+    "name": "390: preview restores focus and scroll",
+    "pass": true
+  },
+  {
+    "name": "390: dragging changes photo without opening preview",
+    "pass": true
+  },
+  {
+    "name": "touch swipe changes photo",
+    "pass": true
+  },
+  {
+    "name": "vertical touch scrolls page",
+    "pass": true
+  },
+  {
+    "name": "390: thumbnail selects the last photo",
+    "pass": true
+  },
+  {
+    "name": "390: next wraps to first photo",
+    "pass": true
+  },
+  {
+    "name": "390: View photo opens current image",
+    "pass": true
+  },
+  {
+    "name": "390: no page errors",
+    "pass": true
+  },
+  {
+    "name": "reduced motion starts paused",
+    "pass": true
+  },
+  {
+    "name": "reduced motion changes directly to next photo",
+    "pass": true
+  },
+  {
+    "name": "autoplay advances after Play",
+    "pass": true
+  },
+  {
+    "name": "offscreen autoplay is suspended",
+    "pass": true
+  },
+  {
+    "name": "image failure exposes plain gallery",
+    "pass": true
+  }
+]

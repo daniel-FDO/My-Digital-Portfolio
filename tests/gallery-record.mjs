@@ -1,8 +1,10 @@
 /* node tests/gallery-record.mjs [url]   (default http://localhost:5173/)
    A short recording of the Gallery in headless Microsoft Edge (real GPU), 1440 × 900:
-   1. photos emerging on the left and sinking away on the right (drift, then a reverse drag)
+   1. autoplay on the plate: the copper crest climbing through the photo, then the tide (the photo
+      washes off into its contour map and the next one develops), then a drag scrubbing the tide
+      by hand, back and forth
    2. opening a photo and moving through the preview
-   3. closing it: the same place on the page, the same photo in the middle
+   3. closing it: the same place on the page, the same photo on the plate
    4. the background's slow motion (shown sped up 20×; captioned)
    A caption and a pointer dot are drawn into the page (the screencast has no cursor).
    Output: review/gallery/gallery.mp4 (needs ffmpeg on PATH) */
@@ -53,20 +55,27 @@ const box = await page.locator('.gal__canvas').boundingBox();
 const cx = box.x + box.width / 2, cy = box.y + box.height / 2;
 
 await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 85, maxWidth: size.width, maxHeight: size.height, everyNthFrame: 1 });
-await say('1 · Photos emerge on the left, sink away on the right');
-await sleep(6000);
-await say('1 · Dragging back: the edges follow each photo\'s position');
-await page.mouse.move(cx - 260, cy, { steps: 6 });
+await say('1 · Autoplay: a copper line climbs through the photo, then the tide brings the next one');
+// until the first autoplay tide has finished (rest 4.2 s → crest 1.4 s → tide 2.2 s after the plate goes live)
+await page.waitForFunction(() => window.__gallery.phase === 'tide', null, { timeout: 12000 }).catch(() => {});
+await page.waitForFunction(() => window.__gallery.phase === 'rest', null, { timeout: 6000 }).catch(() => {});
+await sleep(800);
+await say('1 · Dragging scrubs the tide by hand: forward, back, then let go');
+const hero = await page.evaluate(() => window.__gallery.heroRect());
+const span = 0.9 * hero.w;                                       // one whole tide
+await page.mouse.move(cx + span / 2, cy, { steps: 6 });
 await page.mouse.down();
-await page.mouse.move(cx + 300, cy, { steps: 40 });
-await page.mouse.up();
-await sleep(2500);
-await page.mouse.move(cx + 300, cy); await page.mouse.down(); await page.mouse.move(cx - 300, cy, { steps: 40 }); await page.mouse.up();
-await sleep(2500);
+await page.mouse.move(cx - span * 0.05, cy, { steps: 50 });      // ~55 %: the map moment
+await sleep(700);
+await page.mouse.move(cx + span * 0.3, cy, { steps: 40 });       // back towards the first photo
+await sleep(500);
+await page.mouse.move(cx - span * 0.15, cy, { steps: 30 });
+await page.mouse.up();                                          // past 0.3: it develops the rest of the way
+await sleep(2200);
 
-await say('2 · Click a photo: it opens flat and whole; the site behind is dimmed and blurred');
+await say('2 · Click the photo: it opens flat and whole; the site behind is dimmed and blurred');
 const y0 = await page.evaluate(() => scrollY);
-const mid = await page.evaluate(() => { const g = window.__gallery, w = document.querySelector('.gal__canvas').clientWidth; let best = null; for (let k = 0; k < g.count; k++) { const c = g.centreOf(k); if (c && (!best || Math.abs(c.x - w / 2) < Math.abs(best.x - w / 2))) best = c; } return best; });
+const mid = await page.evaluate(() => { const r = window.__gallery.heroRect(); return { x: r.x + r.w / 2, y: r.y + r.h / 2 }; });
 await page.mouse.move(box.x + mid.x, box.y + mid.y, { steps: 12 });
 await sleep(400);
 await page.mouse.click(box.x + mid.x, box.y + mid.y);
@@ -80,7 +89,7 @@ await page.mouse.move(nb.x + nb.width / 2, nb.y + nb.height / 2, { steps: 10 });
 await next.click(); await sleep(1300);
 await page.keyboard.press('ArrowLeft'); await sleep(1300);
 
-await say('3 · Close: the same place on the page, the same photo in the middle');
+await say('3 · Close: the same place on the page, the same photo on the plate');
 const cl = page.getByRole('button', { name: 'Close preview' });
 const cb = await cl.boundingBox();
 await page.mouse.move(cb.x + cb.width / 2, cb.y + cb.height / 2, { steps: 10 });
