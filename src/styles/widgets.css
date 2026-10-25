@@ -158,7 +158,7 @@
 /* ---- Daniel: the name, each letter swelling as the pointer comes near ---- */
 .daniel {
   justify-content: space-between;
-  cursor: default;
+  cursor: var(--cur-default, default);
   touch-action: pan-y;                       /* sideways drags play; vertical scrolling still works */
   user-select: none; -webkit-user-select: none;
   background:

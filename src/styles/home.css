@@ -116,7 +116,6 @@ button {
   color: inherit;
   background: none;
   border: 0;
-  cursor: pointer;
 }
 img,
 svg,
@@ -124,29 +123,7 @@ canvas {
   display: block;
 }
 
-/* Custom arrow cursor everywhere (hotspot = tip), black on light / white on dark;
-   text fields keep the I-beam */
-:root {
-  --cursor: url("../assets/cursor-light.svg") 1 1, auto;
-}
-:root[data-theme="dark"] {
-  --cursor: url("../assets/cursor-dark.svg") 1 1, auto;
-}
-html,
-html * {
-  cursor: var(--cursor) !important;
-}
-input:not(
-  [type="button"],
-  [type="submit"],
-  [type="checkbox"],
-  [type="radio"],
-  [type="range"]
-),
-textarea,
-[contenteditable="true"] {
-  cursor: text !important;
-}
+/* Cursors live in cursors.css */
 [hidden] {
   display: none !important;
 }
@@ -1718,7 +1695,7 @@ kbd {
   font-size: 0.9rem;
   line-height: 1.4;
   color: var(--fg);
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
 }
 .cmd__item[aria-selected="true"] {
   background: var(--soft-2);
@@ -1998,7 +1975,7 @@ kbd {
   gap: 1rem;
   padding: 0.85rem 0;
   list-style: none;
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
   color: var(--fg);
 }
 .faq__item summary::-webkit-details-marker {

@@ -23,7 +23,7 @@ export function DetailLayer({ view, menuOpen }: { view: FolderView; menuOpen: bo
         <span className="logo">daniel<span>.</span></span>
       </header>
       <div id="detailViews">
-        {mounted.map((k) => <FolderPage key={k} folderKey={k} scroller={layerRef} hidden={k !== shown} />)}
+        {mounted.map((k) => <FolderPage key={k} folderKey={k} scroller={layerRef} hidden={k !== shown} onLeave={back} />)}
       </div>
     </div>
   );

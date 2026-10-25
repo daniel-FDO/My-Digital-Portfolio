@@ -161,7 +161,7 @@
   display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr));
   gap: 0.35rem; margin-top: 0.85rem;
 }
-.act__bar { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; min-width: 0; border-radius: 6px; outline: none; cursor: default; }
+.act__bar { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; min-width: 0; border-radius: 6px; outline: none; cursor: var(--cur-default, default); }
 .act__barTrack { position: relative; display: flex; align-items: flex-end; height: 6.5rem; }
 .act__barFill {
   width: 100%;

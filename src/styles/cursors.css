@@ -1,0 +1,42 @@
+/* =========================================================
+   CURSORS — small arrow / hand SVGs (src/assets/cursors), the
+   same in both themes: black arrows with a white outline, a
+   white hand with a black outline. The images are only set up
+   for a mouse (fine pointer that can hover); everywhere else
+   the var() fallbacks give the native keywords. Rules here are
+   :where() (no specificity), so a component's own grab /
+   grabbing / zoom-in / resize cursor still wins.
+   ========================================================= */
+@media (hover: hover) and (pointer: fine) {
+  :root {
+    --cur-default: url("../assets/cursors/default.svg") 3 2, default;
+    --cur-link: url("../assets/cursors/link.svg") 10 2, pointer;
+    --cur-home: url("../assets/cursors/home.svg") 3 2, pointer;
+    --cur-external: url("../assets/cursors/link-alt.svg") 3 2, pointer;
+    --cur-mail: url("../assets/cursors/mail.svg") 3 2, pointer;
+    --cur-text: text;
+  }
+}
+
+/* The arrow, inherited by everything */
+html { cursor: var(--cur-default, auto); }
+
+/* Selectable text keeps the I-beam (not inside controls or draggable things) */
+:where(p, h1, h2, h3, h4, h5, h6, blockquote, pre, figcaption, dd, dt, td, th, address):not(:where(a, button, summary, label, [role="button"], [role="option"], [role="link"], [data-cursor], .gal__plate, .ab-gallery__stage) *) {
+  cursor: var(--cur-text, auto);
+}
+
+/* Links and buttons: the hand (children inherit it, so icons and labels don't flicker) */
+:where(a[href], button, summary, select, [role="button"], [role="link"], [role="option"],
+  input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="image"])) {
+  cursor: var(--cur-link, pointer);
+}
+:where(a[target="_blank"], a[href^="http://"], a[href^="https://"]) { cursor: var(--cur-external, pointer); }
+:where(a[href="/"], a[href="./"], a[href="index.html"], a[href="/index.html"], a[href="./index.html"]) { cursor: var(--cur-home, pointer); }
+:where(a[href^="mailto:"], #copyEmail, form[action^="mailto:"] [type="submit"]) { cursor: var(--cur-mail, pointer); }
+
+/* Editable fields keep the I-beam; disabled things get the plain arrow */
+:where(input:not([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="image"]), textarea, [contenteditable]:not([contenteditable="false"])) {
+  cursor: var(--cur-text, auto);
+}
+:where(:disabled, [aria-disabled="true"]) { cursor: var(--cur-default, default); }

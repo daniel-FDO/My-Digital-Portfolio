@@ -34,7 +34,7 @@
   border: 1px solid var(--line); background: transparent; color: var(--muted);
   opacity: 0.6;
   transform: translateY(-50%);
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
   transition: opacity var(--fast) ease, color var(--fast) ease, border-color var(--fast) ease;
 }
 .fcn__ctl::before { content: ""; position: absolute; inset: -8px; }   /* a 44 × 44 target */

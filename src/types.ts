@@ -85,26 +85,10 @@ export interface Education {
   };
 }
 
-export interface GallerySlide {
-  src: string;
-  alt: string;
-  position?: string;
-  /** true = muted, looped, only plays while it's the front slide */
-  video?: boolean;
-}
-
+/** The home page's About section + command menu (the About page itself: aboutDesk.ts) */
 export interface AboutPageData {
-  hero: { label: string; title: string[] };
-  gallery: GallerySlide[];
   facts: { label: string; lines: string[] }[];
-  lore: { heading: [string, string, string]; caption: string };
   chapters: { num: string; title: string; paragraphs: string[] }[];
-  footer: {
-    heading: string[];
-    text: string;
-    cta: { label: string; href: string };
-    links: { label: string; href: string; external?: boolean }[];
-  };
 }
 
 export interface GithubConfig {

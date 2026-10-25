@@ -1,42 +1,19 @@
 /* =========================================================
-   ABOUT PAGE — YOUR CONTENT (edit here)
-   Used by AboutPage.tsx (the About folder, opened in place on the
-   home page or on secret.html?folder=about) and the home page's
-   About section. Everything on the page comes from this one object:
-     hero     — the small label + the big title (one line per entry)
-     gallery  — the photo/video slides, in order
-     facts    — the three quick facts under the hero
-     lore     — the "Okay, a little lore." heading + caption
-     chapters — the numbered story on the right
-     footer   — the dark "Got something in mind?" panel
+   ABOUT — the short version, for the home page's About section
+   and the command menu's answers:
+     facts    — quick facts (the "Exploring" line becomes tags)
+     chapters — the three short chapters on the home timeline
+   The full About page has its own words: aboutDesk.ts.
    ========================================================= */
 import type { AboutPageData } from '../types';
 
 export const ABOUT_PAGE: AboutPageData = {
-  hero: {
-    label: '01 / ABOUT ME',
-    title: ['HI, I’M', 'DANIEL'],
-  },
-
-  //   position — CSS object-position, so faces stay in the crop
-  //   video    — true = muted, looped, only plays while it's the front slide
-  gallery: [
-    { src: 'images/about/portrait.jpg', alt: 'Daniel in a black T-shirt, looking down at the camera against a pale grey background', position: '55% 30%' },
-    { src: 'images/about/anime.jpg', alt: 'Daniel drawn in an anime style, holding a backpack strap on a hillside above a lake', position: '50% 30%' },
-    { src: 'images/about/blocky.jpg', alt: 'Daniel as a blocky, Minecraft-style figure holding up a glowing lantern', position: '45% 40%' },
-    { src: 'images/about/cartoon.jpg', alt: 'Daniel as a 3D cartoon character, smiling and waving', position: '50% 30%' },
-  ],
-
   facts: [
     { label: 'Based in', lines: ['Kent, UK'] },
     { label: 'Studying at', lines: ['EKC Canterbury College'] },
     { label: 'Exploring', lines: ['Cybersecurity · UI/UX', 'Front-end development · AI'] },
   ],
 
-  lore: {
-    heading: ['OKAY,', 'A LITTLE', 'LORE.'],
-    caption: 'the short version',
-  },
 
   chapters: [
     {
@@ -68,14 +45,4 @@ export const ABOUT_PAGE: AboutPageData = {
     },
   ],
 
-  footer: {
-    heading: ['GOT SOMETHING', 'IN MIND?'],
-    text: 'A project, an opportunity, or just a hello.',
-    cta: { label: 'Let’s talk', href: 'mailto:danielfash2007@gmail.com' },
-    links: [
-      { label: 'Email', href: 'mailto:danielfash2007@gmail.com' },
-      { label: 'GitHub', href: 'https://github.com/daniel-FDO', external: true },
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/daniel-fasan-a0b503331/', external: true },
-    ],
-  },
 };

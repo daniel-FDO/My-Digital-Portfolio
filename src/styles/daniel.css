@@ -23,7 +23,7 @@
   width: 100%; height: 100%;
   padding: 0; border: 0; background: none;
   border-radius: 14px;
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .dnc__btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
@@ -57,7 +57,7 @@
   width: 44px; height: 44px;
   display: grid; place-items: end; padding: 0 0.7rem 0.75rem 0;
   border: 0; border-radius: 12px; background: none; color: var(--fg);
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
   -webkit-tap-highlight-color: transparent;
 }
 .dnc__dots {
@@ -126,7 +126,7 @@
   display: flex; align-items: center; gap: 0.65rem;
   width: 100%; min-height: 2.35rem; padding: 0 0.7rem;
   border: 0; border-radius: 0.65rem; background: none; color: var(--glass-ink); font: inherit; text-align: left;
-  cursor: pointer;
+  cursor: var(--cur-link, pointer);
   transition: color 0.16s ease, transform 0.16s ease;
 }
 .dnc-menu__item > span:first-of-type { flex: 1; }
@@ -134,7 +134,7 @@
 .dnc-menu__item:focus-visible { box-shadow: inset 0 0 0 2px var(--glass-ink); }
 .dnc-menu__item:active:not([aria-disabled='true']) { transform: scale(0.97); }
 @media (pointer: coarse) { .dnc-menu__item { min-height: 44px; } }
-.dnc-menu__item[aria-disabled='true'] { color: color-mix(in srgb, var(--glass-ink) 40%, transparent); cursor: default; }
+.dnc-menu__item[aria-disabled='true'] { color: color-mix(in srgb, var(--glass-ink) 40%, transparent); cursor: var(--cur-default, default); }
 
 /* icons: each one answers when its row is hovered or focused */
 .dnc-menu__icon {

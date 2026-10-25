@@ -18,9 +18,11 @@ interface Props {
   /** secret.html: the page's <main id="story"> */
   as?: 'div' | 'main';
   id?: string;
+  /** home page only: closes the in-place view (the About page's way out) */
+  onLeave?: () => void;
 }
 
-export function FolderPage({ folderKey, scroller, hidden, as: Tag = 'div', id }: Props) {
+export function FolderPage({ folderKey, scroller, hidden, as: Tag = 'div', id, onLeave }: Props) {
   const folder: Folder = FOLDERS[folderKey];
   const style = lookStyle(folder) as CSSProperties;
 
@@ -28,7 +30,7 @@ export function FolderPage({ folderKey, scroller, hidden, as: Tag = 'div', id }:
   if (folder.custom === 'about') {
     return (
       <Tag className="story page-about" id={id} style={style} data-tone={folder.tone} data-folder={folderKey} hidden={hidden}>
-        <div className="ab-root"><AboutPage scroller={scroller} /></div>
+        <div className="ab-root"><AboutPage scroller={scroller} onLeave={onLeave} /></div>
       </Tag>
     );
   }
