@@ -13,6 +13,7 @@
      It animates only while crossing (no loop in between), holds while
      the tab is hidden or the visitor has paused (the control beside
      the name), and never runs with reduced motion.
+   createTopoStill: the contours alone, still, for the About page.
    Colours come from CSS custom properties on the root element
    (portfolio-background.css), read again whenever the theme changes;
    the trail's is an "r, g, b" triplet so it can fade in its own hue.
@@ -98,6 +99,50 @@ function trace(w: number, h: number, narrow: boolean) {
   return { plain, accent };
 }
 
+/** Paint traced contour lines (plain, then accent) onto a canvas */
+function paintLines(cx: CanvasRenderingContext2D, lines: ReturnType<typeof trace>, colours: { line: string; accent: string }, w: number, h: number, dpr: number) {
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx.clearRect(0, 0, w, h);
+  cx.lineWidth = 1;
+  for (const [segs, colour] of [[lines.plain, colours.line], [lines.accent, colours.accent]] as const) {
+    cx.beginPath();
+    for (let n = 0; n < segs.length; n += 4) { cx.moveTo(segs[n], segs[n + 1]); cx.lineTo(segs[n + 2], segs[n + 3]); }
+    cx.strokeStyle = colour;
+    cx.stroke();
+  }
+}
+
+/** A still copy of the contours, for a reading page (the About page):
+    the same map, drawn once and again after a resize or theme change.
+    No streak and no animation loop. Colours: --topo-line / --topo-accent
+    on `root`. */
+export function createTopoStill(root: HTMLElement, canvas: HTMLCanvasElement) {
+  const cx = canvas.getContext('2d')!;
+  let w = 0, h = 0, dpr = 1;
+  let lines: ReturnType<typeof trace> = { plain: [], accent: [] };
+  const paint = () => {
+    const cs = getComputedStyle(root);
+    paintLines(cx, lines, { line: cs.getPropertyValue('--topo-line').trim(), accent: cs.getPropertyValue('--topo-accent').trim() }, w, h, dpr);
+  };
+  const layout = () => {
+    w = innerWidth; h = innerHeight;
+    dpr = Math.min(2, devicePixelRatio || 1);
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    lines = trace(w, h, w < 640);
+    paint();
+  };
+  layout();
+  let resizeTimer = 0;
+  const onResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => { if (innerWidth !== w || Math.abs(innerHeight - h) >= 120) layout(); }, 200);
+  };
+  const themeWatch = new MutationObserver(paint);
+  themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  addEventListener('resize', onResize);
+  return { destroy() { clearTimeout(resizeTimer); themeWatch.disconnect(); removeEventListener('resize', onResize); } };
+}
+
 export function createTopo(root: HTMLElement, contours: HTMLCanvasElement, streak: HTMLCanvasElement) {
   const cx = contours.getContext('2d')!, sx = streak.getContext('2d')!;
   let w = 0, h = 0, dpr = 1, narrow = false;
@@ -109,17 +154,7 @@ export function createTopo(root: HTMLElement, contours: HTMLCanvasElement, strea
   };
 
   /* ---- contours ---- */
-  function paintContours() {
-    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx.clearRect(0, 0, w, h);
-    cx.lineWidth = 1;
-    for (const [segs, colour] of [[lines.plain, col.line], [lines.accent, col.accent]] as const) {
-      cx.beginPath();
-      for (let n = 0; n < segs.length; n += 4) { cx.moveTo(segs[n], segs[n + 1]); cx.lineTo(segs[n + 2], segs[n + 3]); }
-      cx.strokeStyle = colour;
-      cx.stroke();
-    }
-  }
+  function paintContours() { paintLines(cx, lines, col, w, h, dpr); }
   function layout() {
     w = innerWidth; h = innerHeight; narrow = w < 640;
     dpr = Math.min(2, devicePixelRatio || 1);

@@ -3,7 +3,7 @@
    and the command menu's answers:
      facts    — quick facts (the "Exploring" line becomes tags)
      chapters — the three short chapters on the home timeline
-   The full About page has its own words: aboutDesk.ts.
+   The full About page has its own words: aboutPage.ts.
    ========================================================= */
 import type { AboutPageData } from '../types';
 

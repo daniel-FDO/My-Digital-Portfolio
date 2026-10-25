@@ -85,7 +85,7 @@ export interface Education {
   };
 }
 
-/** The home page's About section + command menu (the About page itself: aboutDesk.ts) */
+/** The home page's About section + command menu (the About page itself: aboutPage.ts) */
 export interface AboutPageData {
   facts: { label: string; lines: string[] }[];
   chapters: { num: string; title: string; paragraphs: string[] }[];
