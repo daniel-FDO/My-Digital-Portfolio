@@ -1,11 +1,9 @@
 /* =========================================================
-   SMALL TILES — GitHub and studying.
-   All from real data: the shared GitHub request (lib/github.ts)
-   and education.ts.
+   SMALL TILES — GitHub.
+   From real data: the shared GitHub request (lib/github.ts).
    ========================================================= */
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import CONFIG from '../../../github-config.json';
-import { EDUCATION } from '../../data/education';
 import { loadContributions } from '../../lib/github';
 import type { Contributions } from '../../types';
 
@@ -44,27 +42,6 @@ export function GitHubTile() {
         </div>
       )}
       <Arrow />
-    </a>
-  );
-}
-
-/* ---- Studying: the course and where I am in it ---- */
-export function StudyTile() {
-  const { panel } = EDUCATION;
-  const steps = panel.timeline;
-  const at = Math.max(0, steps.findIndex((s) => s.current));
-  return (
-    <a className="w tile study-tile" href="#education">
-      <span className="w__label">Studying · {panel.status}</span>
-      <span className="study-tile__title">{panel.heading}</span>
-      <span className="tile__muted">{panel.place}</span>
-      <ol className="study-tile__steps" style={{ '--at': at, '--n': steps.length } as CSSProperties}>
-        {steps.map((s, i) => (
-          <li key={s.label} className={i < at ? 'is-done' : i === at ? 'is-now' : undefined} aria-current={i === at ? 'step' : undefined}>
-            <i aria-hidden="true"></i><span>{s.label}</span>
-          </li>
-        ))}
-      </ol>
     </a>
   );
 }

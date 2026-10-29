@@ -1,7 +1,7 @@
 /* =========================================================
    WIDGETS — the bento under the intro (widgets/Widgets.tsx)
    Wide:   music music | now | github
-           Daniel Daniel | now | studying
+           Daniel Daniel | now | X-ray (xray.css)
    Medium: two columns, "now" tall on the left.
    Narrow: one column for the big ones, pairs for the small ones.
    The layout follows the grid's own width (container queries).
@@ -14,14 +14,14 @@
   grid-auto-rows: 11.5rem;
   grid-template-areas:
     "music music now gh"
-    "name  name  now study";
+    "name  name  now xray";
   gap: 0.9rem;
 }
 .wg--music { grid-area: music; }
 .wg--now { grid-area: now; }
 .wg--gh { grid-area: gh; }
 .wg--name { grid-area: name; }
-.wg--study { grid-area: study; }
+.wg--xray { grid-area: xray; }
 .wg { min-width: 0; }
 /* The tiles' entrance: opacity + a short rise (no blur: cheaper to draw) */
 @media (prefers-reduced-motion: no-preference) {
@@ -186,17 +186,6 @@
   font: 700 0.875rem/1.3 "Nunito Variable", var(--font); letter-spacing: 0.01em; text-transform: none;
 }
 
-/* ---- Studying: the course, and where I am on it ---- */
-.study-tile__title { margin-top: 0.75rem; font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
-.study-tile__steps { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin-top: auto; }
-.study-tile__steps li { position: relative; display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; font: 0.625rem/1.3 var(--mono); letter-spacing: 0.02em; color: var(--muted); }
-.study-tile__steps li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-right: 0.25rem; }
-.study-tile__steps i { position: relative; z-index: 1; width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
-.study-tile__steps li:not(:last-child)::after { content: ""; position: absolute; left: 9px; right: 0; top: 4px; height: 1px; background: var(--line); }
-.study-tile__steps li.is-done i, .study-tile__steps li.is-done::after { background: var(--fg); }
-.study-tile__steps li.is-now i { background: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); }
-.study-tile__steps li.is-now span { color: var(--fg); }
-
 /* ---- Medium: two columns, "now" tall on the left ---- */
 @container (max-width: 759px) {
   .widgets__grid {
@@ -205,7 +194,7 @@
     grid-template-areas:
       "music music"
       "now   gh"
-      "now   study"
+      "now   xray"
       "name  name";
   }
 }
@@ -216,13 +205,13 @@
     grid-template-areas:
       "music music"
       "now   now"
-      "gh    study"
+      "gh    xray"
       "name  name";
     gap: 0.75rem;
   }
   .wg--music { height: 10.8rem; }
   .wg--music .music { padding: 0.95rem; }
-  .wg--gh, .wg--study { min-height: 10.5rem; }
+  .wg--gh, .wg--xray { min-height: 10.5rem; }
   .wg--name { height: 10rem; }
   .daniel__word { font-size: 4rem; }
   .now { display: grid; grid-template-columns: 1fr auto; column-gap: 1rem; }
