@@ -33,6 +33,12 @@ export interface Project {
   video?: string;
   /** that video's poster: shown while it loads, if it can't play, and for reduced motion */
   poster?: string;
+  /** the day Daniel last worked on it, "YYYY-MM-DD" (the "last worked on" strip
+   *  under Projects, LastWorkedOn.tsx). Leave it out if unknown — never guess. */
+  lastWorkedOn?: string;
+  /** "commit" = the date is the repo's latest commit, so the strip says
+   *  "last recorded update"; leave it out for a date you set yourself */
+  lastWorkedOnFrom?: string;
 }
 
 /** [name, abbr, icon]: `icon` is one or more space-separated keys in
