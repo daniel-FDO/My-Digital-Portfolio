@@ -25,7 +25,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { PROJECTS } from '../data/home';
 import { useMediaQuery, useReducedMotion } from '../lib/motion';
 import { ExtIcon, NewTab, SparkIcon } from './icons';
-import { LastWorkedOn } from './LastWorkedOn';
 
 export const ENABLE_PROJECT_SHOWCASE = true;
 
@@ -109,7 +108,6 @@ export function ProjectShowcase() {
             </li>
           ))}
         </ul>
-        <LastWorkedOn />
         {side && stage(false)}
       </div>
     </section>
