@@ -95,4 +95,18 @@ export const GALLERY: GalleryPhoto[] = [
     height: 640,
     position: '50% 40%',
   },
+  {
+    src: 'images/gallery/photo-12.webp',
+    alt: 'Hundreds of paperback books stacked in tall piles across a white office desk, beneath a wall-mounted air conditioner, with empty grey crates on the floor',
+    width: 720,
+    height: 1280,
+    position: '50% 45%',
+  },
+  {
+    src: 'images/gallery/photo-13.webp',
+    alt: 'An empty shopping trolley standing alone in a rain-soaked supermarket car park at dusk, with parked cars and wet leaves on the tarmac',
+    width: 720,
+    height: 1280,
+    position: '50% 55%',
+  },
 ];
