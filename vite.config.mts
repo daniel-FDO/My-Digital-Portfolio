@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,9 +33,19 @@ function api(): Plugin {
   };
 }
 
+/* When this site's code last changed: the latest commit's date, read once
+   when the dev server starts or the site is built (on Vercel: the commit
+   being deployed). null if git isn't there — the intro then leaves it out. */
+function lastCommit(): string | null {
+  try {
+    return execSync('git log -1 --format=%cI', { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim() || null;
+  } catch { return null; }
+}
+
 export default defineConfig({
   // Relative URLs, like the original: the site works from any folder
   base: './',
+  define: { __LAST_COMMIT__: JSON.stringify(lastCommit()) },
   plugins: [react(), api()],
   build: {
     rollupOptions: {

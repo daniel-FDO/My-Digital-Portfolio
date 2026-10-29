@@ -1,12 +1,12 @@
 /* =========================================================
-   INTRO — name (large, revealed letter by letter) + role | Kent,
-   UK + the time there; Currently; then a copy icon and my email.
+   INTRO — name (large, revealed letter by letter) + role | when the
+   site last changed (its latest commit); Currently; then a copy icon
+   and my email.
    Styles: home.css "Intro" (scoped to .page .intro — the folder
    pages have their own .intro).
    ========================================================= */
-import type { CSSProperties } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { HOME, INTRO } from '../data/home';
-import { pad2, useKentTime } from '../lib/kentClock';
 import { FontCycleName } from './fontcycle/FontCycleName';
 
 /** The name changes typeface every 3 seconds (fontcycle/). false = the original heading below. */
@@ -37,11 +37,7 @@ export function Intro({ copy }: Props) {
           )}
           <p className="intro__role in" style={delay(40)}>{INTRO.role}</p>
         </div>
-        {/* Where I am + the time there (Europe/London: GMT or BST) */}
-        <p className="intro__meta in" style={delay(80)}>
-          <span>{HOME.location}</span>
-          <IntroTime />
-        </p>
+        <LastUpdate />
       </div>
 
       <section className="intro__now in" style={delay(160)} aria-labelledby="nowTitle">
@@ -62,13 +58,35 @@ export function Intro({ copy }: Props) {
   );
 }
 
-/* "14:32 BST" under "Kent, UK" — re-renders once a second, on its own */
-function IntroTime() {
-  const t = useKentTime();
-  const short = `${pad2(t.h)}:${pad2(t.m)}`;
+/* "Last recorded update" + "29 Oct 2026 · 2 days ago": this site's latest commit
+   (__LAST_COMMIT__, from vite.config.mts at build time). Days are counted in
+   UK calendar days. Without a date (no git at build time) nothing is shown. */
+const ZONE = HOME.timeZone || 'Europe/London';
+const ukDay = new Intl.DateTimeFormat('en-CA', { timeZone: ZONE, year: 'numeric', month: '2-digit', day: '2-digit' });
+const fmtDate = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, day: 'numeric', month: 'short', year: 'numeric' });
+const fmtFull = new Intl.DateTimeFormat('en-GB', { timeZone: ZONE, dateStyle: 'full', timeStyle: 'short' });
+
+function LastUpdate() {
+  const [, setTick] = useState(0);
+  // a tab left open overnight: count again when it's looked at
+  useEffect(() => {
+    const onVis = () => { if (!document.hidden) setTick((n) => n + 1); };
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
+  // (typeof: a dev server started before vite.config.mts set it has no __LAST_COMMIT__ at all)
+  const iso = typeof __LAST_COMMIT__ === 'string' ? __LAST_COMMIT__ : null;
+  const when = iso ? new Date(iso) : null;
+  if (!iso || !when || Number.isNaN(when.getTime())) return null;
+  const days = Math.round((Date.parse(ukDay.format(new Date())) - Date.parse(ukDay.format(when))) / 864e5);
+  const ago = days <= 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`;
   return (
-    <time className="intro__time" id="introTime" dateTime={short}>
-      <span className="sr">Local time in Kent: </span><span id="introTimeText">{`${short} ${t.zone}`}</span>
-    </time>
+    <p className="intro__meta in" style={delay(80)}>
+      <span>Last recorded update</span>
+      <time className="intro__time" dateTime={iso} title={`Latest commit: ${fmtFull.format(when)}`}>
+        {fmtDate.format(when)} · {ago}
+      </time>
+    </p>
   );
 }

@@ -438,16 +438,21 @@ html.theme-switching *::after {
   opacity: 1;
 }
 
-/* Phones: the place + time move under the role, on one quiet line */
+/* Phones: the last-update label + date move under the role, on one quiet
+   line (two on the narrowest screens: each part stays whole) */
 @media (max-width: 520px) {
   .intro__head {
     flex-direction: column;
   }
   .intro__meta {
     flex-direction: row;
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
     padding-top: 0;
     text-align: left;
+  }
+  .intro__meta > * {
+    white-space: nowrap;
   }
   .intro__meta:has(.intro__time:not([hidden])) > :first-child::after {
     content: "·";
