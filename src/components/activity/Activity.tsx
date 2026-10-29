@@ -186,7 +186,7 @@ export function Activity() {
   };
 
   return (
-    <section className={`sec act is-${gh.state === 'loading' && cl.state === 'loading' ? 'loading' : 'ready'}${seen ? ' is-in' : ''}`} id="activity" aria-labelledby="activityTitle" ref={rootRef}>
+    <section className={`sec act is-${gh.state === 'loading' && cl.state === 'loading' ? 'loading' : 'ready'}${seen ? ' is-in' : ''}`} id="activity" aria-labelledby="activityTitle" ref={rootRef} data-xray="activity">
       <div className="sec__head">
         <h2 className="h" id="activityTitle">Activity</h2>
         <a className="sec__link" href={C.profileUrl} target="_blank" rel="noopener noreferrer">GitHub<NewTab /></a>

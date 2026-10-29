@@ -5,7 +5,8 @@
    the same content. No AI service: if there's no answer here,
    it says so and offers the email.
    Ctrl / ⌘ K opens and closes it, "/" opens it, "T" toggles the
-   theme (when you're not typing).
+   theme (when you're not typing). "X" (X-ray) is handled by
+   components/xray/Xray.tsx.
    ========================================================= */
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { flushSync } from 'react-dom';
@@ -19,6 +20,7 @@ export interface MenuActions {
   go: (sectionId: string) => void;
   openAbout: () => void;
   toggleTheme: () => void;
+  toggleXray: () => void;
   copyEmail: () => void;
   backToTop: () => void;
 }
@@ -93,6 +95,7 @@ export function CommandMenu({ open, setOpen, blocked, actions }: Props) {
       ...HOME.socials.map((s) => ({ group: 'Links', label: s.label, icon: I.link, kw: 'social profile', run: ext(s.href) })),
       { group: 'Links', label: 'Email Daniel', hint: HOME.email, icon: I.link, kw: 'mail contact', run: () => { location.href = 'mailto:' + HOME.email; } },
       { group: 'Actions', label: 'Toggle theme', hint: 'T', icon: I.action, kw: 'dark light mode', run: actions.toggleTheme, keep: true },
+      { group: 'Actions', label: 'Toggle X-ray', hint: 'X', icon: I.action, kw: 'inspect how built source code devtools parts data', run: actions.toggleXray },
       { group: 'Actions', label: 'Copy email address', icon: I.action, kw: 'clipboard', run: actions.copyEmail },
       { group: 'Actions', label: 'Back to top', icon: I.action, kw: 'scroll up home', run: actions.backToTop },
     ];

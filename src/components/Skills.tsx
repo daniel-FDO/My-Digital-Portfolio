@@ -148,7 +148,7 @@ function SkillGroup({ g }: { g: Group }) {
 
 export function Skills() {
   return (
-    <section className="sec" id="skills" aria-labelledby="skillsTitle">
+    <section className="sec" id="skills" aria-labelledby="skillsTitle" data-xray="skills">
       <h2 className="h" id="skillsTitle">
         Tech stack
       </h2>

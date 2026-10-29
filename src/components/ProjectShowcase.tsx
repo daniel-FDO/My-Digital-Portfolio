@@ -65,7 +65,7 @@ export function ProjectShowcase() {
   );
 
   return (
-    <section className={`sec pjs${side ? ' pjs--side' : ''}`} id="projects" aria-labelledby="projectsTitle">
+    <section className={`sec pjs${side ? ' pjs--side' : ''}`} id="projects" aria-labelledby="projectsTitle" data-xray="projects">
       <h2 className="h" id="projectsTitle">Projects</h2>
       <div className="pjs__layout">
         <ul

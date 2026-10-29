@@ -10,7 +10,7 @@ export function Education() {
   const finish = (p.timeline.find((t) => /20\d\d/.test(t.label)) || { label: '' }).label;
 
   return (
-    <section className="sec" id="education" aria-labelledby="eduTitle">
+    <section className="sec" id="education" aria-labelledby="eduTitle" data-xray="education">
       <h2 className="h" id="eduTitle">Education</h2>
       <div id="eduRows">
         <div className="xp">

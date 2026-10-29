@@ -3,6 +3,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { XrayProvider } from './components/xray/Xray';
 import { startPreloader } from './lib/preloader';
 import { ThemeProvider } from './lib/theme';
 
@@ -12,7 +13,9 @@ startPreloader();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
-      <App />
+      <XrayProvider>
+        <App />
+      </XrayProvider>
     </ThemeProvider>
   </StrictMode>,
 );

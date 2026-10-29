@@ -19,6 +19,7 @@ import { Projects } from './components/Projects';
 import { SectionNav } from './components/SectionNav';
 import { Skills } from './components/Skills';
 import { Widgets } from './components/widgets/Widgets';
+import { useXray } from './components/xray/Xray';
 import { HOME } from './data/home';
 import { DetailLayer } from './folder/DetailLayer';
 import { useFolderView } from './folder/useFolderView';
@@ -37,6 +38,7 @@ function focusHeading(h: HTMLElement | null) {
 
 export function App() {
   const { toggleTheme } = useTheme();
+  const { toggle: toggleXray } = useXray();
   const copy = useCopyEmail(HOME.email);
   const [menuOpen, setMenuOpen] = useState(false);
   const folder = useFolderView();
@@ -70,9 +72,10 @@ export function App() {
     },
     openAbout: () => openFolder('about', document.getElementById('askOpen')),
     toggleTheme,
+    toggleXray,
     copyEmail: () => { copyEmail(); },
     backToTop,
-  }), [toggleTheme, copyEmail, backToTop, openFolder]);
+  }), [toggleTheme, toggleXray, copyEmail, backToTop, openFolder]);
 
   return (
     <>

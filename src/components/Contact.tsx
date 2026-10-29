@@ -20,7 +20,7 @@ export function Contact() {
   };
 
   return (
-    <section className="sec" id="contact" aria-labelledby="contactTitle">
+    <section className="sec" id="contact" aria-labelledby="contactTitle" data-xray="contact">
       <h2 className="h" id="contactTitle">Contact</h2>
       <p className="sec__text">Have an idea or an opportunity? Say hello.</p>
       <form className="mail" id="mailForm" action={`mailto:${HOME.email}`} method="get" encType="text/plain" onSubmit={send}>

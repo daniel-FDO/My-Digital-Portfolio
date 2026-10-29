@@ -2,7 +2,7 @@
    what the site already says (about.ts, education.ts, home.ts). */
 export function Faq() {
   return (
-    <section className="sec" id="faq" aria-labelledby="faqTitle">
+    <section className="sec" id="faq" aria-labelledby="faqTitle" data-xray="faq">
       <h2 className="h" id="faqTitle">Questions</h2>
       <div className="faq">
         <details className="faq__item">

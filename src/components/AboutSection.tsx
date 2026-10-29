@@ -30,7 +30,7 @@ export function AboutSection({ onOpenFolder }: Props) {
   const link = { href: 'secret.html?folder=about', rel: 'nofollow', 'data-folder-open': 'about', onClick: open };
 
   return (
-    <section className="sec" id="about" aria-labelledby="aboutTitle">
+    <section className="sec" id="about" aria-labelledby="aboutTitle" data-xray="about">
       <h2 className="h" id="aboutTitle">About</h2>
       <div className="about" id="aboutBody">
         <div className="about__grid">

@@ -21,7 +21,7 @@ interface Props {
 
 export function Intro({ copy }: Props) {
   return (
-    <header className="intro" id="intro" aria-labelledby="introName">
+    <header className="intro" id="intro" aria-labelledby="introName" data-xray="intro">
       <div className="intro__head">
         <div className="intro__id">
           {ENABLE_FONT_CYCLE ? <FontCycleName name={INTRO.name} /> : (

@@ -92,7 +92,7 @@ export function Gallery() {
   };
 
   return (
-    <section className="sec gal" id="gallery" aria-labelledby="galleryTitle">
+    <section className="sec gal" id="gallery" aria-labelledby="galleryTitle" data-xray="gallery">
       <div className="sec__head">
         <h2 className="h" id="galleryTitle">Gallery</h2>
         <span className="gal__edition" aria-hidden="true">Photos / {two(n)}</span>
