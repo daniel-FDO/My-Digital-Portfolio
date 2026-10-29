@@ -14,6 +14,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
 import { PROJECTS } from '../data/home';
 import { useMediaQuery } from '../lib/motion';
 import { ExtIcon, NewTab, SparkIcon } from './icons';
+import { LastWorkedOn } from './LastWorkedOn';
 import { ENABLE_PROJECT_SHOWCASE, ProjectShowcase } from './ProjectShowcase';
 
 const SHOWN = 3;
@@ -211,6 +212,7 @@ function ProjectsClassic() {
         </button>
       )}
       {placeIn === null && card}
+      <LastWorkedOn />
     </section>
   );
 }

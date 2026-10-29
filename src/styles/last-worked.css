@@ -1,0 +1,49 @@
+/* =========================================================
+   LAST WORKED ON — the strip of "tape" under Projects
+   (LastWorkedOn.tsx). Quiet: muted text, a faint wash of the
+   text colour, torn ends, a slight tilt. The project name is
+   the only thing at full contrast.
+   ========================================================= */
+.lwo { margin-top: 1.5rem; max-width: 100%; }
+
+.lwo__strip {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.4rem 0.95rem 0.4rem 0.8rem;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  color: var(--muted);
+  font-size: 0.8125rem; line-height: 1.4;
+  transform: rotate(-0.6deg);
+  /* torn ends, like a strip of tape */
+  clip-path: polygon(
+    3px 0, calc(100% - 2px) 0, 100% 22%, calc(100% - 3px) 48%, 100% 74%, calc(100% - 2px) 100%,
+    2px 100%, 0 76%, 3px 50%, 0 24%
+  );
+}
+.lwo__pen {
+  width: 13px; height: 13px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+}
+.lwo__strip b { font-weight: 600; color: var(--fg); }
+.lwo__ago { font-family: var(--mono); font-size: 0.75rem; white-space: nowrap; }
+
+/* All the lines share one place, so the strip never changes size as they change */
+.lwo__lines { display: grid; min-width: 0; }
+.lwo__line { min-width: 0; }
+.is-rotating .lwo__line {
+  grid-area: 1 / 1;
+  opacity: 0; transform: translateY(3px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.is-rotating .lwo__line.is-on { opacity: 1; transform: none; }
+.lwo__line:not(.is-on) { pointer-events: none; }
+
+/* Not rotating (reduced motion): every project, one under another */
+.lwo__strip:not(.is-rotating) .lwo__lines { row-gap: 0.15rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lwo__line { transition: none; }
+}
+@media (max-width: 479px) {
+  .lwo__strip { font-size: 0.75rem; padding-inline: 0.75rem 0.85rem; }
+}
