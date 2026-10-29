@@ -1823,14 +1823,36 @@ kbd {
 .intro__meta > :first-child {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
+/* The "live" dot: a soft halo, and a ring that keeps spreading out from it
+   (still with reduced motion; holds while the site's Pause is on) */
 .intro__meta > :first-child::before {
   content: "";
+  flex: none;
   width: 5px;
   height: 5px;
   border-radius: 50%;
   background: var(--brand);
+  box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .intro__meta > :first-child::before {
+    animation: intro-live 2s ease-out infinite;
+  }
+  :root:has(.pbg.is-paused) .intro__meta > :first-child::before {
+    animation-play-state: paused;
+  }
+}
+@keyframes intro-live {
+  0% {
+    box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--brand) 22%, transparent),
+      0 0 0 0 color-mix(in srgb, var(--brand) 55%, transparent);
+  }
+  70%, 100% {
+    box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--brand) 22%, transparent),
+      0 0 0 6px color-mix(in srgb, var(--brand) 0%, transparent);
+  }
 }
 .sec {
   scroll-margin-top: 2rem;
