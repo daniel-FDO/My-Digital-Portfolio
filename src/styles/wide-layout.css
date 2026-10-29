@@ -2,7 +2,7 @@
    WIDE LAYOUT — EXPERIMENT (reversible)
    A wider page on desktop (up to 1152px), with comfortable side
    padding, reading-width paragraphs, and side-by-side layouts in
-   About and GitHub activity. Phones and tablets keep their layouts.
+   About. Phones and tablets keep their layouts.
 
    TO REVERT: remove the one <link … wide-layout.css> line in
    index.html (this file changes nothing else).
@@ -43,11 +43,6 @@
   }
   .about__more { margin-left: 0; margin-top: auto; }
   .tl__item { max-width: 36rem; }
-}
-
-/* ---- Activity: the two cards side by side, a little more apart ---- */
-@media (min-width: 1100px) {
-  .act__grid { gap: 1rem; }
 }
 
 /* ---- Gallery: the whole container width (the cards keep a sensible size) ---- */

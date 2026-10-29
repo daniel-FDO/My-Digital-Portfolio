@@ -1,10 +1,11 @@
 /* =========================================================
-   ACTIVITY — GitHub + Claude Code (Activity.tsx)
-   A large editorial line, then two matching cards: GitHub
-   contributions | Claude Code tokens (side by side from 900px,
-   stacked below that). Each: header, heatmap, months.
+   ACTIVITY — GitHub | Claude Code (Activity.tsx)
+   A one-line descriptor, then one card: a switcher with the
+   source's status, a row of figures, the heatmap, and a quiet
+   month strip (which also filters by month).
    Colours are the site's own: the neutral heatmap greys (--gh-*),
-   text tokens, and the red --brand for a few small accents.
+   text tokens, and the red --brand for a few small accents;
+   Claude Code warms the greys slightly (.is-cl).
    The squares' tooltip is .mini-tip (home.css).
    ========================================================= */
 .act {
@@ -15,37 +16,13 @@
   --act-3: var(--gh-3);
   --act-4: var(--gh-4);
   --act-glow: var(--gh-glow);
-  --act-bar: var(--gh-3);
   --act-card: var(--card);
   --act-radius: 1rem;
 }
 
-/* ---- The lead: eyebrow + big line ---- */
-.act__lead {
-  display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem;
-  margin-top: 1.5rem;
-}
-.act__eyebrow {
-  font: 500 0.6875rem/1.4 var(--mono);
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--muted);
-}
-.act__title {
-  margin-top: 0.5rem;
-  font-size: clamp(2rem, 1.2rem + 3.2vw, 3.1rem);
-  font-weight: 600; line-height: 1.02; letter-spacing: -0.055em;
-  color: var(--fg);
-  text-wrap: balance;
-}
-.act__title em { font-style: italic; font-weight: 400; letter-spacing: -0.04em; color: var(--muted); }
-
-/* ---- Cards ---- */
-.act__grid { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
-.act__card {
-  border: 1px solid var(--line);
-  border-radius: var(--act-radius);
-  background: var(--act-card);
-  transition: border-color var(--fast) ease;
+.act__desc {
+  margin-top: 0.85rem; max-width: 52ch;
+  font-size: 0.875rem; line-height: 1.5; color: var(--muted);
 }
 .act__label {
   font: 500 0.6875rem/1.4 var(--mono);
@@ -53,42 +30,47 @@
   color: var(--muted);
 }
 .act__muted { font-size: 0.8125rem; line-height: 1.5; color: var(--muted); }
-
 .act__mark, .act__arrow { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-@media (hover: hover) and (pointer: fine) {
-  .act__card:hover { border-color: color-mix(in srgb, var(--fg) 20%, transparent); }
+
+/* ---- The card ---- */
+.act__card {
+  margin-top: 1.1rem; padding: 0.9rem 1.25rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: var(--act-radius);
+  background: var(--act-card);
 }
-
-/* ---- The panel ---- */
-.act__panel { display: flex; flex-direction: column; min-width: 0; padding: 1.1rem 1.25rem 1.2rem; }
-/* matching cards: the month chart takes whatever height is left, so neither card has a hole in it */
-.act__panel > .act__monthly { flex: 1; display: flex; flex-direction: column; }
-.act__panel > .act__monthly .act__bars { flex: 1; }
-.act__panel > .act__monthly .act__barTrack { flex: 1; min-height: 5.5rem; height: auto; }
-
-/* ---- Claude Code: the same card, with a quiet identity (its mark in Claude's colour,
-   the heatmap's greys warmed very slightly) ---- */
-.act__claude {
+/* Claude Code: a quiet identity — its mark in Claude's colour, the greys warmed very slightly */
+.act__card.is-cl {
   --act-claude: #d97757;
   --act-accent: var(--act-claude);
   --act-1: color-mix(in srgb, var(--gh-1) 82%, var(--act-claude) 18%);
   --act-2: color-mix(in srgb, var(--gh-2) 82%, var(--act-claude) 18%);
   --act-3: color-mix(in srgb, var(--gh-3) 84%, var(--act-claude) 16%);
   --act-4: color-mix(in srgb, var(--gh-4) 86%, var(--act-claude) 14%);
-  --act-bar: var(--act-3);
 }
-.act__mark--claude { fill: var(--act-claude); stroke: none; }
-.act__unit { margin-left: auto; font: 500 0.625rem/1.5 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-/* the four numbers: small, in a row */
-.act__nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1rem; }
-.act__nums div { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
-.act__nums dt { font: 500 0.625rem/1.4 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-.act__nums dd { order: -1; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; }
-.act__note { margin-top: 0.45rem; font-size: 0.75rem; line-height: 1.4; color: var(--muted); }
-.act__claude .act__heat { margin-top: 0.85rem; }
-.act__panelHead { display: flex; align-items: center; gap: 0.6rem; min-width: 0; }
-.act__who { display: inline-flex; align-items: center; gap: 0.45rem; min-width: 0; white-space: nowrap; font-size: 0.875rem; font-weight: 600; letter-spacing: -0.02em; color: var(--fg); }
-.act__who .act__mark { width: 16px; height: 16px; flex: none; }
+.act__mark--claude { fill: #d97757; stroke: none; }
+.act__panel { min-width: 0; }
+.act__panel[hidden] { display: none; }
+
+/* ---- Toolbar: switcher · status · source ---- */
+.act__tools { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem 0.75rem; min-width: 0; }
+.act__tabs {
+  display: inline-flex; padding: 3px; gap: 2px;
+  border: 1px solid var(--line); border-radius: 999px;
+}
+.act__tab {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  min-height: 32px; padding: 0 0.8rem; border-radius: 999px;
+  font: inherit; font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.01em;
+  color: var(--muted); background: transparent; border: 0;
+  transition: color var(--fast) ease, background-color var(--fast) ease;
+}
+.act__tab .act__mark { width: 14px; height: 14px; flex: none; }
+.act__tab:hover { color: var(--fg); }
+.act__tab[aria-selected="true"] { color: var(--fg); background: color-mix(in srgb, var(--fg) 9%, transparent); }
+.act__tab:focus-visible { outline: 1.5px solid var(--fg); outline-offset: 1px; }
+.act__tabUnit { font: 0.625rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; }
+
 .act__badge {
   display: inline-flex; align-items: center; gap: 0.35rem;
   padding: 0.15rem 0.55rem; border-radius: 999px;
@@ -105,12 +87,30 @@
   font-size: 0.8125rem; color: var(--muted); white-space: nowrap;
   transition: color var(--fast) ease;
 }
-.act__view:hover { color: var(--fg); }
+a.act__view:hover { color: var(--fg); }
+.act__view--note { font: 0.6875rem/1.4 var(--mono); }
 .act__arrow { width: 12px; height: 12px; flex: none; transition: transform var(--fast) var(--ease); }
 .act__view:hover .act__arrow { transform: translate(1px, -1px); }
 
-/* Heatmap: fluid squares when there's room; on narrow screens they
-   keep a usable size and the year scrolls sideways inside the panel */
+/* ---- Scope line + figures ---- */
+.act__scope { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 28px; margin-top: 1rem; }
+.act__reset {
+  display: inline-flex; align-items: center; min-height: 28px; padding: 0 0.6rem;
+  border: 1px solid var(--line); border-radius: 999px; background: transparent;
+  font: 0.6875rem/1 var(--mono); color: var(--muted);
+  transition: color var(--fast) ease, border-color var(--fast) ease;
+}
+.act__reset:hover { color: var(--fg); border-color: color-mix(in srgb, var(--fg) 30%, transparent); }
+.act__reset:focus-visible { outline: 1.5px solid var(--fg); outline-offset: 1px; }
+.act__nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem 1rem; margin-top: 0.5rem; }
+.act__nums div { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.act__nums dt { font: 500 0.625rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.act__nums dd { order: -1; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.2; font-variant-numeric: tabular-nums; color: var(--fg); white-space: nowrap; }
+.act__nums small { font-size: 0.75rem; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+.act__note { margin-top: 0.4rem; font-size: 0.75rem; line-height: 1.4; color: var(--muted); }
+
+/* ---- Heatmap: fluid squares when there's room; on narrow screens they keep
+   a usable size and the year scrolls sideways inside the card ---- */
 .act__heat { margin-top: 1.1rem; --cell-min: 0px; --gap: 3px; }
 .act__scroll { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; padding: 4px 2px 6px; margin: -4px -2px 0; }
 .act__cal {
@@ -129,14 +129,15 @@
 .act__cell {
   position: relative; aspect-ratio: 1; border-radius: 2px;
   background: var(--act-0); outline: none;
-  transition: transform 0.15s ease, background-color 0.4s ease;
+  transition: transform 0.15s ease, background-color 0.4s ease, opacity 0.25s ease;
 }
 .act__cell[data-l="1"] { background: var(--act-1); }
 .act__cell[data-l="2"] { background: var(--act-2); }
 .act__cell[data-l="3"] { background: var(--act-3); }
 .act__cell[data-l="4"] { background: var(--act-4); }
 .act__cell::after { content: ""; position: absolute; inset: -2px; border-radius: 3px; box-shadow: 0 0 8px 2px var(--act-glow); opacity: 0; transition: opacity 0.15s ease; pointer-events: none; }
-.act__cell.is-active { transform: scale(1.4); z-index: 1; }
+.act__cell.is-dim { opacity: 0.22; }
+.act__cell.is-active { transform: scale(1.4); z-index: 1; opacity: 1; }
 .act__cell.is-active::after { opacity: 1; }
 .act__cell:focus-visible { box-shadow: 0 0 0 1.5px var(--fg); }
 .act__heatFoot {
@@ -152,72 +153,77 @@
 .act__legend i[data-l="3"] { background: var(--act-3); }
 .act__legend i[data-l="4"] { background: var(--act-4); }
 
-/* Months */
-.act__monthly { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+/* ---- Month strip: short bars, secondary to the heatmap; each is a button ---- */
+.act__monthly { margin-top: 0.9rem; padding-top: 0.85rem; border-top: 1px solid var(--line); }
 .act__monthlyHead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .act__top { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
 .act__top b { font-weight: 600; color: var(--fg); }
 .act__bars {
   display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr));
-  gap: 0.35rem; margin-top: 0.85rem;
+  gap: 0.3rem; margin-top: 0.6rem;
 }
-.act__bar { display: flex; flex-direction: column; align-items: stretch; gap: 0.4rem; min-width: 0; border-radius: 6px; outline: none; cursor: var(--cur-default, default); }
-.act__barTrack { position: relative; display: flex; align-items: flex-end; height: 6.5rem; }
+.act__bar {
+  display: flex; flex-direction: column; align-items: stretch; gap: 0.35rem; min-width: 0;
+  padding: 0.25rem 0.15rem 0.2rem; border: 0; border-radius: 6px; background: transparent;
+  font: inherit; color: inherit; outline: none;
+  transition: background-color var(--fast) ease, opacity var(--fast) ease;
+}
+.act__barTrack { display: flex; align-items: flex-end; height: 1.75rem; }
 .act__barFill {
   width: 100%;
-  height: max(3px, calc(var(--h) * 100%));
-  border-radius: 6px 6px 3px 3px;
-  background: var(--act-bar);
+  height: max(2px, calc(var(--h) * 100%));
+  border-radius: 3px 3px 1px 1px;
+  background: var(--act-2);
   transform-origin: 50% 100%;
   transition: background-color var(--fast) ease;
 }
 .act__bar.is-zero .act__barFill { background: var(--act-0); }
-.act__bar:hover .act__barFill, .act__bar:focus-visible .act__barFill { background: var(--act-4); }
-.act__bar:focus-visible .act__barTrack { box-shadow: 0 0 0 1.5px var(--fg); border-radius: 6px; }
 .act__barLabel { font: 0.625rem/1 var(--mono); color: var(--muted); text-align: center; white-space: nowrap; overflow: hidden; }
+.act__bar:hover .act__barFill { background: var(--act-3); }
+.act__bar:focus-visible { box-shadow: 0 0 0 1.5px var(--fg); }
+.act__bars.has-pick .act__bar { opacity: 0.5; }
+.act__bars.has-pick .act__bar:hover, .act__bars.has-pick .act__bar:focus-visible { opacity: 0.85; }
+.act__bar[aria-pressed="true"] { opacity: 1 !important; background: color-mix(in srgb, var(--fg) 7%, transparent); }
+.act__bar[aria-pressed="true"] .act__barFill { background: var(--act-4); }
+.act__bar[aria-pressed="true"] .act__barLabel { color: var(--fg); }
 
 /* ---- Loading / unavailable ---- */
 .act__skeleton { display: grid; gap: 1rem; margin-top: 1.1rem; }
-.act__skeleton i { display: block; height: 7.5rem; border-radius: 0.5rem; background: var(--act-0); animation: act-wait 1.6s ease-in-out infinite; }
-@keyframes act-wait { 50% { opacity: 0.45; } }
+.act__skeleton i { display: block; height: 7.5rem; border-radius: 0.5rem; background: var(--act-0); }
+.act__skeleton i + i { height: 2.75rem; }
 .act__empty { margin-top: 1.1rem; display: grid; justify-items: start; gap: 0.35rem; }
 .act__emptyTitle { margin-top: 0.4rem; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.035em; color: var(--fg); }
 
-/* ---- Entrance: cards rise in turn, the bars grow (once, when reached) ---- */
+/* ---- Motion: the card rises once when reached; bars grow; the skeleton breathes ---- */
 @media (prefers-reduced-motion: no-preference) {
-  .act.is-in .act__card { animation: act-in 0.6s var(--ease) both; animation-delay: calc(var(--d, 0) * 70ms); }
-  .act.is-in.is-ready .act__barFill { animation: act-grow 0.7s var(--ease) both; animation-delay: calc(160ms + var(--i) * 30ms); }
+  .act.is-in .act__card { animation: act-in 0.6s var(--ease) both; }
+  .act.is-in .act__barFill { animation: act-grow 0.6s var(--ease) both; animation-delay: calc(120ms + var(--i) * 25ms); }
+  .act__skeleton i { animation: act-wait 1.6s ease-in-out infinite; }
 }
 @keyframes act-in { from { opacity: 0; transform: translateY(10px); } }
 @keyframes act-grow { from { transform: scaleY(0); } }
-
-/* ---- Two cards, side by side (equal halves) ---- */
-@media (min-width: 900px) {
-  .act__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
-  /* compact heatmaps: smaller squares; the year scrolls sideways in the card if it doesn't fit */
-  .act__heat { --cell-min: 8px; --gap: 2px; }
-  .act__wd, .act__months { font-size: 0.5625rem; }
-  .act__bars { gap: 0.25rem; }
-  .act__barLabel { font-size: 0.5625rem; }
+@keyframes act-wait { 50% { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) {
+  .act__cell, .act__bar, .act__barFill, .act__tab { transition: none; }
+  .act__cell.is-active { transform: none; }
 }
+
 /* ---- Narrow ---- */
 @media (max-width: 639px) {
-  .act__lead { flex-direction: column; align-items: flex-start; }
-  .act__panel { padding: 1rem 0.9rem 1.1rem; }
-  .act__panelHead { flex-wrap: wrap; row-gap: 0.25rem; }
+  .act__card { padding: 0.75rem 0.85rem 1rem; }
+  .act__tabs { flex: 1 1 100%; }
+  .act__tab { flex: 1; justify-content: center; padding: 0 0.5rem; }
+  .act__view { margin-left: auto; }
   .act__heat { --cell-min: 10px; --gap: 2px; }
-  .act__bars { gap: 0.2rem; }
-  .act__barTrack { height: 5.5rem; }
-  .act__barLabel { font-size: 0.5625rem; letter-spacing: -0.02em; }
   .act__nums { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 0.75rem; }
+  .act__bars { gap: 0.1rem; }
+  .act__bar { padding-inline: 0; }
+  .act__barLabel { font-size: 0.5625rem; letter-spacing: -0.03em; }
 }
 @media (max-width: 380px) {
-  .act__panelHead { flex-wrap: wrap; }
-  .act__view { margin-left: 0; }
+  .act__tabUnit { display: none; }
 }
 @media (pointer: coarse) {
-  .act__view { min-height: 44px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .act__cell.is-active { transform: none; }
+  .act__tab, .act__view { min-height: 44px; }
+  .act__reset { min-height: 36px; }
 }

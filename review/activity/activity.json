@@ -1,18 +1,23 @@
 [
   {
-    "name": "GitHub card: live GitHub data (heatmap + months)",
+    "name": "GitHub (selected first): live GitHub data (figures + heatmap + months)",
     "pass": true,
-    "detail": "{\"badge\":\"Updated 29 min ago\",\"fresh\":true,\"cells\":365,\"months\":13}"
+    "detail": "{\"badge\":\"Updated 2 min ago\",\"cells\":365,\"months\":13,\"nums\":4}"
   },
   {
-    "name": "the old summary / stats column is gone (not just hidden)",
+    "name": "one card, a two-tab switcher; only the selected panel is shown",
     "pass": true,
     "detail": ""
   },
   {
-    "name": "Claude card: totals agree with the source data exactly (total, this month, input, output)",
+    "name": "switcher: → moves to Claude Code and shows its panel",
     "pass": true,
-    "detail": "card 1,637,918,264 / 1,522,590,213 / 8,976 / 7,165,088 · source 1,637,918,264 / 1,522,590,213 / 8,976 / 7,165,088 (23 Oct 2025 – 22 Oct 2026)"
+    "detail": ""
+  },
+  {
+    "name": "Claude panel: figures agree with the source data exactly (total, input, output, active days)",
+    "pass": true,
+    "detail": "panel 1,685,798,350 / 9,454 / 7,566,669 / 22 · source 1,685,798,350 / 9,454 / 7,566,669 / 22 (30 Oct 2025 – 29 Oct 2026)"
   },
   {
     "name": "Claude totals: input + output + cache = total for every day (no double counting)",
@@ -20,24 +25,29 @@
     "detail": ""
   },
   {
-    "name": "Claude heatmap: every day's square carries its exact token count (20 days with data)",
+    "name": "Claude heatmap: every day's square carries its exact token count (22 days with data)",
     "pass": true,
     "detail": ""
   },
   {
-    "name": "Claude card: live badge while the collector runs",
+    "name": "Claude: live badge while the collector runs",
     "pass": true,
-    "detail": "Live · synced 8 min ago"
+    "detail": "Last synced 24 Oct 2026"
   },
   {
     "name": "hovering a Claude square shows its date and exact token count",
     "pass": true,
-    "detail": "42,958,516 tokens · 17 October 2026"
+    "detail": "9,499,732 tokens · 24 October 2026"
   },
   {
-    "name": "desktop: two equal cards side by side, same height",
+    "name": "month filter: picked month is pressed, other days fade, total = that month only",
     "pass": true,
-    "detail": "[{\"l\":144,\"w\":568.53125,\"h\":419.71875},{\"l\":727.46875,\"w\":568.53125,\"h\":419.71875}]"
+    "detail": "Showing September 2026 · 115,328,051 tokens (want 115,328,051)"
+  },
+  {
+    "name": "month filter: \"All months\" clears it",
+    "pass": true,
+    "detail": ""
   },
   {
     "name": "desktop: no horizontal overflow; no console errors",
@@ -75,23 +85,43 @@
     "detail": "Offline · synced just now"
   },
   {
-    "name": "768 light: cards stacked, full width, no overflow",
+    "name": "1440 light: no overflow (page or card), both sources",
     "pass": true,
-    "detail": "[{\"l\":36,\"t\":221,\"w\":696},{\"l\":36,\"t\":599,\"w\":696}]"
+    "detail": ""
   },
   {
-    "name": "768 dark: cards stacked, full width, no overflow",
+    "name": "1440 dark: no overflow (page or card), both sources",
     "pass": true,
-    "detail": "[{\"l\":36,\"t\":222,\"w\":696},{\"l\":36,\"t\":600,\"w\":696}]"
+    "detail": ""
   },
   {
-    "name": "390 light: cards stacked, full width, no overflow",
+    "name": "768 light: no overflow (page or card), both sources",
     "pass": true,
-    "detail": "[{\"l\":25,\"t\":216,\"w\":340},{\"l\":25,\"t\":626,\"w\":340}]"
+    "detail": ""
   },
   {
-    "name": "390 dark: cards stacked, full width, no overflow",
+    "name": "768 dark: no overflow (page or card), both sources",
     "pass": true,
-    "detail": "[{\"l\":25,\"t\":218,\"w\":340},{\"l\":25,\"t\":628,\"w\":340}]"
+    "detail": ""
+  },
+  {
+    "name": "390 light: no overflow (page or card), both sources",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "390 dark: no overflow (page or card), both sources",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "320 light: no overflow (page or card), both sources",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "320 dark: no overflow (page or card), both sources",
+    "pass": true,
+    "detail": ""
   }
 ]

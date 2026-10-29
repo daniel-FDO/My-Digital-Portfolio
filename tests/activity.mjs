@@ -1,12 +1,13 @@
 /* node tests/activity.mjs [url]     (default http://localhost:5174/, the dev server)
-   The Activity dashboard (components/activity/Activity.tsx) in headless Microsoft Edge:
-   - GitHub still shows live data; the old summary / stats column is gone
-   - the Claude Code card shows exactly what /api/claude-usage serves (totals, this month,
-     input, output; the heatmap's day counts) — compared number for number
-   - every state of the Claude card: live, stale (collector not running), not connected,
+   The Activity section (components/activity/Activity.tsx) in headless Microsoft Edge:
+   - one card with a GitHub | Claude Code switcher (tabs, arrow keys); GitHub shows live data
+   - the Claude Code panel shows exactly what /api/claude-usage serves (total, input,
+     output, active days; the heatmap's day counts) — compared number for number
+   - picking a month narrows the figures to that month and fades the other days
+   - every state of the Claude panel: live, stale (collector not running), not connected,
      unavailable, network failure, and offline after it had loaded
-   - layout: two equal cards side by side on desktop, stacked on narrow screens;
-     no horizontal overflow; both themes; no console errors
+   - layout: no horizontal overflow at desktop / tablet / phone widths; both themes;
+     no console errors
    Results: console + review/activity/activity.json */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,14 +35,17 @@ async function open({ viewport = { width: 1440, height: 1000 }, route, theme } =
   await page.waitForSelector('#activity', { timeout: 30000 });
   if (theme) await page.evaluate((t) => { document.documentElement.dataset.theme = t; }, theme);
   await page.evaluate(() => document.getElementById('activity').scrollIntoView());
-  await page.waitForFunction(() => [...document.querySelectorAll('#activity .act__badge')].every((b) => b.textContent !== 'Loading'), null, { timeout: 20000 }).catch(() => {});
+  // both sources finished loading (the badge only shows the selected one: look at the panels)
+  await page.waitForFunction(() => [...document.querySelectorAll('#activity .act__panel')].every((p) => !p.querySelector('.act__skeleton')), null, { timeout: 20000 }).catch(() => {});
   await sleep(400);
   return { ctx, page, errors };
 }
+const showClaude = async (page) => { await page.click('#actTab-cl'); await sleep(150); };
 const claude = (page) => page.evaluate(() => {
   const card = document.querySelector('.act__claude');
+  const badge = document.querySelector('#activity .act__badge');
   return {
-    badge: card.querySelector('.act__badge').textContent, fresh: card.querySelector('.act__badge').classList.contains('is-fresh'),
+    badge: badge.textContent, fresh: badge.classList.contains('is-fresh'),
     empty: card.querySelector('.act__emptyTitle')?.textContent ?? null,
     nums: [...card.querySelectorAll('.act__nums dd')].map((d) => d.title),
     cells: [...card.querySelectorAll('.act__cell')].map((c) => c.getAttribute('aria-label')),
@@ -55,13 +59,22 @@ try {
     const { ctx, page, errors } = await open();
     const api = await page.evaluate(() => fetch('/api/claude-usage').then((r) => r.json()));
     const gh = await page.evaluate(() => {
-      const card = document.querySelectorAll('#activity .act__panel')[0];
-      return { badge: card.querySelector('.act__badge').textContent, fresh: card.querySelector('.act__badge').classList.contains('is-fresh'), cells: card.querySelectorAll('.act__cell').length, months: card.querySelectorAll('.act__bar').length };
+      const card = document.querySelector('#actPanel-gh');
+      return { badge: document.querySelector('#activity .act__badge').textContent, cells: card.querySelectorAll('.act__cell').length, months: card.querySelectorAll('.act__bar').length, nums: card.querySelectorAll('.act__nums dd').length };
     });
-    check('GitHub card: live GitHub data (heatmap + months)', gh.cells > 360 && gh.months >= 12 && /Updated|Cached/.test(gh.badge), JSON.stringify(gh));
-    check('the old summary / stats column is gone (not just hidden)', (await page.locator('.act__summary, .act__stats, .act__side, .act__stat').count()) === 0);
+    check('GitHub (selected first): live GitHub data (figures + heatmap + months)', gh.cells > 360 && gh.months >= 12 && gh.nums === 4 && /Updated|Cached/.test(gh.badge), JSON.stringify(gh));
+    check('one card, a two-tab switcher; only the selected panel is shown', await page.evaluate(() =>
+      document.querySelectorAll('#activity .act__card').length === 1 && document.querySelectorAll('#activity [role="tab"]').length === 2
+      && document.querySelector('#actTab-gh').getAttribute('aria-selected') === 'true' && document.querySelector('#actPanel-cl').hidden));
+    // the switcher by keyboard
+    await page.focus('#actTab-gh');
+    await page.keyboard.press('ArrowRight');
+    await sleep(150);
+    check('switcher: → moves to Claude Code and shows its panel', await page.evaluate(() =>
+      document.activeElement?.id === 'actTab-cl' && document.querySelector('#actTab-cl').getAttribute('aria-selected') === 'true'
+      && !document.querySelector('#actPanel-cl').hidden && document.querySelector('#actPanel-gh').hidden));
     const c = await claude(page);
-    // what the card should say, worked out from the endpoint's own answer over the card's period
+    // what the panel should say, worked out from the endpoint's own answer over the panel's period
     const range = await page.evaluate(() => document.querySelector('#clRange').textContent);
     // the squares are listed row by row (one row per weekday): the period is their earliest → latest date
     const dayOf = (label) => new Date(label.split(' on ')[1] + ' UTC').toISOString().slice(0, 10);
@@ -70,23 +83,44 @@ try {
     const inRange = api.days.filter((d) => d.date >= from && d.date <= to);
     const sum = (k, l = inRange) => l.reduce((n, d) => n + d[k], 0);
     const nf = new Intl.NumberFormat('en-GB');
-    const want = [sum('total'), sum('total', inRange.filter((d) => d.date.startsWith(to.slice(0, 7)))), sum('input'), sum('output')].map((n) => nf.format(n));
+    const want = [sum('total'), sum('input'), sum('output'), inRange.filter((d) => d.total > 0).length].map((n) => nf.format(n));
     const got = c.nums.map((t) => t.match(/^[\d,]+/)?.[0]);
-    check('Claude card: totals agree with the source data exactly (total, this month, input, output)', JSON.stringify(got) === JSON.stringify(want), `card ${got.join(' / ')} · source ${want.join(' / ')} (${range})`);
+    check('Claude panel: figures agree with the source data exactly (total, input, output, active days)', JSON.stringify(got) === JSON.stringify(want), `panel ${got.join(' / ')} · source ${want.join(' / ')} (${range})`);
     check('Claude totals: input + output + cache = total for every day (no double counting)', api.days.every((d) => d.input + d.output + d.cacheWrite + d.cacheRead === d.total));
     // every day the source has in the period appears in the heatmap with its exact count
     const cellMap = new Map(c.cells.map((l) => [dayOf(l), l.split(' on ')[0]]));
     const wrong = inRange.filter((d) => cellMap.get(d.date) !== (d.total === 0 ? 'No tokens' : `${nf.format(d.total)} token${d.total === 1 ? '' : 's'}`)).map((d) => d.date);
     check(`Claude heatmap: every day's square carries its exact token count (${inRange.length} days with data)`, wrong.length === 0 && c.cells.length > 360, wrong.slice(0, 5).join(', '));
-    check('Claude card: live badge while the collector runs', api.live ? c.fresh && /Live/.test(c.badge) : !c.fresh, c.badge);
+    check('Claude: live badge while the collector runs', api.live ? c.fresh && /Live/.test(c.badge) : !c.fresh, c.badge);
     // a square's tooltip shows the date and the exact count
     const lastBox = await page.locator('.act__claude .act__cell').last().boundingBox();
     await page.mouse.move(lastBox.x + lastBox.width / 2, lastBox.y + lastBox.height / 2);
     await sleep(250);
     const tipText = await page.evaluate(() => document.querySelector('.mini-tip')?.textContent ?? '');
     check('hovering a Claude square shows its date and exact token count', /tokens? · \d{1,2} \w+ \d{4}/.test(tipText) || /No tokens · /.test(tipText), tipText);
-    const geo = await page.evaluate(() => [...document.querySelectorAll('#activity .act__panel')].map((c) => { const r = c.getBoundingClientRect(); return { l: r.left, w: r.width, h: r.height }; }));
-    check('desktop: two equal cards side by side, same height', Math.abs(geo[0].w - geo[1].w) < 1 && geo[1].l > geo[0].l + geo[0].w && Math.abs(geo[0].h - geo[1].h) < 1, JSON.stringify(geo));
+    // pick a month: the figures cover only it, the other days fade, the strip says which is picked
+    const bars = page.locator('#actPanel-cl .act__bar');
+    const n = await bars.count();
+    await bars.nth(n - 2).click();
+    await sleep(200);
+    const picked = await page.evaluate(() => {
+      const p = document.querySelector('#actPanel-cl');
+      const b = [...p.querySelectorAll('.act__bar')];
+      return {
+        key: b.findIndex((x) => x.getAttribute('aria-pressed') === 'true'),
+        dim: p.querySelectorAll('.act__cell.is-dim').length, all: p.querySelectorAll('.act__cell').length,
+        total: p.querySelector('.act__nums dd').title, label: p.querySelector('.act__scope .act__label').textContent,
+      };
+    });
+    const mKey = [...new Set(dates.map((d) => d.slice(0, 7)))][n - 2];
+    const mSum = sum('total', inRange.filter((d) => d.date.startsWith(mKey)));
+    check('month filter: picked month is pressed, other days fade, total = that month only',
+      picked.key === n - 2 && picked.dim > 300 && picked.dim < picked.all && picked.total.startsWith(mSum === 0 ? 'No tokens' : nf.format(mSum)),
+      `${picked.label} · ${picked.total} (want ${nf.format(mSum)})`);
+    await page.click('#actPanel-cl .act__reset');
+    await sleep(150);
+    check('month filter: "All months" clears it', await page.evaluate(() =>
+      document.querySelectorAll('#actPanel-cl .act__cell.is-dim').length === 0 && !document.querySelector('#actPanel-cl [aria-pressed="true"]')));
     check('desktop: no horizontal overflow; no console errors', (await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)) && errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
@@ -102,8 +136,9 @@ try {
   ];
   for (const [name, route, ok] of states) {
     const { ctx, page, errors } = await open({ route });
+    const gh = await page.evaluate(() => document.querySelector('#actPanel-gh').querySelectorAll('.act__cell').length);
+    await showClaude(page);
     const c = await claude(page);
-    const gh = await page.evaluate(() => document.querySelectorAll('#activity .act__panel')[0].querySelectorAll('.act__cell').length);
     check(`state: ${name}`, ok(c) && gh > 360 && errors.length === 0, `${c.badge}${c.empty ? ' · ' + c.empty : ''}${errors.length ? ' · ' + errors.join(' | ') : ''}`);
     await ctx.close();
   }
@@ -111,6 +146,7 @@ try {
   {
     let fail = false;
     const { ctx, page } = await open({ route: (r) => (fail ? r.abort() : r.fulfill({ json: sample([day1], new Date().toISOString(), { live: true }) })) });
+    await showClaude(page);
     const before = await claude(page);
     fail = true;
     await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, get: () => false }); document.dispatchEvent(new Event('visibilitychange')); });
@@ -120,12 +156,22 @@ try {
     await ctx.close();
   }
   // ---- themes and widths ----
-  for (const [w, h] of [[768, 1100], [390, 844]]) for (const theme of ['light', 'dark']) {
+  for (const [w, h] of [[1440, 1000], [768, 1100], [390, 844], [320, 700]]) for (const theme of ['light', 'dark']) {
     const { ctx, page, errors } = await open({ viewport: { width: w, height: h }, theme });
-    const geo = await page.evaluate(() => [...document.querySelectorAll('#activity .act__panel')].map((c) => { const r = c.getBoundingClientRect(); return { l: Math.round(r.left), t: Math.round(r.top), w: Math.round(r.width) }; }));
     const o = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-    check(`${w} ${theme}: cards stacked, full width, no overflow`, geo[0].l === geo[1].l && geo[1].t > geo[0].t && geo[0].w === geo[1].w && o <= 0 && errors.length === 0, JSON.stringify(geo));
-    await page.locator('#activity').screenshot({ path: path.join(out, `activity-${w}-${theme}.png`) });
+    // nothing in the card sticks out of it (the heatmap may scroll inside its own box)
+    const spill = () => page.evaluate(() => {
+      const card = document.querySelector('#activity .act__card').getBoundingClientRect();
+      return [...document.querySelectorAll('#activity .act__tools > *, #activity .act__nums, #activity .act__bars, #activity .act__scroll')]
+        .filter((e) => { const r = e.getBoundingClientRect(); return r.width && (r.left < card.left - 1 || r.right > card.right + 1); })
+        .map((e) => e.className);
+    });
+    const s1 = await spill();
+    await page.locator('#activity').screenshot({ path: path.join(out, `activity-${w}-${theme}-gh.png`) });
+    await showClaude(page);
+    const s2 = await spill();
+    await page.locator('#activity').screenshot({ path: path.join(out, `activity-${w}-${theme}-cl.png`) });
+    check(`${w} ${theme}: no overflow (page or card), both sources`, o <= 0 && !s1.length && !s2.length && errors.length === 0, [...s1, ...s2, ...errors].join(', '));
     await ctx.close();
   }
 } finally {
