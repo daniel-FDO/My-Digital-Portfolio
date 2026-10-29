@@ -1,6 +1,9 @@
 /* =========================================================
    HOME — one narrow column, small type, quiet widgets.
-   Colours are tokens (light first, dark under [data-theme="dark"]);
+   Colours are tokens (light first, dark under [data-theme="dark"]):
+   --brand (red-orange) is the main accent; --sage is a quiet second one,
+   only for interaction and status — focus rings, link hovers, selected
+   controls, "fresh" dots. Not for icons, tags, charts or decoration.
    sizes are in rem off a root that grows a little with the window.
    The folder pages (#detail) keep their own look: secret.css,
    about.css — loaded by home.js when one first opens.
@@ -17,9 +20,11 @@
   --widget-line: rgba(0, 0, 0, 0.08);
   --soft: rgba(30, 27, 24, 0.05); /* toolbar search, pills */
   --soft-2: rgba(30, 27, 24, 0.08);
-  --ring: #75716b;
-  --brand: #e0352b; /* one accent: the D, the second hand, badge icons */
+  --brand: #e0352b; /* the main accent: the D, the second hand, badge icons */
   --brand-soft: rgba(224, 53, 43, 0.12);
+  --sage: #5c6b4f; /* the second accent (see above); #A7B39A darkened for light: 5.1:1 on --bg */
+  --sage-soft: rgba(92, 107, 79, 0.12);
+  --ring: var(--sage); /* focus outlines */
   --marker: #938e86; /* flat list markers (timeline dots) */
   --mark-ink: #4f4a44; /* the footer "daniel" (original): soft charcoal, not black */
   --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -52,9 +57,10 @@
   --widget-line: rgba(255, 255, 255, 0.1);
   --soft: rgba(233, 232, 228, 0.08);
   --soft-2: rgba(233, 232, 228, 0.12);
-  --ring: #76736e;
   --brand: #ef4a3c;
   --brand-soft: rgba(239, 74, 60, 0.16);
+  --sage: #a7b39a; /* 8.6:1 on --bg, 7.8:1 on --card */
+  --sage-soft: rgba(167, 179, 154, 0.14);
   --marker: #5c5a56;
   --mark-ink: #bdbbb6; /* light grey, not pure white */
   --overlay: rgba(0, 0, 0, 0.4);
@@ -409,7 +415,7 @@ html.theme-switching *::after {
 .copy.is-done .copy__i--done {
   opacity: 1;
   transform: none;
-  color: var(--fg);
+  color: var(--sage);
 }
 .intro__mail {
   border-radius: 4px;
@@ -676,7 +682,7 @@ html.theme-switching *::after {
 .sec__link:hover,
 .more:hover {
   color: var(--fg);
-  text-decoration-color: currentColor;
+  text-decoration-color: var(--sage);
 }
 .more {
   display: inline-block;
@@ -816,7 +822,7 @@ html.theme-switching *::after {
   opacity: 1;
 }
 .row__repo:hover {
-  color: var(--fg);
+  color: var(--sage);
 }
 .rows > li:has(.row__repo) .row__top {
   padding-right: 3.5rem;
@@ -1895,7 +1901,7 @@ kbd {
 }
 .intro__mail:hover,
 .intro__mail:focus-visible {
-  text-decoration-color: currentColor;
+  text-decoration-color: var(--sage);
 }
 .pv {
   box-shadow: 0 12px 28px -18px #0008;

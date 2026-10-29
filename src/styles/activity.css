@@ -3,13 +3,13 @@
    A one-line descriptor, then one card: a switcher with the
    source's status, a row of figures, the heatmap, and a quiet
    month strip (which also filters by month).
-   Colours are the site's own: the neutral heatmap greys (--gh-*),
-   text tokens, and the red --brand for a few small accents;
-   Claude Code warms the greys slightly (.is-cl).
+   Colours are the site's own: the neutral heatmap greys (--gh-*) and
+   text tokens; --sage (home.css) marks state — the selected tab and
+   month, a fresh status dot, focus. Claude Code warms the greys
+   slightly (.is-cl).
    The squares' tooltip is .mini-tip (home.css).
    ========================================================= */
 .act {
-  --act-accent: var(--brand);
   --act-0: var(--gh-0);
   --act-1: var(--gh-1);
   --act-2: var(--gh-2);
@@ -42,7 +42,6 @@
 /* Claude Code: a quiet identity — its mark in Claude's colour, the greys warmed very slightly */
 .act__card.is-cl {
   --act-claude: #d97757;
-  --act-accent: var(--act-claude);
   --act-1: color-mix(in srgb, var(--gh-1) 82%, var(--act-claude) 18%);
   --act-2: color-mix(in srgb, var(--gh-2) 82%, var(--act-claude) 18%);
   --act-3: color-mix(in srgb, var(--gh-3) 84%, var(--act-claude) 16%);
@@ -67,8 +66,8 @@
 }
 .act__tab .act__mark { width: 14px; height: 14px; flex: none; }
 .act__tab:hover { color: var(--fg); }
-.act__tab[aria-selected="true"] { color: var(--fg); background: color-mix(in srgb, var(--fg) 9%, transparent); }
-.act__tab:focus-visible { outline: 1.5px solid var(--fg); outline-offset: 1px; }
+.act__tab[aria-selected="true"] { color: var(--fg); background: color-mix(in srgb, var(--fg) 9%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sage) 45%, transparent); }
+.act__tab:focus-visible { outline: 1.5px solid var(--ring); outline-offset: 1px; }
 .act__tabUnit { font: 0.625rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; }
 
 .act__badge {
@@ -80,7 +79,7 @@
 }
 .act__badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.6; }
 .act__badge.is-fresh { color: var(--fg); }
-.act__badge.is-fresh::before { opacity: 1; background: var(--act-accent); }
+.act__badge.is-fresh::before { opacity: 1; background: var(--sage); }
 .act__view {
   display: inline-flex; align-items: center; gap: 0.3rem;
   margin-left: auto; min-height: 30px;
@@ -100,8 +99,8 @@ a.act__view:hover { color: var(--fg); }
   font: 0.6875rem/1 var(--mono); color: var(--muted);
   transition: color var(--fast) ease, border-color var(--fast) ease;
 }
-.act__reset:hover { color: var(--fg); border-color: color-mix(in srgb, var(--fg) 30%, transparent); }
-.act__reset:focus-visible { outline: 1.5px solid var(--fg); outline-offset: 1px; }
+.act__reset:hover { color: var(--fg); border-color: color-mix(in srgb, var(--sage) 60%, transparent); }
+.act__reset:focus-visible { outline: 1.5px solid var(--ring); outline-offset: 1px; }
 .act__nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem 1rem; margin-top: 0.5rem; }
 .act__nums div { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
 .act__nums dt { font: 500 0.625rem/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -139,7 +138,7 @@ a.act__view:hover { color: var(--fg); }
 .act__cell.is-dim { opacity: 0.22; }
 .act__cell.is-active { transform: scale(1.4); z-index: 1; opacity: 1; }
 .act__cell.is-active::after { opacity: 1; }
-.act__cell:focus-visible { box-shadow: 0 0 0 1.5px var(--fg); }
+.act__cell:focus-visible { box-shadow: 0 0 0 1.5px var(--ring); }
 .act__heatFoot {
   display: flex; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; flex-wrap: wrap;
   margin-top: 0.6rem; font: 0.6875rem/1.5 var(--mono); color: var(--muted);
@@ -180,12 +179,12 @@ a.act__view:hover { color: var(--fg); }
 .act__bar.is-zero .act__barFill { background: var(--act-0); }
 .act__barLabel { font: 0.625rem/1 var(--mono); color: var(--muted); text-align: center; white-space: nowrap; overflow: hidden; }
 .act__bar:hover .act__barFill { background: var(--act-3); }
-.act__bar:focus-visible { box-shadow: 0 0 0 1.5px var(--fg); }
+.act__bar:focus-visible { box-shadow: 0 0 0 1.5px var(--ring); }
 .act__bars.has-pick .act__bar { opacity: 0.5; }
 .act__bars.has-pick .act__bar:hover, .act__bars.has-pick .act__bar:focus-visible { opacity: 0.85; }
-.act__bar[aria-pressed="true"] { opacity: 1 !important; background: color-mix(in srgb, var(--fg) 7%, transparent); }
+.act__bar[aria-pressed="true"] { opacity: 1 !important; background: var(--sage-soft); }
 .act__bar[aria-pressed="true"] .act__barFill { background: var(--act-4); }
-.act__bar[aria-pressed="true"] .act__barLabel { color: var(--fg); }
+.act__bar[aria-pressed="true"] .act__barLabel { color: var(--sage); }
 
 /* ---- Loading / unavailable ---- */
 .act__skeleton { display: grid; gap: 1rem; margin-top: 1.1rem; }
