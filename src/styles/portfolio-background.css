@@ -213,8 +213,15 @@ html.pbg-on body { background: transparent; }
   --streak-head: #b0613a;                      /* muted copper */
   --streak-trail-rgb: 184, 106, 68;
 }
-.pbg__lines, .pbg__streak { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pbg__streak { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* the canvas is --bleed px (topo.ts: TOPO.bleed) bigger than the screen on every side */
 .pbg__lines {
+  position: absolute; display: block;
+  top: calc(-1 * var(--bleed, 0px)); left: calc(-1 * var(--bleed, 0px));
+  width: calc(100% + 2 * var(--bleed, 0px)); height: calc(100% + 2 * var(--bleed, 0px));
+}
+.pbg__linesMask {
+  position: absolute; inset: 0; overflow: hidden;
   /* two corners of lines: upper right and lower left; the text column stays clear */
   -webkit-mask-image:
     radial-gradient(ellipse 62% 78% at 100% 0%, #000 30%, rgba(0, 0, 0, 0.5) 58%, transparent 82%),
@@ -226,7 +233,7 @@ html.pbg-on body { background: transparent; }
 @media (max-width: 639px) {
   .pbg--topo { --topo-line: rgba(233, 232, 228, 0.07); }
   :root:not([data-theme="dark"]) .pbg--topo { --topo-line: rgba(30, 27, 24, 0.08); }
-  .pbg__lines {
+  .pbg__linesMask {
     -webkit-mask-image:
       radial-gradient(ellipse 80% 42% at 100% 0%, #000 25%, transparent 80%),
       radial-gradient(ellipse 80% 40% at 0% 100%, #000 25%, transparent 80%);
@@ -237,4 +244,19 @@ html.pbg-on body { background: transparent; }
 }
 @media (prefers-reduced-motion: reduce) {
   .pbg__streak { display: none; }
+}
+/* The lines drift: a few px and a fraction of a degree over two minutes (about
+   half a pixel a second), so they feel alive without ever drawing the eye.
+   Transform only, on the compositor: no repainting, no script per frame. Held
+   while the tab is hidden or paused; still with reduced motion. Its reach
+   (~25px at the corners) stays inside the canvas's 32px bleed. */
+@media (prefers-reduced-motion: no-preference) {
+  .pbg__lines { animation: pbg-topo-drift 120s ease-in-out infinite; will-change: transform; }
+  .pbg.is-paused .pbg__lines { animation-play-state: paused; }
+}
+@keyframes pbg-topo-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  25% { transform: translate3d(-10px, 6px, 0) rotate(-0.15deg) scale(1.006); }
+  50% { transform: translate3d(-4px, 13px, 0) rotate(0.1deg) scale(1.012); }
+  75% { transform: translate3d(8px, 5px, 0) rotate(0.18deg) scale(1.004); }
 }

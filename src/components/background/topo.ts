@@ -5,7 +5,10 @@
      seeded noise height field, so the map is the same on every visit.
      Drawn once, and again after a resize; a theme change only
      repaints them in the new colours. A CSS mask keeps them to the
-     upper-right and lower-left, and the middle quiet. They never move.
+     upper-right and lower-left, and the middle quiet. The canvas is
+     drawn TOPO.bleed px bigger than the screen on every side, so the
+     CSS drift (portfolio-background.css) never shows an empty edge;
+     the drawing itself never changes while it moves.
    - streak: now and then one small light crosses the screen
      diagonally (top / right edge → bottom / left), a tiny point with
      a short tapering trail, fading in and out near the edges. One at
@@ -26,6 +29,8 @@ export const TOPO = {
   spacing: 19, mobileSpacing: 28,
   /** marching-squares cell, px */
   cell: 7, mobileCell: 9,
+  /** extra map drawn past each edge of the screen, px (more than the drift's reach) */
+  bleed: 32,
   /** every n-th line is terracotta */
   accentEvery: 11,
   /** the streak: crossing time and the pause after it (seconds, random in range) */
@@ -47,14 +52,17 @@ function height(x: number, y: number) {
   return fbm(u, v, 3) * 1.55 + (u - v) * 0.42;
 }
 
-/** Contour segments: [x1, y1, x2, y2, …], plain and accent lines apart */
-function trace(w: number, h: number, narrow: boolean) {
+/** Contour segments: [x1, y1, x2, y2, …], plain and accent lines apart.
+    With `bleed`, the area is that much bigger on every side (coordinates start at its
+    top-left corner) and the map stays lined up with the screen. */
+function trace(w: number, h: number, narrow: boolean, bleed = 0) {
   const c = narrow ? TOPO.mobileCell : TOPO.cell;
+  w += 2 * bleed; h += 2 * bleed;
   const nx = Math.ceil(w / c) + 2, ny = Math.ceil(h / c) + 2;
   const f = new Float32Array(nx * ny);
   let lo = Infinity, hi = -Infinity, grad = 0;
   for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-    const v = height((i - 1) * c, (j - 1) * c);
+    const v = height((i - 1) * c - bleed, (j - 1) * c - bleed);
     f[j * nx + i] = v;
     if (v < lo) lo = v;
     if (v > hi) hi = v;
@@ -154,12 +162,15 @@ export function createTopo(root: HTMLElement, contours: HTMLCanvasElement, strea
   };
 
   /* ---- contours ---- */
-  function paintContours() { paintLines(cx, lines, col, w, h, dpr); }
+  const B = TOPO.bleed;
+  function paintContours() { paintLines(cx, lines, col, w + 2 * B, h + 2 * B, dpr); }
   function layout() {
     w = innerWidth; h = innerHeight; narrow = w < 640;
     dpr = Math.min(2, devicePixelRatio || 1);
-    for (const c of [contours, streak]) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
-    lines = trace(w, h, narrow);
+    contours.width = Math.round((w + 2 * B) * dpr); contours.height = Math.round((h + 2 * B) * dpr);
+    streak.width = Math.round(w * dpr); streak.height = Math.round(h * dpr);
+    contours.style.setProperty('--bleed', B + 'px');
+    lines = trace(w, h, narrow, B);
     paintContours();
     flight = null; drawStreak();
   }

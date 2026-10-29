@@ -4,9 +4,10 @@
    CURRENT LOOK: BACKGROUND_STYLE = 'topo' — fine topographic contour
    lines at the upper-right and lower-left (the middle stays quiet),
    in grey with the odd muted terracotta line, over the atmosphere's
-   faint colour fields and grain below. Now and then a small light
-   streaks diagonally across behind the page. The drawing and the
-   streak live in background/topo.ts.
+   faint colour fields and grain below. The lines drift very slowly
+   (a 2-minute CSS loop of a few px, compositor only), and now and
+   then a small light streaks diagonally across behind the page. The
+   drawing and the streak live in background/topo.ts.
 
    ATMOSPHERE (BACKGROUND_STYLE = 'atmosphere'), the look before: a quiet backdrop:
    the near-black charcoal base with three very broad, very faint
@@ -221,7 +222,8 @@ function Topo() {
     <div className="pbg pbg--air pbg--topo" ref={rootRef} aria-hidden="true">
       <div className="pbg__air pbg__air--a"></div>
       <div className="pbg__air pbg__air--b"></div>
-      <canvas className="pbg__lines" ref={linesRef}></canvas>
+      {/* the mask stays put; the lines drift slowly under it (portfolio-background.css) */}
+      <div className="pbg__linesMask"><canvas className="pbg__lines" ref={linesRef}></canvas></div>
       <canvas className="pbg__streak" ref={streakRef}></canvas>
       <div className="pbg__grain"></div>
     </div>
