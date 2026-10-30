@@ -46,8 +46,13 @@ export function ProjectShowcase() {
   const showTimer = useRef(0);
   const hideTimer = useRef(0);
 
-  const show = useCallback((i: number) => { clearTimeout(hideTimer.current); setActive(i); setShown(i); }, []);
   const hide = useCallback(() => { clearTimeout(showTimer.current); setActive(null); }, []);
+  // A project with nothing to preview (no poster or video) never opens an empty stage
+  const show = useCallback((i: number) => {
+    const p = PROJECTS[i];
+    if (!p?.poster && !p?.video) { hide(); return; }
+    clearTimeout(hideTimer.current); setActive(i); setShown(i);
+  }, [hide]);
   const hideSoon = useCallback(() => { clearTimeout(showTimer.current); clearTimeout(hideTimer.current); hideTimer.current = window.setTimeout(hide, HIDE_DELAY); }, [hide]);
   const keep = () => clearTimeout(hideTimer.current);
   useEffect(() => () => { clearTimeout(showTimer.current); clearTimeout(hideTimer.current); }, []);

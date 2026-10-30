@@ -113,6 +113,7 @@ async function capture(browserBox, project) {
   const todo = PROJECTS.filter((p) => {
     // a screenshot taken by hand (e.g. inside the gallery, past its entrance) is never replaced
     if (p.capture === false) { results.push({ name: p.name, status: 'skipped (captured by hand)' }); return false; }
+    if (!p.image) { results.push({ name: p.name, status: 'skipped (no screenshot)' }); return false; }
     const fresh = !FORCE && isFresh(path.join(OUT, p.image.replace(/^previews\//, '')));
     if (fresh) results.push({ name: p.name, status: 'skipped (fresh)' });
     return !fresh;

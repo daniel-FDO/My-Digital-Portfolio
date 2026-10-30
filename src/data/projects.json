@@ -73,5 +73,13 @@
     ],
     "video": "previews/video/rock-paper-scissors.mp4",
     "poster": "previews/video/rock-paper-scissors.jpg"
+  },
+  {
+    "name": "Circle",
+    "category": "Social app",
+    "url": "https://circle-daniel.vercel.app/home",
+    "description": "A social app for creating and returning to your circles.",
+    "video": "previews/video/circle.mp4",
+    "poster": "previews/video/circle.jpg"
   }
 ]
