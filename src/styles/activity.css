@@ -20,10 +20,6 @@
   --act-radius: 1rem;
 }
 
-.act__desc {
-  margin-top: 0.85rem; max-width: 52ch;
-  font-size: 0.875rem; line-height: 1.5; color: var(--muted);
-}
 .act__label {
   font: 500 0.6875rem/1.4 var(--mono);
   letter-spacing: 0.12em; text-transform: uppercase;

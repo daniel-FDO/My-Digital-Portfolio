@@ -191,8 +191,6 @@ export function Activity() {
         <h2 className="h" id="activityTitle">Activity</h2>
         <a className="sec__link" href={C.profileUrl} target="_blank" rel="noopener noreferrer">GitHub<NewTab /></a>
       </div>
-      <p className="act__desc">The last 12 months, day by day: contributions on GitHub and tokens used in Claude Code — two separate measures, shown one at a time.</p>
-
       <div className={`act__card${source === 'cl' ? ' is-cl' : ''}`}>
         <div className="act__tools">
           <div className="act__tabs" role="tablist" aria-label="Activity source" onKeyDown={onTabKey}>
