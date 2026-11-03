@@ -1,6 +1,5 @@
 /* Seeded value noise (deterministic: the same pattern on every visit).
-   Shared by the background's contours (background/topo.ts) and the
-   gallery's photo contour maps (gallery/isophote.ts). */
+   Used by the background's contours (background/topo.ts). */
 export function hash(x: number, y: number, seed: number) {
   let h = (x * 374761393 + y * 668265263 + seed * 2147483647) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);

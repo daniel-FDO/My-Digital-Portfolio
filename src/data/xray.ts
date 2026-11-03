@@ -130,12 +130,12 @@ export const XRAY: XrayEntry[] = [
   },
   {
     id: 'gallery',
-    label: 'Photo carousel',
+    label: 'Photo fan',
     component: 'Gallery',
     file: 'src/components/Gallery.tsx',
     dataSource: { short: 'gallery.ts', detail: 'src/data/gallery.ts; the photos in public/images/gallery/.', sources: ['site-data'] },
     refresh: STATIC,
-    fallback: 'If the carousel can’t start, a plain scrolling strip of the same photos shows instead.',
+    fallback: 'With reduced motion, the cards appear in place without the opening animation.',
   },
   {
     id: 'activity',
