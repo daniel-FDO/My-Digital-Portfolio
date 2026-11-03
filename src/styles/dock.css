@@ -1,8 +1,10 @@
 /* =========================================================
-   DOCK (DockBar.tsx) — one floating bar of tinted frosted glass.
-   Search · divider · theme · back to top. It never changes position
-   while you scroll; on hover / keyboard focus (wide screens, precise
-   pointer) the two icon buttons slide their labels open.
+   DOCK (DockBar.tsx) — one floating bar of tinted glass, near-opaque.
+   Search or ask · the section button (below 1180px) · divider · theme
+   · back to top. Scrolling down folds the search label; on phones the
+   bar slides away while you scroll down and returns on scroll up. On
+   hover / keyboard focus (wide screens, precise pointer) the two icon
+   buttons slide their labels open.
    Revert: ENABLE_DOCK_REDESIGN = false in Dock.tsx.
    ========================================================= */
 
@@ -20,6 +22,8 @@
   --glass-muted: var(--muted);
   --glass-edge: color-mix(in srgb, var(--fg) 8%, transparent);
   --glass-divider: color-mix(in srgb, var(--fg) 16%, transparent);
+  /* the bars themselves: near-opaque, so page text never shows through */
+  --glass-solid: color-mix(in srgb, var(--card) 96%, transparent);
 }
 :root[data-theme="dark"] {
   --glass-base: color-mix(in srgb, var(--card) 76%, transparent);
@@ -30,7 +34,7 @@
 }
 /* Keep text readable when backdrop blur is unavailable. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  :root, :root[data-theme="dark"] { --glass-base: var(--card); }
+  :root, :root[data-theme="dark"] { --glass-base: var(--card); --glass-solid: var(--card); }
 }
 
 .dock2 {
@@ -45,12 +49,15 @@
   padding: 0 7px;
   border-radius: 20px;
   border: 1px solid var(--glass-line);
-  background: var(--glass-tint), var(--glass-base);
+  background: var(--glass-tint), var(--glass-solid);
   -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
   color: var(--ink);
   font-family: var(--font);
+  transition: transform 0.45s var(--ease);
 }
+/* phones, scrolling down past 400px: out of the way below the screen */
+.dock2.is-hidden { transform: translateY(calc(100% + 24px + env(safe-area-inset-bottom))); }
 
 /* the highlight pill that glides to the hovered item */
 .dock2__pill {
@@ -75,8 +82,12 @@
   border-radius: 13px;
   color: var(--ink-2);
   text-align: left;
-  transition: color 0.16s ease;
+  overflow: hidden;
+  transition: color 0.16s ease, width 0.4s var(--ease), padding 0.4s var(--ease), gap 0.4s var(--ease);
 }
+.dock2.is-compact .dock2__search { width: 44px; padding: 0 13px; gap: 0; }
+.dock2__label, .dock2__keys { transition: opacity 0.25s ease; }
+.dock2.is-compact .dock2__label, .dock2.is-compact .dock2__keys { opacity: 0; }
 .dock2__search:hover, .dock2__search[aria-expanded="true"] { color: var(--ink); }
 .dock2__glass {
   width: 17px; height: 17px; flex: none;
@@ -94,6 +105,21 @@
   color: var(--glass-muted);
 }
 
+/* ---- The current section (below 1180px): opens the section sheet ---- */
+.dock2__sect {
+  position: relative;
+  display: flex; align-items: center; gap: 8px; flex: none;
+  min-width: 44px; height: 44px; padding: 0 12px;
+  border-radius: 12px;
+  color: var(--glass-ink);
+  font: 500 13.5px/1 var(--font); letter-spacing: -0.01em; white-space: nowrap;
+  transition: color 0.16s ease;
+}
+.dock2__sect-n { font: 500 11px/1 var(--mono); color: var(--brand); }
+.dock2__sect-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.dock2__caret { width: 14px; height: 14px; flex: none; fill: none; stroke: var(--glass-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dock2__sect:focus-visible { outline: 2px solid var(--glass-ink); outline-offset: 2px; }
+
 .dock2__divider { width: 1px; height: 24px; margin: 0 6px; flex: none; background: var(--glass-pill); }
 
 /* ---- Theme / back to top: icon buttons whose labels slide open ---- */
@@ -107,6 +133,16 @@
   transition: color 0.16s ease, transform 0.16s ease, padding 0.38s var(--spring);
 }
 .dock2__btn:hover { color: var(--ink); }
+/* back to top: away (no width, not focusable) until you've scrolled 60% of a screen */
+.dock2__top { padding: 0 6px; overflow: hidden; transition: color 0.16s ease, transform 0.16s ease, padding 0.38s var(--spring), min-width 0.4s var(--ease), width 0.4s var(--ease), opacity 0.3s ease, margin 0.4s var(--ease); }
+.dock2__top.is-away { min-width: 0; width: 0; padding: 0; margin-left: -4px; opacity: 0; pointer-events: none; }
+.dock2__top.is-away .dock2__more { display: none; }
+.dock2__ringwrap { position: relative; display: grid; place-items: center; width: 32px; height: 32px; flex: none; }
+.dock2__ring { position: absolute; inset: 0; width: 32px !important; height: 32px !important; transform: rotate(-90deg); }
+.dock2__ring circle { fill: none; stroke-width: 1.5; }
+.dock2__track { stroke: var(--glass-divider); }
+.dock2__prog { stroke: var(--brand); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.dock2__ringwrap .dock2__up { width: 16px; height: 16px; }
 .dock2__search:active, .dock2__btn:active { transform: scale(0.96); }
 .dock2__btn svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .dock2__search:focus-visible, .dock2__btn:focus-visible { outline: 2px solid var(--glass-ink); outline-offset: 2px; color: var(--ink); }
@@ -164,16 +200,20 @@
 }
 
 /* ---- Narrow: the full width minus 16px each side; no expanding; the shortcut goes when tight ---- */
-@media (max-width: 639px) {
-  .dock2 { left: 16px; right: 16px; transform: none; bottom: calc(16px + env(safe-area-inset-bottom)); }
-  .dock2__search { width: auto; flex: 1; }
+@media (max-width: 640px) {
+  .dock2 { left: 16px; right: 16px; transform: none; bottom: calc(16px + env(safe-area-inset-bottom)); gap: 2px; padding: 0 5px; }
+  .dock2.is-hidden { transform: translateY(calc(100% + 24px + env(safe-area-inset-bottom))); }
+  .dock2__search, .dock2.is-compact .dock2__search { width: 44px; flex: none; padding: 0 13px; gap: 0; }
+  .dock2__label, .dock2__keys { display: none; }
+  .dock2__sect { flex: 1; min-width: 0; padding: 0 10px; }
   .dock2__btn { padding: 0; width: 44px; }
+  .dock2__top { padding: 0 6px; }
+  .dock2__divider { margin: 0 2px; }
 }
-@media (max-width: 479px) {
-  .dock2__keys { display: none; }
-}
+/* the shortcut chip is for keyboards: not on touch screens */
+@media (pointer: coarse) { .dock2__keys { display: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .dock2__pill, .dock2__search, .dock2__btn, .dock2__more, .dock2__more > span, .dock2__glass, .dock2__btn[data-tip]::after { transition: none; }
+  .dock2, .dock2__pill, .dock2__search, .dock2__btn, .dock2__top, .dock2__label, .dock2__keys, .dock2__more, .dock2__more > span, .dock2__glass, .dock2__btn[data-tip]::after { transition: none; }
   .dock2__more > span { transform: none; filter: none; }
   .dock2__search:active, .dock2__btn:active { transform: none; }
 }
@@ -181,3 +221,37 @@
 /* The section dock's narrow row sits 8px above this dock (section-nav.css) */
 :root:has(.dock2) .snav--row { --tb-bottom: 22px; --tb-h: 58px; }
 @media (max-width: 639px) { :root:has(.dock2) .snav--row { --tb-bottom: 16px; } }
+
+/* ---- The section sheet (SectionSheet.tsx): opened by the dock's section button, above the dock ---- */
+.snav-sheet {
+  width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 120px);
+  margin: auto auto calc(92px + env(safe-area-inset-bottom));
+  padding: 0;
+  border: 1px solid var(--glass-line); border-radius: 20px;
+  background: var(--card); color: var(--fg);
+  box-shadow: var(--glass-shadow), 0 30px 80px -24px rgba(0, 0, 0, 0.5);
+}
+.snav-sheet::backdrop { background: rgba(0, 0, 0, 0.45); }
+.snav-sheet__head { display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 2px 18px; }
+.snav-sheet__title { font: 500 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.snav-sheet__close {
+  display: grid; place-items: center; width: 44px; height: 44px;
+  border: 0; border-radius: 12px; background: transparent; color: var(--muted);
+  font: 400 1.4rem/1 var(--font); cursor: var(--cur-link, pointer);
+}
+.snav-sheet__close:hover { color: var(--fg); background: var(--soft); }
+.snav-sheet__list { list-style: none; margin: 0; padding: 0 8px 8px; }
+.snav-sheet__item {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; min-height: 44px; padding: 0 12px;
+  border: 0; border-radius: 12px; background: transparent;
+  color: var(--muted); font: 500 14px/1.2 var(--font); text-align: left;
+  cursor: var(--cur-link, pointer);
+}
+.snav-sheet__item:hover { color: var(--fg); background: var(--soft); }
+.snav-sheet__item[aria-current] { color: var(--fg); background: var(--soft-2); }
+.snav-sheet__n { width: 20px; font: 500 11px/1 var(--mono); color: var(--muted); }
+.snav-sheet__item[aria-current] .snav-sheet__n { color: var(--brand); }
+.snav-sheet__label { flex: 1; }
+.snav-sheet__item svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.snav-sheet__item:focus-visible, .snav-sheet__close:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }

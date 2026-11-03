@@ -72,7 +72,7 @@ const contrast = (page, sel) => page.evaluate((sel) => {
 }, sel);
 const label = (page, sel) => page.locator(sel).first().evaluate((e) => e.textContent.trim());
 const overflowX = (page) => page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
-const toggleTheme = (page) => page.getByRole('button', { name: /Switch to (light|dark) theme/ }).first().click();
+const toggleTheme = (page) => page.evaluate(() => document.getElementById('themeToggle').click());   // the phone dock may be tucked away after scrolling
 
 try {
   /* ---- 1. the real data (TODO entries only): nothing ships, X-ray stays and still works ---- */

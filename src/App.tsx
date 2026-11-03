@@ -102,7 +102,7 @@ export function App() {
       {/* Soft blur along the bottom edge, under the toolbar */}
       <div className="edge" aria-hidden="true" inert={covered}></div>
 
-      <Dock inert={behind} menuOpen={menuOpen} onAsk={() => { if (!folder.isOpen) setMenuOpen(true); }} onTop={backToTop} />
+      <Dock inert={behind} menuOpen={menuOpen} onAsk={() => { if (!folder.isOpen) setMenuOpen(true); }} onTop={backToTop} onGo={actions.go} />
 
       <SectionNav inert={behind} onGo={actions.go} onTop={backToTop} />
 

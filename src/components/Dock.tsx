@@ -24,6 +24,8 @@ interface Props {
   menuOpen: boolean;
   onAsk: () => void;
   onTop: () => void;
+  /** scroll to a section and focus its heading (the dock's section sheet) */
+  onGo: (id: string) => void;
 }
 
 /** The redesigned dock (DockBar.tsx, dock.css). false = the previous toolbar below. */

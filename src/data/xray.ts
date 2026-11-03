@@ -183,6 +183,16 @@ const ALL_ENTRIES: XrayEntry[] = [
     refresh: STATIC,
     fallback: 'It’s a real mailto: form, so it still opens your email app if the page’s script doesn’t run.',
   },
+
+  /* ---- Navigation (fixed to the screen) ---- */
+  {
+    id: 'dock',
+    label: 'The dock: search or ask, the current section, theme and back to top',
+    component: 'DockBar',
+    file: 'src/components/DockBar.tsx',
+    dataSource: { short: 'the page', detail: 'Search opens the command menu (Ctrl K); the section button and the back-to-top ring follow your scrolling.', sources: ['site-data'] },
+    refresh: { short: 'on scroll', detail: 'Back to top appears after 60% of a screen; scrolling down folds the search label (and on phones tucks the dock away) until you scroll up.' },
+  },
 ];
 
 /* The hero grid's last tile is one of these (data/heroSlot.ts): only the one on the page is described */
