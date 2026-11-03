@@ -1,0 +1,127 @@
+[
+  {
+    "name": "writes itself when the card comes into view",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "the ink grows while it writes",
+    "pass": true,
+    "detail": "0 → 1128 chars of path"
+  },
+  {
+    "name": "finishes in rest, with the full stop stamped",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "the loop sleeps once it is still",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "accessible: one focusable button named \"Daniel\"",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "the name stays clear of the character (1440)",
+    "pass": true,
+    "detail": "ink ends 455, him at 586"
+  },
+  {
+    "name": "a pointer sweeping across bends the ink",
+    "pass": true,
+    "detail": "18.9 units"
+  },
+  {
+    "name": "grabbing pulls the line like a rubber band",
+    "pass": true,
+    "detail": "31.6 units"
+  },
+  {
+    "name": "grabbing shows the grabbing cursor",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "let go, it springs back",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "and settles completely",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "a drag is not a click (no rewrite)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "a click erases it…",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "…and writes it again",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "each take is a little different",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "Enter writes it again",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "→ plucks the line",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "scrolled away mid-write: it jumps to the finished name",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: the name is simply there",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: nothing wobbles",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: a click shows a new take at once",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "reduced motion: no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "the name stays clear of the character (768)",
+    "pass": true,
+    "detail": "ink ends 351, him at 605"
+  },
+  {
+    "name": "the name stays clear of the character (390)",
+    "pass": true,
+    "detail": "ink ends 220, him at 259"
+  }
+]

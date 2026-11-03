@@ -21,7 +21,9 @@
     "test:name-fonts": "node tests/name-fonts.mjs",
     "usage:sync": "node scripts/claude-usage-sync.mjs",
     "usage:watch": "node scripts/claude-usage-sync.mjs --watch",
-    "test:activity": "node tests/activity.mjs"
+    "test:activity": "node tests/activity.mjs",
+    "test:name": "node tests/name-script.mjs",
+    "test:hero-slot": "node tests/hero-slot.mjs"
   },
   "engines": {
     "node": ">=21.7"

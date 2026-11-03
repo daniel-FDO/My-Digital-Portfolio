@@ -82,9 +82,11 @@ try {
     check('card renders live, with a sibling actions button', (await page.locator('.dnc > button').count()) === 2 && (await page.locator('.dnc__btn button').count()) === 0);
     const tb = await trig.boundingBox();
     check('actions button hit area ≥ 44 × 44 px', tb.width >= 44 && tb.height >= 44, `${tb.width}×${tb.height}`);
-    // the resting weight from the stylesheet (the letters' inline weight swells while the name animates)
-    const font = await page.evaluate(() => { const x = document.createElement('span'); x.className = 'daniel__ch'; document.querySelector('.daniel__word').append(x); const s = getComputedStyle(x); queueMicrotask(() => x.remove()); return { family: s.fontFamily, wght: s.fontVariationSettings, ready: document.fonts.check('560 64px "Nunito Variable"') }; });
-    check('name set in the bundled rounded font, medium weight', /Nunito/.test(font.family) && /560/.test(font.wght) && font.ready, JSON.stringify(font));
+    // the name: handwritten (nameScript.ts; its own checks are in tests/name-script.mjs); the label stays in the rounded font
+    await page.waitForFunction(() => document.querySelector('.daniel__word')?.__script?.mode === 'rest', null, { timeout: 15000 }).catch(() => {});
+    const name = await page.evaluate(() => ({ ink: [...document.querySelectorAll('.daniel__ink')].map((p) => (p.getAttribute('d') || '').length), label: getComputedStyle(document.querySelector('.daniel > .w__label')).fontFamily }));
+    check('name is the handwritten stroke, labelled "Daniel"', (await page.getByRole('button', { name: 'Daniel', exact: true }).count()) === 1 && name.ink.length === 2 && name.ink.every((n) => n > 100), JSON.stringify(name.ink));
+    check('label set in the bundled rounded font', /Nunito/.test(name.label), name.label);
     check('no hint line under the name', (await page.locator('.daniel__hint').count()) === 0);
 
     // --- hover ---

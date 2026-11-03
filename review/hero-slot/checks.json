@@ -1,0 +1,372 @@
+[
+  {
+    "name": "real data: the X-ray tile keeps its place",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "real data: the slot is described as the X-ray tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "the X key still toggles X-ray",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "no page errors (real data)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed (dark): replaces the X-ray tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: label \"Fixed · 01 / 03\", uppercase mono",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: the FIX label is in --brand (dark theme; light uses a deeper shade of it for contrast)",
+    "pass": true,
+    "detail": "rgb(239, 74, 60)"
+  },
+  {
+    "name": "fixed: project chip and \"View fix ↗\" (new tab)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: Next moves on",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: the new position is announced politely",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: a long field is cut short and offers \"Read more\"",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: \"Read more\" opens the whole entry in a modal dialog",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: the dialog holds the full text",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: focus moves into the dialog",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: arrow keys inside the dialog don't change the card",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: Esc closes it and focus returns to \"Read more\"",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: it wraps round (Previous from 01 → 03)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: → on the focused tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: ← on the focused tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: the tile shows a focus ring",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: a slide plays between cards",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: a swipe to the left goes to the next bug",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: buttons have accessible names",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed (dark): .fx__title contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "14.66"
+  },
+  {
+    "name": "fixed (dark): .fx__rows dd contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "14.66"
+  },
+  {
+    "name": "fixed (dark): .fx__rows dt contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.74"
+  },
+  {
+    "name": "fixed (dark): .fx__fix dt contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "4.89"
+  },
+  {
+    "name": "fixed (dark): .fx .w__label contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.74"
+  },
+  {
+    "name": "fixed (dark): no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed (light): replaces the X-ray tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed (light): .fx__title contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "16.20"
+  },
+  {
+    "name": "fixed (light): .fx__rows dd contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "16.20"
+  },
+  {
+    "name": "fixed (light): .fx__rows dt contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.17"
+  },
+  {
+    "name": "fixed (light): .fx__fix dt contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.09"
+  },
+  {
+    "name": "fixed (light): .fx .w__label contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.17"
+  },
+  {
+    "name": "fixed (light): no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: one entry → no arrows",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: only TODO / empty entries → X-ray stays",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed: reduced motion → instant change, no slide",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed at 320 (dark): everything inside the tile, no sideways scroll",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed at 320 (dark): arrow targets ≥ 24 px",
+    "pass": true,
+    "detail": "28×28"
+  },
+  {
+    "name": "fixed at 320: \"Read more\" is a bottom sheet",
+    "pass": true,
+    "detail": "{\"x\":0,\"y\":442.171875,\"width\":320,\"height\":317.828125}"
+  },
+  {
+    "name": "fixed at 320 (light): everything inside the tile, no sideways scroll",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "fixed at 320 (light): arrow targets ≥ 24 px",
+    "pass": true,
+    "detail": "28×28"
+  },
+  {
+    "name": "setup (dark): replaces the X-ray tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: label \"Setup · 4 things\"",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: one button per thing, named after it",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: Tab order is reading order",
+    "pass": true,
+    "detail": "Placeholder screen → Placeholder chair → Placeholder keyboard → Placeholder mouse"
+  },
+  {
+    "name": "setup: the drawing is lines in --muted, 1–1.5 px",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: the dots pulse",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: a dot shows its name and use in the caption",
+    "pass": true,
+    "detail": "Placeholder keyboard Placeholder use two"
+  },
+  {
+    "name": "setup: the caption is a polite live region",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: the chosen dot is pressed",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: Esc clears the caption",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: Tab moves to the next dot",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: Enter on a dot works too",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: a dot shows a focus ring",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: the placeholder dots are all over the drawing (no dev warning)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup (dark): .su .w__label contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.74"
+  },
+  {
+    "name": "setup (dark): .su__cap contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.74"
+  },
+  {
+    "name": "setup (dark): no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup (light): replaces the X-ray tile",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup (light): .su .w__label contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.17"
+  },
+  {
+    "name": "setup (light): .su__cap contrast ≥ 4.5:1",
+    "pass": true,
+    "detail": "6.17"
+  },
+  {
+    "name": "setup (light): no page errors",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: fewer than 3 items → X-ray stays",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup: a dot over nothing drawn is reported in development",
+    "pass": true,
+    "detail": "[setup] these dots are not over anything drawn — adjust their x / y in src/data/setup.ts: off (95, 15) | [setup] these dots are not over anything drawn — adjust their x / y in src/data/setup.ts: off (95, 15)"
+  },
+  {
+    "name": "setup: reduced motion → no pulse",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup at 320 (dark): every dot is a ≥ 24 × 24 target",
+    "pass": true,
+    "detail": "[[24,24],[24,24],[24,24],[24,24]]"
+  },
+  {
+    "name": "setup at 320 (dark): no sideways scroll",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup at 320 (dark): a tap shows the caption (no hover needed)",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup at 320 (light): every dot is a ≥ 24 × 24 target",
+    "pass": true,
+    "detail": "[[24,24],[24,24],[24,24],[24,24]]"
+  },
+  {
+    "name": "setup at 320 (light): no sideways scroll",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "name": "setup at 320 (light): a tap shows the caption (no hover needed)",
+    "pass": true,
+    "detail": ""
+  }
+]

@@ -13,6 +13,8 @@
    files are never linked).
    ========================================================= */
 
+import { heroSlot } from './heroSlot';
+
 export const SOURCE_REPO_URL = 'https://github.com/daniel-FDO/My-Digital-Portfolio/blob/main/';
 
 /** Where data comes from, counted once each in "N parts · M data sources" */
@@ -41,7 +43,7 @@ export interface XrayEntry {
 
 const STATIC: XrayFact = { short: 'static', detail: 'Built into the page; it changes when the site is redeployed.' };
 
-export const XRAY: XrayEntry[] = [
+const ALL_ENTRIES: XrayEntry[] = [
   /* ---- Hero tiles (components/widgets/) ---- */
   {
     id: 'music',
@@ -83,6 +85,24 @@ export const XRAY: XrayEntry[] = [
     file: 'src/components/widgets/XrayTile.tsx',
     dataSource: { short: 'xray.ts', detail: 'The manifest in src/data/xray.ts.', sources: ['site-data'] },
     refresh: STATIC,
+  },
+  {
+    id: 'fixed',
+    label: 'Fixed: a bug logbook, one bug per card',
+    component: 'FixedTile',
+    file: 'src/components/widgets/FixedTile.tsx',
+    dataSource: { short: 'fixed.ts', detail: 'The entries in src/data/fixed.ts; only complete ones (title, symptom, cause and fix) are shown.', sources: ['site-data'] },
+    refresh: STATIC,
+    fallback: 'With no complete entry, this tile isn’t shown and the X-ray tile takes its place.',
+  },
+  {
+    id: 'setup',
+    label: 'Setup: my desk, with a dot for each thing on it',
+    component: 'SetupTile',
+    file: 'src/components/widgets/SetupTile.tsx',
+    dataSource: { short: 'setup.ts', detail: 'The items in src/data/setup.ts, each placed on the line drawing by its x / y.', sources: ['site-data'] },
+    refresh: STATIC,
+    fallback: 'With fewer than 3 placed items, this tile isn’t shown and the X-ray tile takes its place.',
   },
 
   /* ---- Sections ---- */
@@ -164,6 +184,11 @@ export const XRAY: XrayEntry[] = [
     fallback: 'It’s a real mailto: form, so it still opens your email app if the page’s script doesn’t run.',
   },
 ];
+
+/* The hero grid's last tile is one of these (data/heroSlot.ts): only the one on the page is described */
+const SLOT_IDS = ['fixed', 'setup', 'xray'];
+const slot = heroSlot();
+export const XRAY: XrayEntry[] = ALL_ENTRIES.filter((e) => !SLOT_IDS.includes(e.id) || e.id === slot);
 
 /* Only component / UI files under src/ are linked — never the server, scripts or config */
 const NEVER = /(^|\/)(api|scripts|lib)\/|server\.js|get-token|\.env|token|config|secret/i;

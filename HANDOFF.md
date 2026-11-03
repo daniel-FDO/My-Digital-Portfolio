@@ -4,6 +4,26 @@
 
 **Preview:** `npm run dev` → http://localhost:5173/ (the name card is in the widgets bento under the intro).
 
+## Update (3 November 2026): the name is handwritten
+
+The "Typography" notes below describe the earlier Nunito name; only the label "Hello, I'm" is still set in Nunito.
+
+- **Look:** "Daniel" is one monoline pen stroke in an SVG. The D is one stroke and "aniel" is drawn without lifting the pen. The i gets a tapped dot and the line ends in the red full stop.
+  - The ink uses `var(--fg)` and the full stop uses `var(--brand)`, so both themes work.
+  - The letter data is a short list of spline points at the top of `nameScript.ts`.
+- **Writing:** the red full stop is the pen. When the card first comes into view (after the preloader), it writes the name at a hand's pace, slowing into turns. It then taps the i's dot and hops to the end, where it lands as the full stop with a small squash.
+- **Playing:**
+  - The ink acts as a string: a pointer sweeping across bends it, and it wobbles back.
+  - Grab the line and pull: it stretches like a rubber band (capped) and twangs on release. Touch works with sideways swipes; vertical swipes still scroll the page.
+- **Rewriting:** click, tap, Enter or Space and the pen eats the ink back, then writes the name again. Each take is slightly different (slant, baseline, small jitter), like a real signature. ← and → pluck the line.
+- **Reduced motion:** the name is shown complete with no animation. A click or Enter swaps to a new take instantly, and nothing wobbles.
+- **Lifecycle:**
+  - A write in progress jumps to its end when the card leaves the screen or the tab hides.
+  - The animation loop sleeps when everything is still.
+  - If the visitor's ambient Pause is on, the first write is skipped and the name is shown complete.
+- **Files:** `src/components/widgets/nameScript.ts` (engine and hook) and `DanielTile.tsx` (markup). Styles: `.daniel__word`, `.daniel__script` and `.daniel__stop` in `widgets.css`. The width beside the character is set in `daniel.css`. `useNameHop.ts` was removed.
+- **Tests:** `npm run test:name` (`tests/name-script.mjs`, 25 checks) writes `review/name-play/checks.json`. `test:daniel:browser` now checks the handwritten name instead of the old font weight.
+
 ## What changed
 
 ### Typography

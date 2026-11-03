@@ -181,10 +181,9 @@
 }
 
 /* ---- The card around him ---- */
-/* the name stays left and never reaches him: its size also follows the space left of him
-   ("Daniel." at full weight is ~3.35em wide) */
+/* the name stays left and never reaches him: its width is the space left of him */
 .daniel--with-character .daniel__word {
-  font-size: min(7rem, (100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 3.4rem) / 3.4);
+  width: min(24rem, 100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 3rem);
 }
 .daniel--with-character .w__label {
   max-width: calc(100cqw - (100cqh - 2 * var(--dnc-pad)) * 0.75 - 2.6rem);
