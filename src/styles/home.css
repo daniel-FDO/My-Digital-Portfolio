@@ -1307,11 +1307,24 @@ body.is-previewing .footer {
   color: color-mix(in srgb, var(--fg) 82%, var(--muted));
   transition:
     border-color var(--fast) ease,
-    color var(--fast) ease;
+    color var(--fast) ease,
+    transform var(--fast) var(--ease);
 }
 .chip:hover {
   border-color: color-mix(in srgb, var(--fg) 28%, transparent);
   color: var(--fg);
+}
+/* Hover: the chip lifts and its icon plays chip-icon-hop */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .chip:hover {
+    transform: translateY(-2px);
+  }
+  .chip:hover .chip__icon {
+    animation: chip-icon-hop 0.55s var(--ease);
+  }
+}
+@keyframes chip-icon-hop {
+  /* TODO(human): the icon's hover move, e.g. a hop, wiggle or spin */
 }
 .chip__i {
   display: grid;
@@ -1328,16 +1341,11 @@ body.is-previewing .footer {
   color: var(--fg);
 }
 
-/* Skills | what I'm learning: two columns split by a hairline, stacked on phones */
 .skills {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 17.5rem);
-  align-items: start;
   margin-top: 1rem;
 }
 .skills .stack {
   margin-top: 0;
-  padding-right: 2rem;
 }
 /* the skills themselves: one column of groups, or two side by side on wide screens */
 .stack__col {
@@ -1348,18 +1356,10 @@ body.is-previewing .footer {
 @media (min-width: 1200px) {
   .skills .stack {
     display: grid;
-    grid-template-columns: minmax(0, max-content) minmax(16rem, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
     column-gap: 2.5rem;
   }
-}
-.learn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  align-self: stretch; /* the divider runs the full height */
-  padding-left: 2rem;
-  border-left: 1px solid var(--line);
 }
 .chip__icon {
   display: grid;
@@ -1368,26 +1368,12 @@ body.is-previewing .footer {
   flex: none;
   color: var(--fg);
 }
+.chip__icon img {
+  border-radius: 3px; /* Stitch's logo is a square tile */
+}
 .chip__icon svg {
   width: 100%;
   height: 100%;
-}
-.learn__group--next .chip {
-  border-style: dashed;
-  background: transparent;
-} /* not started yet */
-@media (max-width: 640px) {
-  .skills {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 1.25rem;
-  }
-  .skills .stack {
-    padding-right: 0;
-  }
-  .learn {
-    padding-left: 0;
-    border-left: 0;
-  }
 }
 
 /* ---------- GitHub activity: activity.css ---------- */

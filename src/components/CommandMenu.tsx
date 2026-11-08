@@ -103,12 +103,11 @@ export function CommandMenu({ open, setOpen, blocked, actions }: Props) {
 
   /* ---- Answers, from this page's own content ---- */
   const answerFor = (q: string): ReactNode => {
-    const learning = (HOME.skills.find((g) => /learning/i.test(g.group)) || { items: [] }).items.map((i) => i[0]);
     const ANSWERS: { re: RegExp; a: () => ReactNode }[] = [
       { re: /\b(photos?|pictures?|gallery|images?)\b/, a: () => 'There’s a photo gallery further down the page: drag, swipe or use the arrow buttons.' },
       { re: /\b(where|based|live|from|location|kent|uk)\b/, a: () => `Daniel is based in ${HOME.location}.` },
       { re: /\b(stud|college|school|course|t-?level|education|ekc|qualif|grade|year)/, a: () => EDUCATION.card.text },
-      { re: /\b(learn|learning|next|improv)/, a: () => `Right now he’s learning ${join(learning)}.` },
+      { re: /\b(learn|learning|next|improv)/, a: () => INTRO.learning },
       { re: /\b(skill|stack|tech|language|know|tools?|code in|program)/, a: () => HOME.skills.map((g, i) => <span key={g.group}>{i > 0 && <br />}<b>{g.group}:</b> {g.items.map((it) => it[0]).join(', ')}</span>) },
       { re: /\b(project|built|build|made|make|work|portfolio|site)/, a: () => `${PROJECTS.length} projects so far: ${join(PROJECTS.map((p) => p.name))}. The newest is ${PROJECTS[0].name}: ${PROJECTS[0].description}` },
       { re: /\b(contact|email|e-mail|reach|hire|message|talk|opportunit)/, a: () => <>Email <Mail />, or find him on <a href={HOME.socials[1].href} target="_blank" rel="noopener noreferrer">LinkedIn</a>.</> },

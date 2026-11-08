@@ -1,13 +1,13 @@
 /* =========================================================
-   SKILLS & TOOLS — the groups I use on the left (Design and AI
-   tools in a middle column on wide screens); "Currently
-   learning" and "Learning next" (groups with `learning` in
-   home.ts) on the right. Brand marks come from skill-icons.ts;
-   OWN_ICONS are drawn here.
+   SKILLS & TOOLS — the groups from home.ts, in two columns on
+   wide screens (`column: 'middle'` groups in the second).
+   Brand marks come from skill-icons.ts; OWN_ICONS are drawn here.
    ========================================================= */
-import type { ReactElement } from "react";
+import { useEffect, useRef, type ReactElement } from "react";
 import { HOME } from "../data/home";
 import { SKILL_ICONS } from "../data/skill-icons";
+import { calm } from "../lib/motion";
+import { onPreloaderDone } from "../lib/preloader";
 import type { SkillGroup as Group } from "../types";
 
 const OWN_ICONS: Record<string, ReactElement> = {
@@ -15,6 +15,10 @@ const OWN_ICONS: Record<string, ReactElement> = {
   Antigravity: (
     <img src="/icons/antigravity.svg" width="15" height="15" alt="" />
   ),
+  // Official favicon: https://stitch.withgoogle.com
+  stitch: <img src="/icons/stitch.png" width="15" height="15" alt="" />,
+  // Lovable's brand mark, via Lobe Icons (keeps its gradient)
+  lovable: <img src="/icons/lovable.svg" width="15" height="15" alt="" />,
   ts: (
     <svg viewBox="0 0 16 16">
       <rect width="16" height="16" rx="3" fill="#3178c6" />
@@ -64,34 +68,6 @@ const OWN_ICONS: Record<string, ReactElement> = {
       <path d="M12.6 12h.8" />
     </svg>
   ),
-  uiux: (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect x="1.5" y="2.5" width="13" height="11" rx="2" />
-      <path d="M1.5 5.5h13M4 8.2h3.5M4 10.6h2.2" />
-      <path d="m9.4 8 3.2 1.2-1.4.5-.5 1.4z" fill="currentColor" />
-    </svg>
-  ),
-  motion: (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M1.5 12.5C4.5 12.5 5 3.5 9 3.5c2.4 0 3.2 2.3 5.5 2.3" />
-      <circle cx="9" cy="3.5" r="1.4" fill="currentColor" stroke="none" />
-      <path d="M1.5 14.5h13" opacity="0.45" />
-    </svg>
-  ),
 };
 
 function iconFor(key: string): ReactElement | null {
@@ -128,11 +104,7 @@ function SkillIcons({ keys, abbr }: { keys: string; abbr: string }) {
 
 function SkillGroup({ g }: { g: Group }) {
   return (
-    <div
-      className={
-        g.learning ? `learn__group learn__group--${g.learning}` : undefined
-      }
-    >
+    <div>
       <h3 className="stack__label">{g.group}</h3>
       <ul className="chips">
         {g.items.map(([name, abbr, icon]) => (
@@ -146,36 +118,72 @@ function SkillGroup({ g }: { g: Group }) {
   );
 }
 
+/* The chips pop in one after another, once, when the section is reached.
+   Nothing is hidden by CSS, so they stay readable if this never runs. */
+function useChipEntrance(section: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const el = section.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const running: Animation[] = [];
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        if (calm()) return;
+        el.querySelectorAll(".chips").forEach((list) =>
+          [...list.children].forEach((chip, i) =>
+            running.push(
+              chip.animate(
+                [
+                  { opacity: 0, transform: "translateY(8px) scale(0.92)" },
+                  { opacity: 1, transform: "none" },
+                ],
+                {
+                  duration: 420,
+                  delay: 60 + i * 45,
+                  easing: "cubic-bezier(.22,1,.36,1)",
+                  fill: "backwards",
+                },
+              ),
+            ),
+          ),
+        );
+      },
+      { threshold: 0.08 },
+    );
+    const stopWaiting = onPreloaderDone(() => observer.observe(el));
+    return () => {
+      stopWaiting();
+      observer.disconnect();
+      running.forEach((a) => a.cancel());
+    };
+  }, [section]);
+}
+
 export function Skills() {
+  const sectionRef = useRef<HTMLElement>(null);
+  useChipEntrance(sectionRef);
   return (
-    <section className="sec" id="skills" aria-labelledby="skillsTitle" data-xray="skills">
+    <section ref={sectionRef} className="sec" id="skills" aria-labelledby="skillsTitle" data-xray="skills">
       <h2 className="h" id="skillsTitle">
         Tech stack
       </h2>
-      {/* Left: the skills I use. Right: what I'm learning now / next. */}
       <div className="skills">
         <div className="stack" id="skillGroups">
           <div className="stack__col">
             {HOME.skills
-              .filter((g) => !g.learning && !g.column)
+              .filter((g) => !g.column)
               .map((g) => (
                 <SkillGroup g={g} key={g.group} />
               ))}
           </div>
           <div className="stack__col">
             {HOME.skills
-              .filter((g) => !g.learning && g.column === "middle")
+              .filter((g) => g.column === "middle")
               .map((g) => (
                 <SkillGroup g={g} key={g.group} />
               ))}
           </div>
-        </div>
-        <div className="learn" id="learnGroups">
-          {HOME.skills
-            .filter((g) => g.learning)
-            .map((g) => (
-              <SkillGroup g={g} key={g.group} />
-            ))}
         </div>
       </div>
     </section>
