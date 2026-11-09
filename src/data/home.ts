@@ -48,7 +48,7 @@ export const HOME: HomeData = {
   // appears once.
   skills: [
     { group: 'Frontend', items: [['HTML', 'H', 'html'], ['CSS', 'C', 'css'], ['Tailwind CSS', 'Tw', 'tailwind'], ['Responsive design', '↔', 'responsive'], ['React', 'R', 'react'], ['TypeScript', 'TS', 'ts'], ['JavaScript', 'JS', 'js']] },
-    { group: 'Backend', column: 'middle', items: [['Supabase', 'Sb', 'supabase']] },
+    { group: 'Backend', column: 'middle', items: [['Supabase', 'Sb', 'supabase'], ['FastAPI', 'FA', 'fastapi']] },
     { group: 'Python & data', items: [['Python', 'Py', 'python'], ['Flask', 'F', 'flask'], ['Pandas', 'Pd', 'pandas']] },
     { group: 'Tools', items: [['VS Code', 'VS', 'vscode'], ['Git & GitHub', 'G', 'git github'], ['Chrome DevTools', 'Dt', 'chrome'], ['Antigravity', 'A', 'Antigravity']] },
     { group: 'Design', column: 'middle', items: [['Figma', 'F', 'figma'], ['Canva', 'C', 'canva'], ['Stitch', 'St', 'stitch'], ['Lovable', 'Lv', 'lovable']] },
