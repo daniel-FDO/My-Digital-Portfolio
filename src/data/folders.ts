@@ -34,7 +34,7 @@ export interface Folder extends FolderLook {
 }
 
 const DARK = { ink: '#F1F0EC', ink2: '#B9B8B2', line: 'rgba(241, 240, 236, 0.13)', tone: 'dark' as const };
-const look = (): FolderLook => ({ color: '#1c1c1a', accent: '#d4cfc6', ...DARK });
+const look = (): FolderLook => ({ color: '#111111', accent: '#d4cfc6', ...DARK });
 
 export const FOLDERS = {
   about: {

@@ -1,5 +1,5 @@
 /* =========================================================
-   THEME — light on a fresh visit; a choice lasts this visit
+   THEME — dark on a fresh visit; a choice lasts this visit
    (sessionStorage 'theme', also read by secret.html). The first
    value is set by the inline script in index.html's <head>, before
    the page draws, so there's no flash.
@@ -16,7 +16,7 @@ interface ThemeValue {
 
 const ThemeContext = createContext<ThemeValue | null>(null);
 
-const current = (): Theme => (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+const current = (): Theme => (document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(current);
@@ -24,7 +24,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#111110' : '#F4F1E9';
+    if (meta) meta.content = theme === 'dark' ? '#050505' : '#F4F1E9';
   }, [theme]);
 
   const setTheme = useCallback((next: Theme) => {

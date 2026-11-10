@@ -12,13 +12,13 @@
 
 /* ---- 1. Page ---- */
 .story.page-about {
-  --ab-accent: #286B63;                       /* the home page's --brand */
+  --ab-accent: #3A3A38;                       /* the home page's --brand */
   --ab-prose: color-mix(in srgb, var(--text) 84%, var(--bg));
   --ab-hover: color-mix(in srgb, var(--text) 5%, transparent);
   --ab-focus: color-mix(in srgb, var(--text) 70%, transparent);
   /* the still contours (background/topo.ts reads these) */
   --topo-line: rgba(36, 37, 34, 0.075);
-  --topo-accent: rgba(40, 107, 99, 0.32);
+  --topo-accent: rgba(36, 37, 34, 0.2);
 
   position: relative;
   min-height: 100vh;
@@ -30,9 +30,9 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 :root[data-theme="dark"] .story.page-about {
-  --ab-accent: #4FA89C;
-  --topo-line: rgba(233, 232, 228, 0.07);
-  --topo-accent: rgba(79, 168, 156, 0.3);
+  --ab-accent: #CFCFCF;
+  --topo-line: rgba(242, 242, 242, 0.07);
+  --topo-accent: rgba(242, 242, 242, 0.14);
 }
 
 /* The home page's contours, still, kept to two outer corners */

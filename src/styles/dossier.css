@@ -1,11 +1,11 @@
 /* Detail pages share the homepage's warm neutrals and reading measure.
    Existing gallery, book, routes and controls retain their own behaviour. */
 .fp {
-  --bg: #F4F1E9; --text: #242522; --muted: #6B6963; --line: #D9D5CC; --accent: #286B63;
+  --bg: #F4F1E9; --text: #242522; --muted: #6B6963; --line: #D9D5CC; --accent: #3A3A38;
   --font: 'Geist', 'Inter', sans-serif; --font-display: 'Geist', 'Inter', sans-serif;
   --fold-gutter: clamp(22px, 5vw, 48px);
 }
-:root[data-theme='dark'] .fp { --bg: #111110; --text: #e9e8e4; --muted: #a19e99; --line: #ffffff1f; --accent: #4FA89C; }
+:root[data-theme='dark'] .fp { --bg: #050505; --text: #F2F2F2; --muted: #929292; --line: #222222; --accent: #CFCFCF; }
 .fp .top { max-width: 860px; margin-inline: auto; padding: 24px var(--fold-gutter); }
 .fp .logo { font-size: 17px; color: var(--text); }
 .fp .logo span { color: var(--accent); }

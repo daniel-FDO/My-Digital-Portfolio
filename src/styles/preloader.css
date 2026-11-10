@@ -18,8 +18,8 @@ html.pl-on .sec { animation-play-state: paused; }
   position: fixed; inset: 0; z-index: 3000;
   place-items: center;
   padding: 24px;
-  background: #111110;
-  color: #e9e8e4;
+  background: #050505;
+  color: #F2F2F2;
   font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   user-select: none;
@@ -43,12 +43,12 @@ html.pl-on .sec { animation-play-state: paused; }
 
 /* 2. the full stop lights up, with a soft halo */
 .pl__dot {
-  color: #4a4845;
+  color: #4A4A4A;
   transition: color 0.4s ease 0.3s, text-shadow 0.6s ease 0.3s;
 }
 .pl.is-in .pl__dot {
-  color: #4FA89C;
-  text-shadow: 0 0 2px rgba(79, 168, 156, 0.7), 0 0 16px rgba(79, 168, 156, 0.5);
+  color: #F2F2F2;
+  text-shadow: 0 0 2px rgba(242, 242, 242, 0.5), 0 0 14px rgba(242, 242, 242, 0.25);
 }
 
 .pl__tag {
@@ -78,11 +78,11 @@ html.pl-on .sec { animation-play-state: paused; }
   flex: 1;
   height: 1px;
   overflow: hidden;
-  background: rgba(233, 232, 228, 0.13);
+  background: rgba(242, 242, 242, 0.13);
 }
 .pl__fill {
   position: absolute; inset: 0;
-  background: #4FA89C;
+  background: #D9D9D9;
   transform-origin: left center;
   transform: scaleX(var(--p, 0));
 }
@@ -91,7 +91,7 @@ html.pl-on .sec { animation-play-state: paused; }
   transform: translateY(-50%);
   font: 400 11px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-variant-numeric: tabular-nums;
-  color: #a19e99;
+  color: #929292;
 }
 .pl__note {
   height: 12px;

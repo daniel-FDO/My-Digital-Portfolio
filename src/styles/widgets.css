@@ -88,7 +88,7 @@
 }
 :root:not([data-theme="dark"]) .music__bg { opacity: 0.22; }
 .music__eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 10px; margin-right: 7px; vertical-align: -1px; }
-.music__eq i { width: 2px; height: 100%; border-radius: 1px; background: #1db954; transform-origin: 50% 100%; }
+.music__eq i { width: 2px; height: 100%; border-radius: 1px; background: var(--fg); transform-origin: 50% 100%; }
 .music__eq i:nth-child(2) { transform: scaleY(0.55); }
 .music__eq i:nth-child(3) { transform: scaleY(0.8); }
 .music__eq i:nth-child(4) { transform: scaleY(0.4); }

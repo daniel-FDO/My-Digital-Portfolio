@@ -1,7 +1,7 @@
 /* =========================================================
    HOME — one narrow column, small type, quiet widgets.
    Colours are tokens (light first, dark under [data-theme="dark"]):
-   --brand (deep teal) is the main accent; --sage is a quiet second one (also teal),
+   --brand (neutral: grey on dark, charcoal on light) is the main accent; --sage is a quiet second one,
    only for interaction and status — focus rings, link hovers, selected
    controls, "fresh" dots. Not for icons, tags, charts or decoration.
    sizes are in rem off a root that grows a little with the window.
@@ -20,10 +20,10 @@
   --widget-line: rgba(36, 37, 34, 0.09);
   --soft: rgba(36, 37, 34, 0.05); /* toolbar search, pills */
   --soft-2: rgba(36, 37, 34, 0.08);
-  --brand: #286B63; /* the main accent (deep teal, 5.5:1 on --bg): the D, the second hand, badge icons */
-  --brand-soft: rgba(40, 107, 99, 0.12);
-  --sage: #286B63; /* the second accent (see above), now the same teal */
-  --sage-soft: rgba(40, 107, 99, 0.12);
+  --brand: #3A3A38; /* the main accent (neutral charcoal): the D, the second hand, badge icons */
+  --brand-soft: rgba(36, 37, 34, 0.08);
+  --sage: #3A3A38; /* the second accent (see above): focus rings, link hovers */
+  --sage-soft: rgba(36, 37, 34, 0.08);
   --ring: var(--sage); /* focus outlines */
   --marker: #817F78; /* flat list markers (timeline dots): muted stone */
   --mark-ink: #4A4A46; /* the footer "daniel" (original): soft charcoal, not black */
@@ -47,31 +47,31 @@
   color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --bg: #111110;
-  --fg: #e9e8e4;
-  --muted: #a19e99;
-  --card: #1c1c1a;
-  --hover: rgba(35, 35, 34, 0.6);
-  --line: rgba(235, 231, 224, 0.12);
-  --widget: rgba(23, 23, 23, 0.95);
-  --widget-line: rgba(255, 255, 255, 0.1);
-  --soft: rgba(233, 232, 228, 0.08);
-  --soft-2: rgba(233, 232, 228, 0.12);
-  --brand: #4FA89C; /* deep teal lifted for the dark base: 6.7:1 on --bg */
-  --brand-soft: rgba(79, 168, 156, 0.16);
-  --sage: #4FA89C;
-  --sage-soft: rgba(79, 168, 156, 0.14);
-  --marker: #5c5a56;
-  --mark-ink: #bdbbb6; /* light grey, not pure white */
+  --bg: #050505; /* near-black */
+  --fg: #F2F2F2; /* soft white: 18.9:1 on --bg */
+  --muted: #929292; /* cool grey: 6.9:1 on --bg */
+  --card: #0E0E0E;
+  --hover: rgba(17, 17, 17, 0.6);
+  --line: #222222; /* subtle charcoal */
+  --widget: rgba(11, 11, 11, 0.95);
+  --widget-line: #222222;
+  --soft: rgba(242, 242, 242, 0.06);
+  --soft-2: rgba(242, 242, 242, 0.1);
+  --brand: #CFCFCF; /* no colour accent: a soft grey (13.4:1 on --bg) */
+  --brand-soft: rgba(242, 242, 242, 0.08);
+  --sage: #D9D9D9; /* focus rings and link hovers: clearly visible, still neutral */
+  --sage-soft: rgba(242, 242, 242, 0.1);
+  --marker: #4A4A4A;
+  --mark-ink: #BDBDBD; /* light grey, not pure white */
   --overlay: rgba(0, 0, 0, 0.4);
-  --gh-0: rgba(233, 232, 228, 0.06);
-  --gh-1: rgba(233, 232, 228, 0.2);
-  --gh-2: rgba(233, 232, 228, 0.36);
-  --gh-3: rgba(233, 232, 228, 0.58);
-  --gh-4: rgba(233, 232, 228, 0.85);
-  --gh-glow: rgba(233, 232, 228, 0.3);
-  --tip-bg: #e9e8e4;
-  --tip-ink: #111110;
+  --gh-0: rgba(242, 242, 242, 0.06);
+  --gh-1: rgba(242, 242, 242, 0.2);
+  --gh-2: rgba(242, 242, 242, 0.36);
+  --gh-3: rgba(242, 242, 242, 0.58);
+  --gh-4: rgba(242, 242, 242, 0.85);
+  --gh-glow: rgba(242, 242, 242, 0.3);
+  --tip-bg: #F2F2F2;
+  --tip-ink: #050505;
   color-scheme: dark;
 }
 @media (min-width: 640px) {
@@ -600,7 +600,7 @@ html.theme-switching *::after {
   transition: color var(--fast) ease;
 }
 .music__logo:hover {
-  color: #1db954;
+  color: var(--fg);
 }
 .music__logo svg {
   width: 100%;
@@ -1098,7 +1098,7 @@ html.theme-switching *::after {
   bottom: 0.5rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: rgba(17, 17, 16, 0.72);
+  background: rgba(5, 5, 5, 0.72);
   font-size: 0.6875rem;
   line-height: 1.5;
   color: #F4F1E9;

@@ -9,9 +9,9 @@
 html.pbg-on body { background: transparent; }
 
 .pbg {
-  --pbg-line: rgba(233, 232, 228, 0.085);
-  --pbg-index: rgba(233, 232, 228, 0.13);
-  --pbg-glow: rgba(30, 92, 84, 0.22);
+  --pbg-line: rgba(242, 242, 242, 0.085);
+  --pbg-index: rgba(242, 242, 242, 0.13);
+  --pbg-glow: rgba(255, 255, 255, 0.035);
   --pbg-grain: 0.06;
   position: fixed; inset: 0; z-index: -1;
   overflow: hidden;
@@ -21,7 +21,7 @@ html.pbg-on body { background: transparent; }
 :root:not([data-theme="dark"]) .pbg {
   --pbg-line: rgba(36, 37, 34, 0.075);
   --pbg-index: rgba(36, 37, 34, 0.12);
-  --pbg-glow: rgba(40, 107, 99, 0.07);
+  --pbg-glow: rgba(36, 37, 34, 0.05);
   --pbg-grain: 0.035;
 }
 
@@ -88,7 +88,7 @@ html.pbg-on body { background: transparent; }
 
 /* ---- Small screens: fewer, fainter lines (fewer hills are drawn too) ---- */
 @media (max-width: 639px) {
-  .pbg { --pbg-line: rgba(233, 232, 228, 0.065); --pbg-index: rgba(233, 232, 228, 0.1); }
+  .pbg { --pbg-line: rgba(242, 242, 242, 0.065); --pbg-index: rgba(242, 242, 242, 0.1); }
   :root:not([data-theme="dark"]) .pbg { --pbg-line: rgba(36, 37, 34, 0.06); --pbg-index: rgba(36, 37, 34, 0.09); }
   .pbg__map {
     -webkit-mask-image: linear-gradient(180deg, #000, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.1) 70%, #000);
@@ -103,8 +103,8 @@ html.pbg-on body { background: transparent; }
 /* =========================================================
    MORE LIFE (LIFE in PortfolioBackground.tsx; .pbg--life)
    ========================================================= */
-.pbg { --pbg-trace: rgba(79, 168, 156, 0.6); }
-:root:not([data-theme="dark"]) .pbg { --pbg-trace: rgba(40, 107, 99, 0.42); }
+.pbg { --pbg-trace: rgba(242, 242, 242, 0.38); }
+:root:not([data-theme="dark"]) .pbg { --pbg-trace: rgba(36, 37, 34, 0.32); }
 .pbg__mover { position: absolute; inset: 0; }   /* one per hill; JS leans it towards the pointer */
 
 @media (prefers-reduced-motion: no-preference) {
@@ -168,13 +168,13 @@ html.pbg-on body { background: transparent; }
    pulse, nothing sharp. Static with reduced motion.
    ========================================================= */
 .pbg--air {
-  --air-a: rgba(24, 86, 78, 0.22);      /* deep teal, upper right */
-  --air-b: rgba(18, 64, 58, 0.16);      /* deeper teal, lower left */
-  --air-c: rgba(196, 186, 176, 0.045);  /* a neutral lift, upper left */
+  --air-a: rgba(255, 255, 255, 0.035); /* a faint lift, upper right */
+  --air-b: rgba(255, 255, 255, 0.025); /* fainter, lower left */
+  --air-c: rgba(255, 255, 255, 0.03);   /* a neutral lift, upper left */
   --pbg-grain: 0.05;
 }
 :root:not([data-theme="dark"]) .pbg--air {
-  --air-a: rgba(40, 107, 99, 0.08);     /* a faint teal wash */
+  --air-a: rgba(36, 37, 34, 0.04);     /* a faint grey wash */
   --air-b: rgba(217, 213, 204, 0.35);   /* soft stone */
   --air-c: rgba(255, 255, 255, 0.55);   /* paper-white lift */
   --pbg-grain: 0.03;
@@ -202,16 +202,16 @@ html.pbg-on body { background: transparent; }
    --streak-trail-rgb is an "r, g, b" triplet.
    ========================================================= */
 .pbg--topo {
-  --topo-line: rgba(233, 232, 228, 0.1);
-  --topo-accent: rgba(79, 168, 156, 0.4);      /* teal */
-  --streak-head: #f7efe2;                      /* warm ivory */
-  --streak-trail-rgb: 111, 176, 166;           /* soft teal */
+  --topo-line: rgba(242, 242, 242, 0.1);
+  --topo-accent: rgba(242, 242, 242, 0.2);    /* soft white */
+  --streak-head: #F2F2F2;                      /* soft white */
+  --streak-trail-rgb: 200, 200, 200;           /* soft grey */
 }
 :root:not([data-theme="dark"]) .pbg--topo {
   --topo-line: rgba(36, 37, 34, 0.095);
-  --topo-accent: rgba(40, 107, 99, 0.45);
-  --streak-head: #286B63;                      /* deep teal */
-  --streak-trail-rgb: 40, 107, 99;
+  --topo-accent: rgba(36, 37, 34, 0.24);
+  --streak-head: #4A4A4A;                      /* graphite */
+  --streak-trail-rgb: 74, 74, 74;
 }
 .pbg__streak { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* the canvas is --bleed px (topo.ts: TOPO.bleed) bigger than the screen on every side */
@@ -231,7 +231,7 @@ html.pbg-on body { background: transparent; }
     radial-gradient(ellipse 48% 70% at 0% 100%, #000 28%, rgba(0, 0, 0, 0.5) 58%, transparent 84%);
 }
 @media (max-width: 639px) {
-  .pbg--topo { --topo-line: rgba(233, 232, 228, 0.07); }
+  .pbg--topo { --topo-line: rgba(242, 242, 242, 0.07); }
   :root:not([data-theme="dark"]) .pbg--topo { --topo-line: rgba(36, 37, 34, 0.08); }
   .pbg__linesMask {
     -webkit-mask-image:
