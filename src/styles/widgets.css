@@ -280,7 +280,7 @@
 .daniel__word[data-grab] { cursor: grabbing; }
 .daniel__word:focus-visible { box-shadow: 0 0 0 2px var(--ring); }
 .daniel__script { display: block; width: 100%; height: auto; max-height: calc(100cqh - 2.75rem); overflow: visible; }
-.daniel__stop { fill: var(--brand); }
+.daniel__stop { fill: var(--accent); }
 /* the supporting lines: the same rounded face, sentence case, quieter */
 .daniel > .w__label {
   font: 700 0.875rem/1.3 "Nunito Variable", var(--font); letter-spacing: 0.01em; text-transform: none;

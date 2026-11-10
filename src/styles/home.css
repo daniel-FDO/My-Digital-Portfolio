@@ -1,7 +1,7 @@
 /* =========================================================
    HOME — one narrow column, small type, quiet widgets.
    Colours are tokens (light first, dark under [data-theme="dark"]):
-   --brand (neutral: grey on dark, charcoal on light) is the main accent; --sage is a quiet second one,
+   --brand is neutral (grey on dark, charcoal on light); --accent (muted cool blue) is the one colour, used sparingly; --sage = --accent,
    only for interaction and status — focus rings, link hovers, selected
    controls, "fresh" dots. Not for icons, tags, charts or decoration.
    sizes are in rem off a root that grows a little with the window.
@@ -22,7 +22,8 @@
   --soft-2: rgba(36, 37, 34, 0.08);
   --brand: #3A3A38; /* the main accent (neutral charcoal): the D, the second hand, badge icons */
   --brand-soft: rgba(36, 37, 34, 0.08);
-  --sage: #3A3A38; /* the second accent (see above): focus rings, link hovers */
+  --accent: #46657A; /* the one colour accent, used sparingly: the signature's dot, tag icons + labels (5.5:1 on --bg) */
+  --sage: var(--accent); /* focus rings, link hovers, selected states: the same blue */
   --sage-soft: rgba(36, 37, 34, 0.08);
   --ring: var(--sage); /* focus outlines */
   --marker: #817F78; /* flat list markers (timeline dots): muted stone */
@@ -59,7 +60,8 @@
   --soft-2: rgba(242, 242, 242, 0.1);
   --brand: #CFCFCF; /* no colour accent: a soft grey (13.4:1 on --bg) */
   --brand-soft: rgba(242, 242, 242, 0.08);
-  --sage: #D9D9D9; /* focus rings and link hovers: clearly visible, still neutral */
+  --accent: #9BB8C8; /* muted cool blue, used sparingly (9.1:1 on --bg, 7.6:1 in a tag) */
+  --sage: var(--accent); /* focus rings, link hovers, selected states */
   --sage-soft: rgba(242, 242, 242, 0.1);
   --marker: #4A4A4A;
   --mark-ink: #BDBDBD; /* light grey, not pure white */
@@ -760,18 +762,18 @@ html.theme-switching *::after {
   gap: 0.25rem;
   padding: 0.125rem 0.5rem;
   border-radius: 999px;
-  background: var(--brand-soft);
+  background: var(--brand-soft); /* stays a dark grey: the blue is only the label and icon */
   font-size: 0.75rem;
   line-height: 1.33;
   font-weight: 500;
-  color: var(--fg);
+  color: var(--accent);
 }
 .badge svg {
   width: 11px;
   height: 11px;
   flex: none;
   fill: none;
-  stroke: var(--brand);
+  stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
