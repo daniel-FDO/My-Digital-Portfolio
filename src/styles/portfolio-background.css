@@ -204,7 +204,7 @@ html.pbg-on body { background: transparent; }
 .pbg--topo {
   --topo-line: rgba(242, 242, 242, 0.075);
   --topo-accent: rgba(242, 242, 242, 0.15);   /* soft white */
-  --streak-head: #F2F2F2;                      /* soft white */
+  --streak-head: #EDEDED;                      /* soft off-white */
   --streak-trail-rgb: 200, 200, 200;           /* soft grey */
 }
 :root:not([data-theme="dark"]) .pbg--topo {

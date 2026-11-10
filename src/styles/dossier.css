@@ -5,7 +5,7 @@
   --font: 'Geist', 'Inter', sans-serif; --font-display: 'Geist', 'Inter', sans-serif;
   --fold-gutter: clamp(22px, 5vw, 48px);
 }
-:root[data-theme='dark'] .fp { --bg: #050505; --text: #F2F2F2; --muted: #929292; --line: #222222; --accent: #CFCFCF; }
+:root[data-theme='dark'] .fp { --bg: #101010; --text: #EDEDED; --muted: #9A9A9A; --line: #262626; --accent: #CFCFCF; }
 .fp .top { max-width: 860px; margin-inline: auto; padding: 24px var(--fold-gutter); }
 .fp .logo { font-size: 17px; color: var(--text); }
 .fp .logo span { color: var(--accent); }

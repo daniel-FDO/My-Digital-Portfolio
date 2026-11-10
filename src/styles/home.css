@@ -47,13 +47,13 @@
   color-scheme: light;
 }
 :root[data-theme="dark"] {
-  --bg: #050505; /* near-black */
-  --fg: #F2F2F2; /* soft white: 18.9:1 on --bg */
-  --muted: #929292; /* cool grey: 6.9:1 on --bg */
-  --card: #0E0E0E;
-  --hover: rgba(17, 17, 17, 0.6);
-  --line: #222222; /* subtle charcoal */
-  --widget: rgba(12, 12, 12, 0.72); /* translucent near-black: the scene shows through, softened (.w blurs it) */
+  --bg: #101010; /* soft charcoal black, not pure black */
+  --fg: #EDEDED; /* soft off-white: 16.3:1 on --bg */
+  --muted: #9A9A9A; /* grey: 6.8:1 on --bg, 6.1:1 on the lightest surface */
+  --card: #171717; /* a step lighter than the page */
+  --hover: rgba(28, 28, 28, 0.6);
+  --line: #262626; /* restrained grey */
+  --widget: rgba(24, 24, 24, 0.72); /* translucent charcoal, a shade above the page: the scene shows through, softened (.w blurs it) */
   --widget-line: rgba(255, 255, 255, 0.08); /* a quiet edge, not an outline (also the dock / rail border) */
   --soft: rgba(242, 242, 242, 0.06);
   --soft-2: rgba(242, 242, 242, 0.1);
@@ -70,8 +70,8 @@
   --gh-3: rgba(242, 242, 242, 0.58);
   --gh-4: rgba(242, 242, 242, 0.85);
   --gh-glow: rgba(242, 242, 242, 0.3);
-  --tip-bg: #F2F2F2;
-  --tip-ink: #050505;
+  --tip-bg: #EDEDED;
+  --tip-ink: #101010;
   color-scheme: dark;
 }
 @media (min-width: 640px) {
@@ -1098,7 +1098,7 @@ html.theme-switching *::after {
   bottom: 0.5rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
-  background: rgba(5, 5, 5, 0.72);
+  background: rgba(16, 16, 16, 0.72);
   font-size: 0.6875rem;
   line-height: 1.5;
   color: #F4F1E9;

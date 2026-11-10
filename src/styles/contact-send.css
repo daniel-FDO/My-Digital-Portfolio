@@ -1,7 +1,7 @@
 /* Expanding dotted-arrow interaction from the attached CTA note. */
 .mail__send--animated {
   flex-shrink: 0;
-  background: #F2F2F2;
+  background: #EDEDED;
   color: #171716;
 }
 
