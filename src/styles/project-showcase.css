@@ -1,21 +1,23 @@
 /* =========================================================
    PROJECT SHOWCASE (ProjectShowcase.tsx)
-   Mouse on a wide screen: the list ~42% | a column for the preview
-   ~58%; the preview is hidden until a project is hovered or focused,
+   Mouse on a wide screen: the list ~56% | a column for the preview
+   ~44%, the preview itself capped at --pjs-w (25rem); the preview is hidden until a project is hovered or focused,
    then fades in, staying level with the top of the list as you
    scroll. Touch / narrow: the preview opens under its own row.
    The rows themselves are the original list's (home.css "Rows").
    ========================================================= */
 .pjs--side .pjs__layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
-  gap: 2.25rem;
+  grid-template-columns: minmax(0, 0.56fr) minmax(0, 0.44fr);
+  gap: 2rem;
   align-items: start;
 }
 .pjs .rows > li { max-width: none; }
 
-/* ---- The stage ---- */
-.pjs__stage { min-width: 0; }
+/* ---- The stage: capped at --pjs-w so the preview stays a compact card ---- */
+.pjs { --pjs-w: 25rem; }
+.pjs__stage { min-width: 0; width: 100%; max-width: var(--pjs-w); }
+.pjs--side .pjs__stage { justify-self: end; }
 .pjs--side .pjs__stage {
   position: sticky; top: 2rem;
   margin-top: 1rem;
@@ -35,7 +37,7 @@
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: 0.9rem;
+  border-radius: 0.7rem;
   border: 1px solid var(--widget-line);
   background: var(--soft);
   box-shadow: 0 24px 48px -30px rgba(0, 0, 0, 0.55);
