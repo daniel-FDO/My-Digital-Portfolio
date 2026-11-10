@@ -16,7 +16,7 @@
   --act-3: var(--gh-3);
   --act-4: var(--gh-4);
   --act-glow: var(--gh-glow);
-  --act-card: var(--card);
+  --act-card: var(--widget);
   --act-radius: 1rem;
 }
 
@@ -34,6 +34,7 @@
   border: 1px solid var(--line);
   border-radius: var(--act-radius);
   background: var(--act-card);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
 }
 /* Claude Code: a quiet identity — its mark in Claude's colour, the greys warmed very slightly */
 .act__card.is-cl {

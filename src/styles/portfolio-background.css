@@ -202,8 +202,8 @@ html.pbg-on body { background: transparent; }
    --streak-trail-rgb is an "r, g, b" triplet.
    ========================================================= */
 .pbg--topo {
-  --topo-line: rgba(242, 242, 242, 0.1);
-  --topo-accent: rgba(242, 242, 242, 0.2);    /* soft white */
+  --topo-line: rgba(242, 242, 242, 0.075);
+  --topo-accent: rgba(242, 242, 242, 0.15);   /* soft white */
   --streak-head: #F2F2F2;                      /* soft white */
   --streak-trail-rgb: 200, 200, 200;           /* soft grey */
 }
@@ -231,7 +231,7 @@ html.pbg-on body { background: transparent; }
     radial-gradient(ellipse 48% 70% at 0% 100%, #000 28%, rgba(0, 0, 0, 0.5) 58%, transparent 84%);
 }
 @media (max-width: 639px) {
-  .pbg--topo { --topo-line: rgba(242, 242, 242, 0.07); }
+  .pbg--topo { --topo-line: rgba(242, 242, 242, 0.055); }
   :root:not([data-theme="dark"]) .pbg--topo { --topo-line: rgba(36, 37, 34, 0.08); }
   .pbg__linesMask {
     -webkit-mask-image:
@@ -260,3 +260,20 @@ html.pbg-on body { background: transparent; }
   50% { transform: translate3d(-4px, 13px, 0) rotate(0.1deg) scale(1.012); }
   75% { transform: translate3d(8px, 5px, 0) rotate(0.18deg) scale(1.004); }
 }
+
+/* =========================================================
+   CONTENT VEIL — the contours recede behind content
+   Each block on the page (intro, widgets, every section) sits on a
+   soft wash of the page colour that fades out towards its edges, so
+   lines stay faintly visible in the gaps between blocks and at the
+   sides, and quieter behind text. Only while the background is on.
+   ========================================================= */
+html.pbg-on .page > :is(.intro, .widgets, .sec) { position: relative; }
+html.pbg-on .page > :is(.intro, .widgets, .sec)::before {
+  content: "";
+  position: absolute; inset: -2.5rem -3rem; z-index: -1;
+  background: radial-gradient(closest-side, var(--veil) 55%, transparent);
+  pointer-events: none;
+}
+:root { --veil: color-mix(in srgb, var(--bg) 55%, transparent); }
+:root[data-theme="dark"] { --veil: color-mix(in srgb, var(--bg) 62%, transparent); }
