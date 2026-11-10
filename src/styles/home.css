@@ -660,7 +660,6 @@ html.theme-switching *::after {
 /* ---------- Sections ---------- */
 .sec {
   position: relative;
-  margin-top: 4rem;
 }
 .sec__head {
   display: flex;
@@ -1851,18 +1850,6 @@ kbd {
 .sec {
   scroll-margin-top: 2rem;
 }
-.sec__head {
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--line);
-}
-.sec > .h {
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid var(--line);
-}
-.h {
-  font-weight: 600;
-  letter-spacing: -0.025em;
-}
 .row__name {
   font-weight: 500;
   letter-spacing: -0.015em;
@@ -1967,15 +1954,20 @@ kbd {
 .intro__role {
   margin-top: 0.45rem;
 }
+/* Section headings: one quiet style, no rule under them; the same space
+   above every section (--sec-gap) and below every heading */
 .h {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 500;
   line-height: 1.3;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
 }
+.page { --sec-gap: 5rem; }
+@media (max-width: 639px) { .page { --sec-gap: 3.75rem; } }
+.sec { margin-top: var(--sec-gap); }
 .sec > .h,
 .sec__head {
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
 }
 .sec__head {
   align-items: last baseline;

@@ -13,8 +13,6 @@
    files are never linked).
    ========================================================= */
 
-import { heroSlot } from './heroSlot';
-
 export const SOURCE_REPO_URL = 'https://github.com/daniel-FDO/My-Digital-Portfolio/blob/main/';
 
 /** Where data comes from, counted once each in "N parts · M data sources" */
@@ -54,55 +52,21 @@ const ALL_ENTRIES: XrayEntry[] = [
     refresh: { short: '10 s', detail: 'Every 10 seconds while the tab is visible, and straight away when you come back to it.' },
     fallback: 'If a request fails, the last known track stays, shown as paused or recently played, never as playing. With nothing known: “Not available right now” and an Open Spotify link.',
   },
+
   {
-    id: 'now',
-    label: 'Kent right now: the time, date, weather and the sun',
-    component: 'KentNow',
-    file: 'src/components/widgets/KentNow.tsx',
-    dataSource: { short: 'Open-Meteo', detail: 'Open-Meteo’s forecast for Canterbury (free, no key; nothing about the visitor is sent). The time is UK time from the visitor’s clock.', sources: ['open-meteo'] },
-    refresh: { short: '30 min', detail: 'Weather every 30 minutes while the tab is visible; the clock every second.' },
-    fallback: 'If Open-Meteo doesn’t answer, the last good weather stays; with none, the weather and the sun arc just don’t show.',
+    id: 'clock',
+    label: 'The time in Kent, on an analog face',
+    component: 'ClockTile',
+    file: 'src/components/widgets/ClockTile.tsx',
+    dataSource: { short: 'your clock', detail: 'UK time worked out from the visitor’s own clock (lib/kentClock.ts); nothing is fetched.', sources: ['site-data'] },
+    refresh: { short: '1 s', detail: 'Every second, from one shared timer that only runs while the clock is on the page.' },
   },
   {
-    id: 'gh',
-    label: 'GitHub contributions, the last 16 weeks',
-    component: 'GitHubTile',
-    file: 'src/components/widgets/Tiles.tsx',
-    dataSource: { short: 'GitHub', detail: 'This site’s /api/github-contributions endpoint (GitHub’s GraphQL API, token kept server-side). The same request feeds the Activity section.', sources: ['github'] },
-    refresh: { short: 'per visit', detail: 'Asked once per page load; the server keeps an answer for an hour.' },
-    fallback: '“Activity unavailable right now.” No squares are made up. If GitHub fails, the server sends its last real answer, marked stale.',
-  },
-  {
-    id: 'name',
-    label: '“Hello, I’m Daniel.” with Daniel the character',
-    component: 'DanielTile',
-    file: 'src/components/widgets/DanielTile.tsx',
-  },
-  {
-    id: 'xray',
-    label: 'This tile: the X-ray switch and a map of the grid',
-    component: 'XrayTile',
-    file: 'src/components/widgets/XrayTile.tsx',
-    dataSource: { short: 'xray.ts', detail: 'The manifest in src/data/xray.ts.', sources: ['site-data'] },
+    id: 'mono',
+    label: 'A D for Daniel, drawn in dots',
+    component: 'MonogramTile',
+    file: 'src/components/widgets/MonogramTile.tsx',
     refresh: STATIC,
-  },
-  {
-    id: 'fixed',
-    label: 'Fixed: a bug logbook, one bug per card',
-    component: 'FixedTile',
-    file: 'src/components/widgets/FixedTile.tsx',
-    dataSource: { short: 'fixed.ts', detail: 'The entries in src/data/fixed.ts; only complete ones (title, symptom, cause and fix) are shown.', sources: ['site-data'] },
-    refresh: STATIC,
-    fallback: 'With no complete entry, this tile isn’t shown and the X-ray tile takes its place.',
-  },
-  {
-    id: 'setup',
-    label: 'Setup: my desk, with a dot for each thing on it',
-    component: 'SetupTile',
-    file: 'src/components/widgets/SetupTile.tsx',
-    dataSource: { short: 'setup.ts', detail: 'The items in src/data/setup.ts, each placed on the line drawing by its x / y.', sources: ['site-data'] },
-    refresh: STATIC,
-    fallback: 'With fewer than 3 placed items, this tile isn’t shown and the X-ray tile takes its place.',
   },
 
   /* ---- Sections ---- */
@@ -187,10 +151,7 @@ const ALL_ENTRIES: XrayEntry[] = [
   },
 ];
 
-/* The hero grid's last tile is one of these (data/heroSlot.ts): only the one on the page is described */
-const SLOT_IDS = ['fixed', 'setup', 'xray'];
-const slot = heroSlot();
-export const XRAY: XrayEntry[] = ALL_ENTRIES.filter((e) => !SLOT_IDS.includes(e.id) || e.id === slot);
+export const XRAY: XrayEntry[] = ALL_ENTRIES;
 
 /* Only component / UI files under src/ are linked — never the server, scripts or config */
 const NEVER = /(^|\/)(api|scripts|lib)\/|server\.js|get-token|\.env|token|config|secret/i;

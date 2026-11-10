@@ -20,7 +20,7 @@ export const ABOUT_PAGE: AboutPageData = {
       num: '01',
       title: 'Right now',
       paragraphs: [
-        'I’m Daniel, a software development student based in Kent. I’m in my second year at EKC Canterbury College and due to finish in summer 2027.',
+        'I’m Daniel, a software development student based in Kent. I’m in my second year at EKC Canterbury College.',
         'I use HTML, CSS, Python and Flask, and I’m learning more JavaScript, React, TypeScript and Tailwind CSS. I’m most comfortable working with data in Pandas.',
         'I enjoy designing interfaces and figuring out why something isn’t working. I also use AI tools to help with development, then work through the code to understand it.',
       ],

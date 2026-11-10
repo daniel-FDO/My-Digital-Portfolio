@@ -44,6 +44,7 @@ export function Intro({ copy }: Props) {
         <h2 className="intro__label" id="nowTitle">Currently</h2>
         <p className="intro__study">{INTRO.study}</p>
         <p className="intro__learning">{INTRO.learning}</p>
+        {INTRO.more && <p className="intro__learning">{INTRO.more}</p>}
       </section>
 
       <p className="intro__contact in" style={delay(200)}>

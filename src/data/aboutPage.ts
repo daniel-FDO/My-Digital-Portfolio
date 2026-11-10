@@ -11,7 +11,7 @@ export const ABOUT = {
   label: 'About',
   heading: 'A little more about me.',
   intro: [
-    'I’m Daniel, a software development student based in Kent. I’m in my second year at EKC Canterbury College, studying T‑Level Digital Software Development, and I’m due to finish in summer 2027.',
+    'I’m Daniel, a software development student based in Kent. I’m in my second year at EKC Canterbury College, studying T‑Level Digital Software Development.',
     'I enjoy working on interfaces and figuring out why things aren’t working. At the moment, I’m learning React and TypeScript through my own projects.',
   ],
   portrait: {
@@ -85,7 +85,7 @@ export const ABOUT = {
   ahead: {
     heading: 'Looking ahead',
     text: [
-      'After I finish college in summer 2027, I’m considering university or a degree apprenticeship. I haven’t decided yet. The areas I’d most like to explore further are front-end development, UI/UX design and cybersecurity.',
+      'After I finish college, I’m considering university or a degree apprenticeship. I haven’t decided yet. The areas I’d most like to explore further are front-end development, UI/UX design and cybersecurity.',
     ],
     links: {
       projects: { label: 'See my projects', href: 'index.html#projects', id: 'projects' },

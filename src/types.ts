@@ -77,9 +77,8 @@ export interface Education {
     heading: string;
     place: string;
     status: string;
-    timeline: { label: string; current?: boolean }[];
-    topics: { title: string; text: string }[];
-    note: string;
+    /** what the Education row opens to show: label + one line */
+    details: { label: string; text: string }[];
   };
 }
 

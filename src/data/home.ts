@@ -18,8 +18,11 @@ export const PROJECTS: Project[] = projects;
 export const INTRO = {
   name: 'Daniel Fasan',
   role: 'Software development student',
-  study: 'Second-year T-Level Digital Software Development student at EKC Canterbury College. Finishing summer 2027.',
-  learning: 'Currently learning React and TypeScript.',
+  study: 'I’m a second-year T-Level Digital Software Development student at EKC Canterbury College.',
+  learning: 'Right now I’m learning React and TypeScript.',
+  /* PLACEHOLDER: one more line in your own words, shown under "Currently" once filled in
+     (e.g. what you like building, or what you're working on now). Leave '' to hide it. */
+  more: '',
 };
 
 export const SPOTIFY_PROFILE = 'https://open.spotify.com/user/313dgijnrcg4vwkwuuryvr4wqfb4?si=e403baac359541ba';

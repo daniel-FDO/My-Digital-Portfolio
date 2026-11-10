@@ -47,7 +47,7 @@ export const FOLDERS = {
     num: '02', tag: 'EDUCATION', title: 'My Studies',
     ...look(),
     lead: 'I’m in my second year of T-Level Digital Software Development at EKC Canterbury College.',
-    facts: [['Course', 'Digital Software Development'], ['Where', 'EKC Canterbury College'], ['Next milestone', 'Summer 2027']],
+    facts: [['Course', 'Digital Software Development'], ['Where', 'EKC Canterbury College'], ['Now', 'Year 2']],
     sections: [
       { heading: 'The course', text: 'Planning interfaces and applications, building them, then testing and troubleshooting what needs improving.' },
       { heading: 'Highlights', text: 'I work on practical projects alongside my coursework. After college, I’m considering university or an apprenticeship.' },
