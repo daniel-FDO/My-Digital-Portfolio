@@ -1,10 +1,9 @@
 /* =========================================================
    DOCK (DockBar.tsx) — one floating bar of tinted glass, near-opaque.
    Search or ask · the section button (below 1180px) · divider · theme
-   · back to top. Scrolling down folds the search label; on phones the
-   bar slides away while you scroll down and returns on scroll up. On
-   hover / keyboard focus (wide screens, precise pointer) the two icon
-   buttons slide their labels open.
+   · back to top. One fixed size: nothing folds or grows on scroll or
+   hover (--d is one item's height). On phones the bar slides away while
+   you scroll down and returns on scroll up.
    Revert: ENABLE_DOCK_REDESIGN = false in Dock.tsx.
    ========================================================= */
 
@@ -41,13 +40,14 @@
   --ink: var(--glass-ink);
   --ink-2: var(--glass-muted);
   --spring: cubic-bezier(0.32, 1.25, 0.5, 1);   /* a light overshoot, like a spring with little bounce */
+  --d: 34px;                                    /* one item's height (and an icon button's width) */
   position: fixed; z-index: 50;
-  left: 50%; bottom: calc(22px + env(safe-area-inset-bottom));
+  left: 50%; bottom: calc(18px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  display: flex; align-items: center; gap: 4px;
-  height: 58px;
-  padding: 0 7px;
-  border-radius: 20px;
+  display: flex; align-items: center; gap: 2px;
+  height: calc(var(--d) + 10px);
+  padding: 0 5px;
+  border-radius: 14px;
   border: 1px solid var(--glass-line);
   background: var(--glass-tint), var(--glass-solid);
   -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
@@ -62,8 +62,8 @@
 /* the highlight pill that glides to the hovered item */
 .dock2__pill {
   position: absolute; left: 0; top: 50%;
-  width: var(--pill-w); height: 44px;
-  border-radius: 13px;
+  width: var(--pill-w); height: var(--d);
+  border-radius: 10px;
   background: var(--glass-pill);
   box-shadow: inset 0 0 0 1px var(--glass-edge);
   transform: translate(var(--pill-x), -50%);
@@ -76,32 +76,29 @@
 /* ---- Search ---- */
 .dock2__search {
   position: relative;
-  display: flex; align-items: center; gap: 10px;
-  width: 268px; min-width: 0; height: 44px;
-  padding: 0 10px 0 12px;
-  border-radius: 13px;
+  display: flex; align-items: center; gap: 8px;
+  width: 196px; min-width: 0; height: var(--d);
+  padding: 0 6px 0 10px;
+  border-radius: 10px;
   color: var(--ink-2);
   text-align: left;
   overflow: hidden;
-  transition: color 0.16s ease, width 0.4s var(--ease), padding 0.4s var(--ease), gap 0.4s var(--ease);
+  transition: color 0.16s ease;
 }
-.dock2.is-compact .dock2__search { width: 44px; padding: 0 13px; gap: 0; }
-.dock2__label, .dock2__keys { transition: opacity 0.25s ease; }
-.dock2.is-compact .dock2__label, .dock2.is-compact .dock2__keys { opacity: 0; }
 .dock2__search:hover, .dock2__search[aria-expanded="true"] { color: var(--ink); }
 .dock2__glass {
-  width: 17px; height: 17px; flex: none;
+  width: 15px; height: 15px; flex: none;
   fill: none; stroke: color-mix(in srgb, var(--brand) 78%, #fff 6%); stroke-width: 2; stroke-linecap: round;
   transition: transform 0.35s var(--spring);
 }
-.dock2__label { flex: 1; min-width: 0; font-size: 13.5px; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dock2__label { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dock2__keys { display: flex; gap: 3px; flex: none; }
 .dock2__keys kbd {
-  min-width: 20px; height: 20px; padding: 0 5px;
-  border-radius: 6px;
+  min-width: 17px; height: 17px; padding: 0 4px;
+  border-radius: 5px;
   background: var(--glass-edge);
   box-shadow: inset 0 0 0 1px var(--soft);
-  font: 500 10.5px/1 var(--mono);
+  font: 500 9.5px/1 var(--mono);
   color: var(--glass-muted);
 }
 
@@ -109,10 +106,10 @@
 .dock2__sect {
   position: relative;
   display: flex; align-items: center; gap: 8px; flex: none;
-  min-width: 44px; height: 44px; padding: 0 12px;
-  border-radius: 12px;
+  min-width: var(--d); height: var(--d); padding: 0 10px;
+  border-radius: 10px;
   color: var(--glass-ink);
-  font: 500 13.5px/1 var(--font); letter-spacing: -0.01em; white-space: nowrap;
+  font: 500 12.5px/1 var(--font); letter-spacing: -0.01em; white-space: nowrap;
   transition: color 0.16s ease;
 }
 .dock2__sect-n { font: 500 11px/1 var(--mono); color: var(--brand); }
@@ -120,44 +117,33 @@
 .dock2__caret { width: 14px; height: 14px; flex: none; fill: none; stroke: var(--glass-muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .dock2__sect:focus-visible { outline: 2px solid var(--glass-ink); outline-offset: 2px; }
 
-.dock2__divider { width: 1px; height: 24px; margin: 0 6px; flex: none; background: var(--glass-pill); }
+.dock2__divider { width: 1px; height: 18px; margin: 0 4px; flex: none; background: var(--glass-pill); }
 
-/* ---- Theme / back to top: icon buttons whose labels slide open ---- */
+/* ---- Theme / back to top: square icon buttons ---- */
 .dock2__btn {
   position: relative;
   display: flex; align-items: center; justify-content: center;
-  min-width: 44px; height: 44px; flex: none;
-  padding: 0 13px;
-  border-radius: 12px;
+  width: var(--d); height: var(--d); flex: none;
+  padding: 0;
+  border-radius: 10px;
   color: var(--glass-ink);
-  transition: color 0.16s ease, transform 0.16s ease, padding 0.38s var(--spring);
+  transition: color 0.16s ease, transform 0.16s ease;
 }
 .dock2__btn:hover { color: var(--ink); }
-/* back to top: away (no width, not focusable) until you've scrolled 60% of a screen */
-.dock2__top { padding: 0 6px; overflow: hidden; transition: color 0.16s ease, transform 0.16s ease, padding 0.38s var(--spring), min-width 0.4s var(--ease), width 0.4s var(--ease), opacity 0.3s ease, margin 0.4s var(--ease); }
-.dock2__top.is-away { min-width: 0; width: 0; padding: 0; margin-left: -4px; opacity: 0; pointer-events: none; }
-.dock2__top.is-away .dock2__more { display: none; }
-.dock2__ringwrap { position: relative; display: grid; place-items: center; width: 32px; height: 32px; flex: none; }
-.dock2__ring { position: absolute; inset: 0; width: 32px !important; height: 32px !important; transform: rotate(-90deg); }
+/* back to top: its slot is always kept (so the bar never changes width); it fades in, and
+   is unfocusable, until you've scrolled 60% of a screen */
+.dock2__top { transition: color 0.16s ease, transform 0.16s ease, opacity 0.3s ease; }
+.dock2__top.is-away { opacity: 0; pointer-events: none; }
+.dock2__ringwrap { position: relative; display: grid; place-items: center; width: 26px; height: 26px; flex: none; }
+.dock2__ring { position: absolute; inset: 0; width: 26px !important; height: 26px !important; transform: rotate(-90deg); }
 .dock2__ring circle { fill: none; stroke-width: 1.5; }
 .dock2__track { stroke: var(--glass-divider); }
 .dock2__prog { stroke: var(--brand); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
-.dock2__ringwrap .dock2__up { width: 16px; height: 16px; }
+.dock2__ringwrap .dock2__up { width: 13px; height: 13px; }
 .dock2__search:active, .dock2__btn:active { transform: scale(0.96); }
-.dock2__btn svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dock2__btn svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .dock2__search:focus-visible, .dock2__btn:focus-visible { outline: 2px solid var(--glass-ink); outline-offset: 2px; color: var(--ink); }
-.dock2__search:focus-visible { border-radius: 13px; }
-.dock2__btn:focus-visible { border-radius: 12px; }
-/* the label: its column grows from nothing to its text width, the text sliding and un-blurring in */
-.dock2__more { display: grid; grid-template-columns: 0fr; transition: grid-template-columns 0.38s var(--spring); }
-.dock2__more > span {
-  min-width: 0; overflow: hidden; white-space: nowrap;
-  font-size: 13px; line-height: 1; letter-spacing: -0.01em;
-  opacity: 0; transform: translateX(-6px); filter: blur(4px);
-  transition: opacity 0.2s ease, transform 0.32s var(--spring), filter 0.25s ease;
-}
-.dock2.is-expanded .dock2__more { grid-template-columns: 1fr; }
-.dock2.is-expanded .dock2__more > span { padding-left: 8px; opacity: 1; transform: none; filter: none; transition-delay: 0.04s; }
+.dock2__search:focus-visible, .dock2__btn:focus-visible { border-radius: 10px; }
 
 /* the icons answer the pointer (precise pointers, motion allowed) */
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -171,7 +157,7 @@
 /* The theme icon: the sun in dark mode (to switch to light), the moon in light;
    the one that appears turns in gently. (An animation, not a transition, so it
    still plays while the theme switch turns transitions off.) */
-.dock2__theme { position: relative; width: 18px; height: 18px; flex: none; }
+.dock2__theme { position: relative; width: 16px; height: 16px; flex: none; }
 .dock2__theme svg { position: absolute; inset: 0; }
 :root[data-theme="dark"] .dock2__moon, :root:not([data-theme="dark"]) .dock2__sun { opacity: 0; }
 @media (prefers-reduced-motion: no-preference) {
@@ -181,8 +167,7 @@
 @keyframes dock2-sun { from { opacity: 0; transform: rotate(-70deg) scale(0.6); } }
 @keyframes dock2-moon { from { opacity: 0; transform: rotate(40deg) scale(0.6); } }
 
-/* Small labels above the icons while the bar is compact (touch / narrow screens show them
-   on keyboard focus; once the bar is expanded its own labels take over) */
+/* Small labels above the icon buttons: on hover (precise pointers) and keyboard focus */
 .dock2__btn[data-tip]::after {
   content: attr(data-tip);
   position: absolute; left: 50%; bottom: calc(100% + 12px);
@@ -196,36 +181,35 @@
 }
 .dock2__btn[data-tip]:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 @media (hover: hover) and (pointer: fine) {
-  .dock2:not(.is-expanded) .dock2__btn[data-tip]:hover::after { opacity: 1; transform: translate(-50%, 0); }
+  .dock2__btn[data-tip]:hover::after { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* ---- Narrow: the full width minus 16px each side; no expanding; the shortcut goes when tight ---- */
+/* touch screens: a slightly larger item, still an easy tap */
+@media (pointer: coarse) { .dock2 { --d: 40px; } }
+/* ---- Narrow: the full width minus 16px each side; search is just its icon ---- */
 @media (max-width: 640px) {
-  .dock2 { left: 16px; right: 16px; transform: none; bottom: calc(16px + env(safe-area-inset-bottom)); gap: 2px; padding: 0 5px; }
+  .dock2 { left: 16px; right: 16px; transform: none; bottom: calc(16px + env(safe-area-inset-bottom)); }
   .dock2.is-hidden { transform: translateY(calc(100% + 24px + env(safe-area-inset-bottom))); }
-  .dock2__search, .dock2.is-compact .dock2__search { width: 44px; flex: none; padding: 0 13px; gap: 0; }
+  .dock2__search { width: var(--d); flex: none; padding: 0; justify-content: center; gap: 0; }
   .dock2__label, .dock2__keys { display: none; }
   .dock2__sect { flex: 1; min-width: 0; padding: 0 10px; }
-  .dock2__btn { padding: 0; width: 44px; }
-  .dock2__top { padding: 0 6px; }
   .dock2__divider { margin: 0 2px; }
 }
 /* the shortcut chip is for keyboards: not on touch screens */
 @media (pointer: coarse) { .dock2__keys { display: none; } }
 @media (prefers-reduced-motion: reduce) {
-  .dock2, .dock2__pill, .dock2__search, .dock2__btn, .dock2__top, .dock2__label, .dock2__keys, .dock2__more, .dock2__more > span, .dock2__glass, .dock2__btn[data-tip]::after { transition: none; }
-  .dock2__more > span { transform: none; filter: none; }
+  .dock2, .dock2__pill, .dock2__search, .dock2__btn, .dock2__top, .dock2__glass, .dock2__btn[data-tip]::after { transition: none; }
   .dock2__search:active, .dock2__btn:active { transform: none; }
 }
 
 /* The section dock's narrow row sits 8px above this dock (section-nav.css) */
-:root:has(.dock2) .snav--row { --tb-bottom: 22px; --tb-h: 58px; }
+:root:has(.dock2) .snav--row { --tb-bottom: 18px; --tb-h: 44px; }
 @media (max-width: 639px) { :root:has(.dock2) .snav--row { --tb-bottom: 16px; } }
 
 /* ---- The section sheet (SectionSheet.tsx): opened by the dock's section button, above the dock ---- */
 .snav-sheet {
   width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 120px);
-  margin: auto auto calc(92px + env(safe-area-inset-bottom));
+  margin: auto auto calc(76px + env(safe-area-inset-bottom));
   padding: 0;
   border: 1px solid var(--glass-line); border-radius: 20px;
   background: var(--card); color: var(--fg);
