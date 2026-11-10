@@ -53,8 +53,8 @@
   --card: #0E0E0E;
   --hover: rgba(17, 17, 17, 0.6);
   --line: #222222; /* subtle charcoal */
-  --widget: rgba(10, 10, 10, 0.72); /* translucent: the scene shows through, softened (.w blurs it) */
-  --widget-line: rgba(255, 255, 255, 0.07); /* a quiet edge, not an outline */
+  --widget: rgba(12, 12, 12, 0.72); /* translucent near-black: the scene shows through, softened (.w blurs it) */
+  --widget-line: rgba(255, 255, 255, 0.08); /* a quiet edge, not an outline (also the dock / rail border) */
   --soft: rgba(242, 242, 242, 0.06);
   --soft-2: rgba(242, 242, 242, 0.1);
   --brand: #CFCFCF; /* no colour accent: a soft grey (13.4:1 on --bg) */
