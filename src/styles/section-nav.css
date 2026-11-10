@@ -47,6 +47,18 @@
 .snav--rail .snav__btn svg { width: 15px; height: 15px; }
 .snav--rail.is-expanded .snav__bar { border-radius: 20px; }
 .snav--row .snav__bar { padding: 5px 12px; max-width: 100%; }
+/* Tucked (SectionNav.tsx): slid off the right edge until the mouse nears it; a thin
+   handle at the edge hints that it's there. Not inert, so Tab still reaches it (and reveals it). */
+.snav--rail .snav__bar { transition: opacity 0.25s ease, transform 0.4s var(--spring), visibility 0s, border-radius 0.38s var(--spring); }
+.snav--rail.is-tucked .snav__bar { opacity: 0; transform: translateX(calc(100% + 16px)); transition: opacity 0.2s ease, transform 0.35s var(--ease); }
+.snav--rail::after {
+  content: ""; position: absolute; top: 50%; right: -6px;
+  width: 3px; height: 40px; margin-top: -20px; border-radius: 2px;
+  background: var(--glass-divider);
+  opacity: 0; transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.snav--rail.is-tucked::after { opacity: 1; transition-delay: 0.15s; }
 .snav.is-hidden .snav__bar { opacity: 0; visibility: hidden; transform: translateY(10px) scale(0.98); transition: opacity 0.2s ease, transform 0.3s var(--ease), visibility 0s linear 0.3s; pointer-events: none; }
 
 /* Current number · the count */

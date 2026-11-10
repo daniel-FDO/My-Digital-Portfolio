@@ -52,6 +52,10 @@ export const SECTIONS: { id: string; label: string }[] = [
 ];
 
 const two = (n: number) => String(n).padStart(2, '0');
+/** how close (px) to the right edge the mouse must come to slide the rail in */
+const REVEAL_ZONE = 72;
+/** how long (ms) the rail stays after the mouse moves away */
+const HIDE_DELAY = 350;
 
 interface Props {
   inert: boolean;
@@ -86,6 +90,32 @@ export function SectionNav({ inert, onGo, onTop }: Props) {
     return () => clearTimeout(t);
   }, [pointerIn, focusIn]);
   const open = expanded && canExpand;
+
+  /* ---- Tucked away: the rail hides off the right edge until the mouse comes near it ----
+     Only with a mouse (touch screens can't hover, so there it always shows). Keyboard focus
+     reaching it brings it back too; it lingers briefly after the mouse leaves. */
+  const mouse = useMediaQuery('(hover: hover) and (pointer: fine)');
+  const [near, setNear] = useState(false);
+  const [peek, setPeek] = useState(false);
+  useEffect(() => {
+    if (!rail || !mouse) return;
+    const onMove = (e: globalThis.PointerEvent) => {
+      if (e.pointerType === 'mouse') setNear(innerWidth - e.clientX <= REVEAL_ZONE);
+    };
+    const onLeave = () => setNear(false);
+    addEventListener('pointermove', onMove, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onLeave);
+    return () => {
+      removeEventListener('pointermove', onMove);
+      document.documentElement.removeEventListener('pointerleave', onLeave);
+    };
+  }, [rail, mouse]);
+  useEffect(() => {
+    if (near || pointerIn || focusIn) { setPeek(true); return; }
+    const t = window.setTimeout(() => setPeek(false), HIDE_DELAY);
+    return () => clearTimeout(t);
+  }, [near, pointerIn, focusIn]);
+  const tucked = rail && mouse && !peek;
 
   /* ---- Which section is on screen (and, narrow, whether to show at all) ---- */
   useEffect(() => {
@@ -190,7 +220,7 @@ export function SectionNav({ inert, onGo, onTop }: Props) {
 
   return (
     <nav
-      className={`snav ${rail ? 'snav--rail' : 'snav--row'}${shown ? '' : ' is-hidden'}${open ? ' is-expanded' : ''}`}
+      className={`snav ${rail ? 'snav--rail' : 'snav--row'}${shown ? '' : ' is-hidden'}${open ? ' is-expanded' : ''}${tucked ? ' is-tucked' : ''}`}
       aria-label="Sections" ref={navRef} inert={inert || !shown}
       onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPointerIn(true); }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse') { setPointerIn(false); setHover(-1); } }}
