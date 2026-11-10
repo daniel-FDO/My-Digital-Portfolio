@@ -1,14 +1,14 @@
 /* Detail pages share the homepage's warm neutrals and reading measure.
    Existing gallery, book, routes and controls retain their own behaviour. */
 .fp {
-  --bg: #f4f2ef; --text: #1e1b18; --muted: #625d56; --line: #dfdcd6;
+  --bg: #F4F1E9; --text: #242522; --muted: #6B6963; --line: #D9D5CC; --accent: #286B63;
   --font: 'Geist', 'Inter', sans-serif; --font-display: 'Geist', 'Inter', sans-serif;
   --fold-gutter: clamp(22px, 5vw, 48px);
 }
-:root[data-theme='dark'] .fp { --bg: #111110; --text: #e9e8e4; --muted: #a19e99; --line: #ffffff1f; }
+:root[data-theme='dark'] .fp { --bg: #111110; --text: #e9e8e4; --muted: #a19e99; --line: #ffffff1f; --accent: #4FA89C; }
 .fp .top { max-width: 860px; margin-inline: auto; padding: 24px var(--fold-gutter); }
 .fp .logo { font-size: 17px; color: var(--text); }
-.fp .logo span { color: #df4a3d; }
+.fp .logo span { color: var(--accent); }
 .fp .back { border: 1px solid var(--line); border-radius: 8px; font: 500 13px/1.4 var(--font); padding: 11px 17px; min-height: 44px; }
 .fp .intro { border-radius: 0; padding-block: 112px 44px; box-shadow: none; border-bottom: 1px solid var(--line); background: var(--bg); color: var(--text); }
 .fp .intro__inner, .fp .body { max-width: 762px; margin-inline: auto; }

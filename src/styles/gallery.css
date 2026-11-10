@@ -64,18 +64,18 @@
   background: rgba(255, 255, 255, 0.1);
   font: 0.75rem/1 var(--mono); color: rgba(244, 242, 239, 0.75); font-variant-numeric: tabular-nums;
 }
-.gpv__count b { font-weight: 500; color: #f4f2ef; }
+.gpv__count b { font-weight: 500; color: #F4F1E9; }
 .gpv__btn {
   position: absolute; z-index: 1;
   display: grid; place-items: center;
   width: 44px; height: 44px; border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(30, 28, 26, 0.72); color: #f4f2ef;
+  background: rgba(36, 37, 34, 0.72); color: #F4F1E9;
   cursor: var(--cur-link, pointer);
   transition: background-color var(--fast) ease;
 }
 .gpv__btn:hover { background: rgba(60, 56, 52, 0.85); }
-.gpv__btn:focus-visible { outline: 2px solid #f4f2ef; outline-offset: 2px; }
+.gpv__btn:focus-visible { outline: 2px solid #F4F1E9; outline-offset: 2px; }
 .gpv__btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .gpv__close { top: calc(1rem + env(safe-area-inset-top)); right: calc(1rem + env(safe-area-inset-right)); }
 .gpv__prev, .gpv__next { bottom: calc(1rem + env(safe-area-inset-bottom)); }

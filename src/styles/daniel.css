@@ -169,7 +169,7 @@
 .dnc-menu__switch > span {
   position: absolute; left: 2px; top: 2px;
   width: 12px; height: 12px; border-radius: 50%;
-  background: #f4f2ef;
+  background: #F4F1E9;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
   transition: transform 0.3s var(--spring);
 }

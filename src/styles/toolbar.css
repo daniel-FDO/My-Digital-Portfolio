@@ -46,7 +46,7 @@
   display: grid; place-items: center; flex: none;
   width: 24px; height: 24px; border-radius: 50%;
   background: color-mix(in srgb, var(--brand) 22%, transparent);
-  color: #ff8a7e;
+  color: #7FC4BA;
   transition: transform 0.45s var(--ease), background-color var(--fast) ease;
 }
 .dock__spark svg { width: 14px; height: 14px; fill: currentColor; }

@@ -1,7 +1,7 @@
 /* =========================================================
    HOME — one narrow column, small type, quiet widgets.
    Colours are tokens (light first, dark under [data-theme="dark"]):
-   --brand (red-orange) is the main accent; --sage is a quiet second one,
+   --brand (deep teal) is the main accent; --sage is a quiet second one (also teal),
    only for interaction and status — focus rings, link hovers, selected
    controls, "fresh" dots. Not for icons, tags, charts or decoration.
    sizes are in rem off a root that grows a little with the window.
@@ -10,33 +10,33 @@
    ========================================================= */
 
 :root {
-  --bg: #f4f2ef;
-  --fg: #1e1b18;
-  --muted: #625d56;
-  --card: #fbfaf8;
-  --hover: rgba(234, 232, 227, 0.6);
-  --line: #dfdcd6;
-  --widget: rgba(250, 250, 250, 0.8);
-  --widget-line: rgba(0, 0, 0, 0.08);
-  --soft: rgba(30, 27, 24, 0.05); /* toolbar search, pills */
-  --soft-2: rgba(30, 27, 24, 0.08);
-  --brand: #e0352b; /* the main accent: the D, the second hand, badge icons */
-  --brand-soft: rgba(224, 53, 43, 0.12);
-  --sage: #5c6b4f; /* the second accent (see above); #A7B39A darkened for light: 5.1:1 on --bg */
-  --sage-soft: rgba(92, 107, 79, 0.12);
+  --bg: #F4F1E9; /* warm ivory */
+  --fg: #242522; /* charcoal: 13.7:1 on --bg */
+  --muted: #6B6963; /* muted stone for text: #817F78 darkened to 4.9:1 on --bg (AA) */
+  --card: #FBF9F4;
+  --hover: rgba(217, 213, 204, 0.45);
+  --line: #D9D5CC; /* soft stone */
+  --widget: rgba(251, 249, 244, 0.85);
+  --widget-line: rgba(36, 37, 34, 0.09);
+  --soft: rgba(36, 37, 34, 0.05); /* toolbar search, pills */
+  --soft-2: rgba(36, 37, 34, 0.08);
+  --brand: #286B63; /* the main accent (deep teal, 5.5:1 on --bg): the D, the second hand, badge icons */
+  --brand-soft: rgba(40, 107, 99, 0.12);
+  --sage: #286B63; /* the second accent (see above), now the same teal */
+  --sage-soft: rgba(40, 107, 99, 0.12);
   --ring: var(--sage); /* focus outlines */
-  --marker: #938e86; /* flat list markers (timeline dots) */
-  --mark-ink: #4f4a44; /* the footer "daniel" (original): soft charcoal, not black */
+  --marker: #817F78; /* flat list markers (timeline dots): muted stone */
+  --mark-ink: #4A4A46; /* the footer "daniel" (original): soft charcoal, not black */
   --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --overlay: rgba(0, 0, 0, 0.2);
-  --gh-0: rgba(30, 27, 24, 0.07);
-  --gh-1: rgba(30, 27, 24, 0.22);
-  --gh-2: rgba(30, 27, 24, 0.4);
-  --gh-3: rgba(30, 27, 24, 0.62);
-  --gh-4: rgba(30, 27, 24, 0.86);
-  --gh-glow: rgba(30, 27, 24, 0.25);
-  --tip-bg: #1e1b18;
-  --tip-ink: #f4f2ef;
+  --gh-0: rgba(36, 37, 34, 0.07);
+  --gh-1: rgba(36, 37, 34, 0.22);
+  --gh-2: rgba(36, 37, 34, 0.4);
+  --gh-3: rgba(36, 37, 34, 0.62);
+  --gh-4: rgba(36, 37, 34, 0.86);
+  --gh-glow: rgba(36, 37, 34, 0.25);
+  --tip-bg: #242522;
+  --tip-ink: #F4F1E9;
 
   --font:
     "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -57,10 +57,10 @@
   --widget-line: rgba(255, 255, 255, 0.1);
   --soft: rgba(233, 232, 228, 0.08);
   --soft-2: rgba(233, 232, 228, 0.12);
-  --brand: #ef4a3c;
-  --brand-soft: rgba(239, 74, 60, 0.16);
-  --sage: #a7b39a; /* 8.6:1 on --bg, 7.8:1 on --card */
-  --sage-soft: rgba(167, 179, 154, 0.14);
+  --brand: #4FA89C; /* deep teal lifted for the dark base: 6.7:1 on --bg */
+  --brand-soft: rgba(79, 168, 156, 0.16);
+  --sage: #4FA89C;
+  --sage-soft: rgba(79, 168, 156, 0.14);
   --marker: #5c5a56;
   --mark-ink: #bdbbb6; /* light grey, not pure white */
   --overlay: rgba(0, 0, 0, 0.4);
@@ -1101,7 +1101,7 @@ html.theme-switching *::after {
   background: rgba(17, 17, 16, 0.72);
   font-size: 0.6875rem;
   line-height: 1.5;
-  color: #f4f2ef;
+  color: #F4F1E9;
 }
 .pv__cap:empty {
   display: none;

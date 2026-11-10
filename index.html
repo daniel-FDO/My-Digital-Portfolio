@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Daniel Fasan</title>
   <meta name="description" content="Daniel Fasan — T-Level Digital Software Development student in Kent, UK. Projects, education, skills and contact." />
-  <meta name="theme-color" content="#111110" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111110'/%3E%3Cpath d='M9 7h7a9 9 0 0 1 0 18H9v-3h2V10H9zm6 4v10h1a5 5 0 0 0 0-10z' fill='%23ef4a3c' fill-rule='evenodd'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#F4F1E9" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23F4F1E9'/%3E%3Cpath d='M9 7h7a9 9 0 0 1 0 18H9v-3h2V10H9zm6 4v10h1a5 5 0 0 0 0-10z' fill='%23286B63' fill-rule='evenodd'/%3E%3C/svg%3E" />
 
   <!-- THEME, set before the page draws (no flash).
-       A fresh visit or reload starts dark; a choice made with the toolbar's
+       A fresh visit or reload starts light; a choice made with the toolbar's
        theme button lasts for this visit (sessionStorage), so opening a
        folder, Back / Forward and secret.html all keep it. src/lib/theme.tsx. -->
   <script>
     (function () {
-      var theme = 'dark';
+      var theme = 'light';
       try {
         var nav = performance.getEntriesByType('navigation')[0];
         var sameSite = false;
         try { sameSite = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
         if ((nav && nav.type === 'back_forward') || sameSite) {
-          if (sessionStorage.getItem('theme') === 'light') theme = 'light';
+          if (sessionStorage.getItem('theme') === 'dark') theme = 'dark';
         } else {
-          sessionStorage.setItem('theme', 'dark');
+          sessionStorage.setItem('theme', 'light');
         }
       } catch (e) {}
       document.documentElement.dataset.theme = theme;

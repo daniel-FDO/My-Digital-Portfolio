@@ -118,8 +118,8 @@
 .idrig__weave--b   { stroke: rgba(0, 0, 0, 0.3); stroke-width: calc(var(--strap-w) * 0.6); stroke-dasharray: 0.45 1.25; stroke-dashoffset: 0.85; }
 .idrig__thread     { stroke: rgba(0, 0, 0, 0.22); stroke-width: 0.5; }
 .idrig__stitch-hole { stroke: rgba(0, 0, 0, 0.45); stroke-width: calc(var(--strap-w) * 0.075); stroke-dasharray: 1.7 1.1; stroke-linecap: round; }
-.idrig__stitch     { stroke: #d42a30; stroke-width: calc(var(--strap-w) * 0.04); stroke-dasharray: 1.7 1.1; stroke-linecap: round; }
-.idrig__logo       { fill: none; stroke: #e0333a; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
+.idrig__stitch     { stroke: #3E9488; stroke-width: calc(var(--strap-w) * 0.04); stroke-dasharray: 1.7 1.1; stroke-linecap: round; }
+.idrig__logo       { fill: none; stroke: #4FA89C; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
 .idrig__logo--shade { stroke: rgba(0, 0, 0, 0.55); stroke-width: 1.7; transform: translate(0.25px, 0.4px); }
 
 /* Hardware: brushed gunmetal */
