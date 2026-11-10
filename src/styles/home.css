@@ -1930,7 +1930,7 @@ kbd {
 
 /* =========================================================
    EDITORIAL LAYER — Geist headings (medium, tight), compact sections
-   in "Off the clock", Questions, and the Contact window.
+   in "Off the clock" and the Contact window.
    ========================================================= */
 /* Headings: Geist, medium weight, tight tracking */
 .page .intro .intro__name {
@@ -1977,61 +1977,6 @@ kbd {
 }
 .sec__head {
   align-items: last baseline;
-}
-
-/* ---- Questions: one line each; the answer opens under it ---- */
-.faq {
-  margin-top: 0.25rem;
-  max-width: 40rem;
-}
-.faq__item {
-  border-bottom: 1px solid var(--line);
-}
-.faq__item summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 0;
-  list-style: none;
-  cursor: var(--cur-link, pointer);
-  color: var(--fg);
-}
-.faq__item summary::-webkit-details-marker {
-  display: none;
-}
-.faq__item summary::after {
-  /* a plus that turns into a cross */
-  content: "";
-  flex: none;
-  width: 11px;
-  height: 11px;
-  background:
-    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
-    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
-  color: var(--muted);
-  transition: transform 0.25s var(--ease);
-}
-.faq__item[open] summary::after {
-  transform: rotate(45deg);
-}
-.faq__item summary:hover::after {
-  color: var(--fg);
-}
-.faq__item p {
-  padding: 0 2rem 1.1rem 0;
-  max-width: 36rem;
-  color: var(--muted);
-  text-wrap: pretty;
-}
-.faq__item p b {
-  font-weight: 500;
-  color: var(--fg);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .faq__item[open] p {
-    animation: rise 0.35s var(--ease) both;
-  }
 }
 
 /* ---- Contact: a small "new message" window ---- */

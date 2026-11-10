@@ -10,7 +10,6 @@ import { CommandMenu, type MenuActions } from './components/CommandMenu';
 import { Contact } from './components/Contact';
 import { Dock } from './components/Dock';
 import { Education } from './components/Education';
-import { Faq } from './components/Faq';
 import { Footer } from './components/footer/Footer';
 import { Gallery } from './components/Gallery';
 import { Intro } from './components/Intro';
@@ -93,7 +92,6 @@ export function App() {
         <Skills />
         <Gallery />
         <Activity />
-        <Faq />
         <Contact />
       </main>
 

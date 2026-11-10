@@ -35,7 +35,6 @@ const ICONS: Record<string, ReactNode> = {
   skills: <path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15" />,
   gallery: <><rect x="3" y="4" width="18" height="16" rx="2.5" /><circle cx="9" cy="9.5" r="1.7" /><path d="m21 15.5-4.6-4.6a1.5 1.5 0 0 0-2.1 0L5 20" /></>,
   activity: <path d="M3 12h3.5l2.5-7 5 14 2.5-7H21" />,
-  faq: <><circle cx="12" cy="12" r="9" /><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.5-2.7 2.5M12 16.8h.01" /></>,
   contact: <><rect x="3" y="5" width="18" height="14" rx="2.5" /><path d="m3.5 7 8.5 6 8.5-6" /></>,
 };
 
@@ -47,7 +46,6 @@ export const SECTIONS: { id: string; label: string }[] = [
   { id: 'skills', label: 'Tech stack' },
   { id: 'gallery', label: 'Gallery' },
   { id: 'activity', label: 'Activity' },
-  { id: 'faq', label: 'Questions' },
   { id: 'contact', label: 'Contact' },
 ];
 

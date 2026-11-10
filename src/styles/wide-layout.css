@@ -16,8 +16,7 @@
 
 /* ---- Reading width: paragraphs stay around 60–65 characters ---- */
 /* (ch is the width of a "0", wider than an average Geist letter: 44ch ≈ 63 letters) */
-.intro__text, .intro__study, .intro__learning, .sec__text, .faq__item p { max-width: 44ch; }
-.faq { max-width: 46rem; }
+.intro__text, .intro__study, .intro__learning, .sec__text { max-width: 44ch; }
 
 /* ---- Things that shouldn't grow with the page keep their old size ---- */
 .xp { max-width: 46rem; }                         /* education rows: title ↔ place */

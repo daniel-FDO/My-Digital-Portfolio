@@ -21,7 +21,6 @@ export const SECTIONS: { id: string; label: string }[] = [
   { id: 'skills', label: 'Tech stack' },
   { id: 'gallery', label: 'Gallery' },
   { id: 'activity', label: 'Activity' },
-  { id: 'faq', label: 'Questions' },
   { id: 'contact', label: 'Contact' },
 ];
 export const two = (n: number) => String(n).padStart(2, '0');

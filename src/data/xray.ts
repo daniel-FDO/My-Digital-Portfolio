@@ -167,14 +167,6 @@ const ALL_ENTRIES: XrayEntry[] = [
     fallback: '“Unavailable” or “Not connected” instead of numbers; nothing is estimated. A failed Claude refresh keeps the numbers already shown, marked offline.',
   },
   {
-    id: 'faq',
-    label: 'Questions people ask',
-    component: 'Faq',
-    file: 'src/components/Faq.tsx',
-    dataSource: { short: 'written in', detail: 'Written in Faq.tsx, from what the site already says.', sources: ['site-data'] },
-    refresh: STATIC,
-  },
-  {
     id: 'contact',
     label: 'A “new message” window',
     component: 'Contact',
