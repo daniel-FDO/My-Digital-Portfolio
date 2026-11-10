@@ -45,6 +45,7 @@
   --ease: cubic-bezier(0.23, 1, 0.32, 1);
   --fast: 0.18s;
   --gutter: 25px;
+  --col: 42rem; /* the page's column: a comfortable reading width */
   color-scheme: light;
 }
 :root[data-theme="dark"] {
@@ -280,7 +281,7 @@ html.theme-switching *::after {
 
 /* ---------- The column ---------- */
 .page {
-  width: min(51rem, 100% - 2 * var(--gutter));
+  width: min(var(--col), 100% - 2 * var(--gutter));   /* one narrow reading column */
   margin-inline: auto;
   padding-top: 3.9rem;
   padding-bottom: 0; /* the footer (footer.css) opens one section gap below */
@@ -1411,7 +1412,7 @@ body.is-previewing .footer {
   overflow-x: clip;
 }
 .fend {
-  width: min(51rem, 100%);
+  width: min(var(--col), 100%);
   margin-inline: auto;
   text-align: center;
 }

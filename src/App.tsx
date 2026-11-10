@@ -27,7 +27,7 @@ import { useSectionReveal } from "./hooks/useSectionReveal";
 import { calm } from "./lib/motion";
 import { markPageReady, preloaderActive } from "./lib/preloader";
 import { useTheme } from "./lib/theme";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
 
 // Focus a heading without scrolling to it again (it gets tabindex -1 to take focus)
 function focusHeading(h: HTMLElement | null) {

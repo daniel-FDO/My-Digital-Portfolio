@@ -26,7 +26,7 @@ import { PROJECTS } from '../data/home';
 import { useMediaQuery, useReducedMotion } from '../lib/motion';
 import { ExtIcon, NewTab, SparkIcon } from './icons';
 
-export const ENABLE_PROJECT_SHOWCASE = true;
+export const ENABLE_PROJECT_SHOWCASE = false;
 
 const SIDE_QUERY = '(hover: hover) and (pointer: fine) and (min-width: 900px)';
 const SHOW_DELAY = 110;    // ms a pointer rests on a row before its preview shows
